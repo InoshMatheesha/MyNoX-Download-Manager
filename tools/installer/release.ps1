@@ -31,7 +31,10 @@ $gpg = @((Get-Command gpg.exe -ErrorAction SilentlyContinue).Source, "$env:Progr
   Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
 if (-not $gpg) { throw "gpg not found" }
 $fpr = (Get-Content (Join-Path $private "release-key-fingerprint.txt") -Raw).Trim()
-$env:GNUPGHOME = Join-Path $private "gnupg"
+$home_ = Join-Path $private "gnupg"
+# Git's gpg is an MSYS program: its agent needs the folder as /d/..., not D:\...
+if ($gpg -like "*\usr\bin\gpg.exe") { $home_ = "/" + $home_.Substring(0, 1).ToLower() + ($home_.Substring(2) -replace '\\', '/') }
+$env:GNUPGHOME = $home_
 & $gpg --batch --yes --pinentry-mode loopback --passphrase "" --detach-sign --digest-algo SHA256 --local-user $fpr `
   --output (Join-Path $dist "SHA256SUMS.txt.sig") (Join-Path $dist "SHA256SUMS.txt")
 if ($LASTEXITCODE) { throw "signing failed" }
