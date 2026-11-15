@@ -1,0 +1,18 @@
+# Build output
+/target/
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store
+__pycache__/
+
+node_modules/
+
+# Claude Code: personal settings and worktrees
+/.claude/
+# Private signing keys (extension key, release key): never committed
+.private/
+/k/

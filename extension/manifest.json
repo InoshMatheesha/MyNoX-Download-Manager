@@ -1,0 +1,63 @@
+{
+    "manifest_version": 3,
+    "default_locale": "en",
+    "name": "__MSG_name__",
+    "version": "0.1.2",
+    "description": "__MSG_description__",
+    "homepage_url": "https://github.com/InoshMatheesha/MyNoX-Download-Manager",
+    "minimum_chrome_version": "116",
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqgHXEB6ya3ZofcahqJugJGsx3PUMeZKbN3ymayBB5riPMPwgYjs5oZx0wwNJ1X3YvxajUHZ/MYiaUeD4a1E4v8TYIZW5bSemMUyP4VKuC4oKFuPPhT+INvpzHdBm1cyyxhteR1uR/xEXISHDYcNRwKH1vfWR6+1RjwKv8myG3NPTd6DrprUxpKLyRNsv0nmUu+g2wFS7mOKowk27hvWMIMRvnggNQUJ0hAJjTqWlGSNDiRpVrMbN9FuhjBb+wHAJwlSjf3fDC7N/h/G+F29N3+MOxJ+8ndYDwGqwl2wExBRo4XAUlrdP8foVS2iVPTmNJLgr0KkHEkqnYGQFC0+n2QIDAQAB",
+    "permissions": [
+        "downloads",
+        "contextMenus",
+        "nativeMessaging",
+        "cookies",
+        "storage",
+        "webRequest",
+        "scripting",
+        "declarativeNetRequestWithHostAccess",
+        "proxy"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "__MSG_name__",
+        "default_icon": {
+            "16": "icons/icon-16.png",
+            "32": "icons/icon-32.png"
+        }
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "video.js"
+            ],
+            "all_frames": true,
+            "run_at": "document_idle"
+        },
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "page.js"
+            ],
+            "all_frames": true,
+            "run_at": "document_start"
+        }
+    ],
+    "icons": {
+        "16": "icons/icon-16.png",
+        "32": "icons/icon-32.png",
+        "48": "icons/icon-48.png",
+        "128": "icons/icon-128.png"
+    }
+}

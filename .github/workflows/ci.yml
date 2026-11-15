@@ -1,0 +1,81 @@
+# CI: build, lint and test main and every pull request on Windows, and check the browser extension.
+name: CI
+
+# A change to the docs alone builds nothing here; the app's catalogs, i18n/*.tsv, still run everything.
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
+  pull_request:
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
+
+# A newer commit on a pull request makes its older run moot.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      # rust-toolchain.toml picks stable with rustfmt and clippy.
+      - name: Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+      - name: Format
+        run: cargo fmt --all --check
+      # A text added to the code without running tools/i18n/extract.py fails here.
+      - name: English catalog matches the code
+        run: |
+          python tools/i18n/extract.py
+          git diff --exit-code -- i18n/en.tsv
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Tests
+        run: cargo test --workspace
+
+  extension:
+    name: browser extension
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+      - name: Logic against fake Firefox and Chrome APIs
+        run: node tools/extension/test.mjs
+      - name: Pack for every browser
+        shell: pwsh
+        run: ./tools/extension/pack.ps1
+      - name: Check the packages
+        run: node tools/extension/check-pack.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: extension
+          path: |
+            target/extension/mynox-chromium.zip
+            target/extension/mynox-firefox.xpi

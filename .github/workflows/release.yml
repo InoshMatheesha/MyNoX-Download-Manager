@@ -1,0 +1,159 @@
+# Release: builds the Windows downloads and the browser extension, and on a vX.Y.Z tag publishes them.
+# - Windows (tools/installer/build.ps1): the installer, the portable zip and the plain zip.
+# - The extension (tools/extension/pack.ps1): MyNoX-<version>-extension-chromium.zip and -firefox.xpi.
+# - A pushed tag vX.Y.Z (matching Cargo.toml) publishes a GitHub release with SHA256SUMS.txt, signed
+#   with the MYNOX_RELEASE_KEY secret when it is set (Help -> Check for updates installs only signed releases).
+# - Run by hand (Actions -> Release -> Run workflow) it only builds and keeps the files as artifacts.
+# - A tag whose release already exists (made by tools/installer/release.ps1) is skipped.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    # A release made from a PC (tools/installer/release.ps1) is already published: nothing to do.
+    runs-on: ubuntu-latest
+    outputs:
+      exists: ${{ steps.r.outputs.exists }}
+    steps:
+      - id: r
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ startsWith(github.ref, 'refs/tags/') }}" = "true" ] && gh release view "${{ github.ref_name }}" -R "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  geo:
+    needs: check
+    if: needs.check.outputs.exists != 'true'
+    # This month's IP-to-country table for the build; a failed download keeps the committed one.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - name: IP-to-country table
+        run: python3 tools/geo/build.py --release
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: geo-data
+          path: crates/geo/data/*
+          retention-days: 7
+
+  windows:
+    needs: geo
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: geo-data
+          path: crates/geo/data
+      - name: Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: release-${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+          restore-keys: release-${{ runner.os }}-cargo-
+      - name: Tag matches Cargo.toml
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: |
+          $v = [regex]::Match((Get-Content Cargo.toml -Raw), '(?m)^version\s*=\s*"([^"]+)"').Groups[1].Value
+          if ("v$v" -ne "${{ github.ref_name }}") { throw "tag ${{ github.ref_name }} but Cargo.toml says $v" }
+      - name: Tests
+        run: cargo test --workspace
+      - name: Inno Setup
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup --no-progress -y
+          }
+      # Optional Authenticode signing: CODESIGN_PFX_BASE64 + CODESIGN_PASSWORD secrets.
+      - name: Code-signing certificate
+        id: cert
+        shell: pwsh
+        env:
+          PFX: ${{ secrets.CODESIGN_PFX_BASE64 }}
+          PASSWORD: ${{ secrets.CODESIGN_PASSWORD }}
+        run: |
+          if (-not $env:PFX) { "No certificate: building unsigned."; exit 0 }
+          $pfx = Join-Path $env:RUNNER_TEMP "codesign.pfx"
+          [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:PFX))
+          $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" |
+            Sort-Object FullName -Descending | Select-Object -First 1
+          "command=`"$($signtool.FullName)`" sign /fd sha256 /tr http://timestamp.digicert.com /td sha256 /f `"$pfx`" /p `"$env:PASSWORD`" `$f" >> $env:GITHUB_OUTPUT
+      - name: Installer, zips and extension
+        shell: pwsh
+        env:
+          MYNOX_SIGN_COMMAND: ${{ steps.cert.outputs.command }}
+        run: |
+          ./tools/installer/build.ps1
+          $v = [regex]::Match((Get-Content Cargo.toml -Raw), '(?m)^version\s*=\s*"([^"]+)"').Groups[1].Value
+          Copy-Item target/extension/mynox-chromium.zip "target/dist/MyNoX-$v-extension-chromium.zip"
+          Copy-Item target/extension/mynox-firefox.xpi "target/dist/MyNoX-$v-extension-firefox.xpi"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: windows
+          path: target/dist/*.*
+
+  publish:
+    permissions:
+      contents: write # the release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: windows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MYNOX_RELEASE_KEY: ${{ secrets.MYNOX_RELEASE_KEY }}
+        shell: pwsh
+        run: |
+          # One SHA256SUMS.txt for every file, signed with the release key when the secret is set.
+          Remove-Item dist/SHA256SUMS*.txt* -ErrorAction SilentlyContinue
+          $files = Get-ChildItem dist -File | Sort-Object Name
+          $sums = $files | ForEach-Object { "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)" }
+          Set-Content -Encoding ascii dist/SHA256SUMS.txt $sums
+          if ($env:MYNOX_RELEASE_KEY) {
+            $key = Join-Path $env:RUNNER_TEMP "mynox-release.asc"
+            Set-Content -Encoding ascii $key $env:MYNOX_RELEASE_KEY
+            gpg --batch --quiet --import $key
+            Remove-Item $key
+            gpg --batch --yes --detach-sign --digest-algo SHA256 --output dist/SHA256SUMS.txt.sig dist/SHA256SUMS.txt
+            if ($LASTEXITCODE) { throw "signing SHA256SUMS.txt failed" }
+          } else {
+            Write-Warning "MYNOX_RELEASE_KEY isn't set: this release is unsigned, and MyNoX won't update to it by itself."
+          }
+          # Notes: the version's section of CHANGELOG.md ("## [X.Y.Z]" up to the next "## ").
+          $v = "${{ github.ref_name }}".TrimStart("v")
+          $log = Get-Content CHANGELOG.md -Raw -ErrorAction SilentlyContinue
+          $m = [regex]::Match("$log", "(?ms)^## \[$([regex]::Escape($v))\][^\n]*\n(.*?)(?=^## |\z)")
+          $notes = if ($m.Success) { $m.Groups[1].Value.Trim() } else { "" }
+          Set-Content -Encoding utf8 notes.md $notes
+          gh release create "${{ github.ref_name }}" --latest --title "MyNoX Download Manager ${{ github.ref_name }}" --notes-file notes.md (Get-ChildItem dist -File).FullName
