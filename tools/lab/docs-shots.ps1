@@ -49,6 +49,10 @@ param(
   # ('"video_cookies":"firefox"': Options, Sites Logins, with a browser chosen).
   [string]$Settings = ""
 )
+# Physical pixels for every rectangle and capture (cap-own.ps1, ui-rects.ps1 run in this process):
+# without it, a display scaled above 100 % hands this script scaled window rectangles.
+Add-Type -Namespace Dpi -Name Aware -MemberDefinition '[DllImport("user32.dll")] public static extern bool SetProcessDpiAwarenessContext(IntPtr c);'
+[Dpi.Aware]::SetProcessDpiAwarenessContext([IntPtr](-4)) | Out-Null
 $ErrorActionPreference = "Stop"
 # With -Show, its list instead of the built-in one (unless -Only names some of those too). From
 # `powershell -File`, a list comes as one string: split at its commas.

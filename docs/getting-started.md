@@ -7,108 +7,13 @@ Builds for macOS are new and still experimental: see [On a Mac](#on-a-mac).
 
 ## Choose a download
 
-Every version is on the [Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases) page. For Windows there are three files:
+Every version is on the [Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases) page, with three files for Windows:
 
 | File | What it is |
 |---|---|
 | `MyNoX-<version>-setup.exe` | The installer. Pick this one unless you have a reason not to. It can set up browser integration and open `.torrent` files and magnet links with MyNoX. |
 | `MyNoX-<version>-portable.zip` | A portable copy. The download list and settings stay in a `data` folder next to the program, and nothing is written to the registry. Browser integration needs the installer. See [Portable mode](portable.md). |
 | `MyNoX-<version>-x64.zip` | The same programs without an installer. It keeps its data in `%APPDATA%\mynox`, like an installed copy. |
-
-### On Linux
-
-MyNoX runs on 64-bit Linux with a desktop session. It is tested on Ubuntu 24.04, Debian 12 and
-Fedora, with GNOME, KDE Plasma, Xfce and Cinnamon, on X11 and in Wayland sessions. Pick one
-of these files (up to version 0.2.4, their names end in `-experimental`, as in
-`...-linux-x86_64-experimental.deb`):
-
-| File | What it is |
-|---|---|
-| `...-linux-x86_64.deb` | For Ubuntu, Debian, Mint and Pop!_OS: `sudo apt install ./<file>.deb`. It brings the libraries MyNoX needs. |
-| `...-linux-x86_64.rpm` | For Fedora, openSUSE and RHEL: `sudo dnf install ./<file>.rpm`. It brings the libraries MyNoX needs. |
-| `...-linux-x86_64.AppImage` | Runs on most distributions: make it executable (`chmod +x`) and run it. It updates itself in place (**Help → Check for updates**). |
-| `...-linux-x86_64.tar.gz` | The plain programs, for any distribution. |
-
-![MyNoX's main window on Ubuntu 24.04's GNOME desktop: the categories and a list of downloads, each with the desktop's icon for its type](images/main-linux.webp)
-*MyNoX on Ubuntu's GNOME desktop, with the desktop's own file icons.*
-
-Browser integration is set up by MyNoX itself at each start (the browsers installed then are found); add the extension as in [Browser integration](browser-integration.md). Firefox installed as a Snap (Ubuntu's) reaches MyNoX once you allow it; other Snap and Flatpak browsers can't (see [Flatpak and Snap browsers](browser-help.md#linux-sandbox)). The tray icon, Dark Mode support and Launch on startup work on GNOME (Ubuntu's), KDE Plasma, Xfce and Cinnamon.
-
-![The window that offers the browser extension on Linux: Google Chrome and Mozilla Firefox, each with Add the extension](images/browser-offer-linux.webp)
-*MyNoX finds the browsers installed and offers each one its extension.*
-
-In a Wayland session the windows go through XWayland (below). Not there yet on Linux: screen
-readers (Orca) don't read MyNoX's windows; browsers installed as a Flatpak can't reach MyNoX (Firefox
-from Flathub may, through the desktop as the Snap does, but that isn't checked yet); and **View →
-Draw with → Vulkan** is a choice, OpenGL stays the default.
-
-In a Wayland session (GNOME, KDE Plasma and others), MyNoX's windows run through XWayland when it is there: Wayland doesn't let a program place its own windows, so MyNoX's menus and drop-down lists would open in the middle of the screen. To run on Wayland itself anyway, start it with `MYNOX_WAYLAND=1 mynox`. If the system lacks a library X11 windows need (such as libxkbcommon-x11, which the .deb and .rpm bring but the AppImage and the tar.gz can't), MyNoX opens on Wayland instead; with no window system it can use, it names what's missing and the command that installs it.
-
-The windows are the ones described in this help, with the desktop's fonts, file icons and title
-bars:
-
-<!-- pictures -->
-
-- ![Add URL on Linux, with its address box](images/add-url-linux.webp)
-  *Add URL.*
-- ![A download's progress window on Linux: its speed, time left and connections](images/progress-linux.webp)
-  *A download's progress.*
-- ![Add torrent on Linux, with the torrent's files](images/add-torrent-linux.webp)
-  *Add torrent.*
-- ![The Scheduler on Linux](images/scheduler-linux.webp)
-  *The Scheduler.*
-- ![Options on its Connection page, on Linux](images/options-linux.webp)
-  *Options.*
-
-And on the other desktops it was checked on:
-
-<!-- pictures -->
-
-- ![MyNoX's main window on KDE Plasma](images/kde-main-linux.webp)
-  *KDE Plasma.*
-- ![MyNoX's main window on Cinnamon](images/cinnamon-main-linux.webp)
-  *Cinnamon.*
-- ![MyNoX's main window on Xfce](images/xfce-main-linux.webp)
-  *Xfce.*
-
-#### Uninstall on Linux {#uninstall-linux}
-
-`sudo apt remove mynox` (or `sudo dnf remove mynox`) removes the
-programs, and the small files that tell your browsers where MyNoX's helper is: the .deb and .rpm
-install those for everyone (in `/etc` and `/usr/lib`), for Chrome, Chromium, Edge, Brave, Vivaldi
-and Firefox (the Snap too), so MyNoX doesn't write them in your home folder. For the AppImage or the
-tar.gz, delete the file or the folder.
-
-What MyNoX keeps in your home folder stays, as with any package: your list and settings
-(`~/.local/share/mynox`), the AppImage's and the tar.gz's browser files, and
-those of the browsers that read them only there (Opera, Helium, Thorium, and Firefox's forks:
-Zen, LibreWolf, Floorp, Waterfox). A package can't remove those: it never touches
-home folders. Without MyNoX they lead nowhere, so the extension says it can't reach MyNoX. To remove
-them as well, run this as each user who used MyNoX, **before** uninstalling:
-
-```sh
-mynox-nmhost --unregister
-```
-
-(From the AppImage: `~/.local/share/mynox/browser-host/mynox-nmhost --unregister`.)
-Already uninstalled? This removes the same files:
-
-```sh
-find ~/.mozilla ~/.librewolf ~/.config -name com.mynox.host.json -delete 2>/dev/null
-```
-
-### On a Mac
-
-The macOS builds are fresh and still experimental: we haven't tried them on a Mac ourselves yet,
-so you'd be among the first. Please
-[tell us how it went](https://github.com/InoshMatheesha/MyNoX-Download-Manager/issues/new/choose), good or bad.
-
-| File | What it is |
-|---|---|
-| `...-macos-arm64-experimental.dmg` | For a Mac with Apple Silicon (M1 or later: **Apple menu → About This Mac** shows a *Chip*). Open it and drag MyNoX Download Manager to Applications. macOS asks before its first start, because the app isn't notarized by Apple: right-click it and choose **Open** (on macOS 15 and later: **System Settings → Privacy & Security → Open Anyway**). |
-| `...-macos-x86_64-experimental.dmg` | The same, for a Mac with an Intel processor (About This Mac shows a *Processor*). |
-
-Browser integration is set up by MyNoX itself at each start (the browsers installed then are found); add the extension as in [Browser integration](browser-integration.md).
 
 ## Install with the setup
 
@@ -239,11 +144,6 @@ used, and how to make and share one.
 
 Closing the main window doesn't quit MyNoX. It hides in the notification area, and downloads, queues and schedules carry on. To make closing quit (a portable copy's folder can then be deleted), untick **Options → General → Keep running when closing the window**. If there is no icon for MyNoX at all — not in the notification area, nor behind the ^ hidden icons — the window minimizes to the taskbar instead, so downloads continue and there is a way back. An icon behind ^ can be clicked to bring the window back, and starting MyNoX again always does.
 
-On Linux this needs a tray, which most desktops have (KDE Plasma, Xfce, Cinnamon, Ubuntu's GNOME or GNOME with the AppIndicator extension, waybar's tray). On a desktop without one (some tiling window managers), closing the window quits MyNoX, since there would be nowhere to bring it back from.
-
-![MyNoX's icon in the top bar of Ubuntu's GNOME, its menu open: Open MyNoX Download Manager, Add new download, Add batch download, Downloads in progress, Speed Limiter, Scheduler, the main queue, Options and Exit](images/tray-linux.webp)
-*The tray icon's menu on Ubuntu's GNOME.*
-
 - Click the tray icon to bring the window back.
 - Right-click it for **Add new download**, **Add batch download**, **Downloads in progress**, **Speed Limiter**, **Scheduler**, the main download queue, **Options** and **Exit**.
 - **Downloads in progress** lists the running downloads. Choose one to see its progress window.
@@ -252,7 +152,7 @@ Minimize hides the main window there too, while **Minimize to the notification a
 
 A download's progress window can go there as well, with its Minimize or with its **Hide to the notification area** button: a short dash with an arrow down to the corner.
 
-On Windows that button is in the window's title bar, left of Minimize, and in the title bar's menu (Alt+Space). On Linux and macOS it's at the end of the tab row.
+On Windows that button is in the window's title bar, left of Minimize, and in the title bar's menu (Alt+Space).
 
 To bring the window back, choose it in **Downloads in progress**, or double-click the download in the list.
 

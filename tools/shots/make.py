@@ -253,7 +253,7 @@ def save_webp(img, path: Path, lossy: int = 0) -> None:
         img.save(path, "WEBP", lossless=True, quality=100, method=6, exact=False)
 
 
-def build(shots: list[dict]) -> None:
+def build(shots: list[dict], raw_scale: float = 1.0) -> None:
     from PIL import Image
     made = 0
     for s in shots:
@@ -269,6 +269,10 @@ def build(shots: list[dict]) -> None:
                 continue
             img = Image.open(raw).convert("RGB")
             ctrls = controls(raw)
+            # Shot at a display scale above 100 % (--raw-scale): back to 100 % first, controls too.
+            if s.get("take") and raw_scale != 1.0:
+                img = img.resize((round(img.width / raw_scale), round(img.height / raw_scale)), Image.LANCZOS)
+                ctrls = [dict(c, rect=[round(v / raw_scale) for v in c["rect"]]) if "rect" in c else c for c in ctrls]
             try:
                 box = crop_box(s, ctrls, img.size)
                 img = img.crop((box[0], box[1], box[0] + box[2], box[1] + box[3]))
@@ -296,7 +300,7 @@ DOCS_SHOTS = ["add-torrent", "add-url", "arabic-main", "crash-report", "grabber"
 DOCS_DARK = ["main-dark"]
 
 
-def docs(run: Path | None, extra: list[Path]) -> None:
+def docs(run: Path | None, extra: list[Path], raw_scale: float = 1.0) -> None:
     """docs/images/<name>.webp, lossless, from a Docs screenshots run (the docs-shots artifact:
     docs/*.png and site-dark/*.png) and from single PNGs (`--png`: the browser's pictures, the
     phone's, a window shot elsewhere), each by its file name. A shot the run lacks keeps its
@@ -311,6 +315,8 @@ def docs(run: Path | None, extra: list[Path]) -> None:
             print(f"  {name}: no {src}; kept")
             continue
         img = Image.open(src).convert("RGBA")
+        if raw_scale != 1.0 and run:
+            img = img.resize((round(img.width / raw_scale), round(img.height / raw_scale)), Image.LANCZOS)
         if img.getchannel("A").getextrema() == (255, 255):
             img = img.convert("RGB")
         dst = IMAGES / f"{name}.webp"
@@ -431,12 +437,13 @@ def main() -> int:
     ap.add_argument("--at", default="", help='docs-shots -At "x,y": on the screen at x,y (a runner\'s software OpenGL)')
     ap.add_argument("--url-host", default="", help="docs-shots -UrlHost: the lab server's name in the addresses")
     ap.add_argument("--port", type=int, default=0, help="docs-shots -Port: the lab server's port")
+    ap.add_argument("--raw-scale", type=float, default=1.0, help="build/docs: the display scale the raw shots were taken at (1.5 for 150 %%)")
     a = ap.parse_args()
     shots = load()
     if a.step == "check":
         return check(shots)
     if a.step == "docs":
-        docs(Path(a.id) if a.id else None, a.png)
+        docs(Path(a.id) if a.id else None, a.png, a.raw_scale)
         return 0
     if a.step == "snippet":
         hit = [s for s in shots if s["id"] == a.id]
@@ -452,7 +459,7 @@ def main() -> int:
             + (["-Port", str(a.port)] if a.port else [])
         shoot(shots, a.bin, a.work, extra)
     if a.step in ("all", "build"):
-        build(shots)
+        build(shots, a.raw_scale)
     return 0
 
 

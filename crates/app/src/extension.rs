@@ -294,7 +294,10 @@ impl Extension {
                 set_up(ui.ctx());
             }
         }
-        let (line, color) = if !self.registered {
+        // The hint names Chrome's own offer, which only comes for a store-listed extension.
+        let (line, color) = if !self.registered
+            || (!self.connected && mynox_ipc::extension::store_id().is_none())
+        {
             (String::new(), muted)
         } else if self.connected {
             (
