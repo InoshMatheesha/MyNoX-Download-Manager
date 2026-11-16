@@ -189,24 +189,4 @@
     })
     .catch(function () {});
 
-  // Every program file of every release (not the checksum lists), downloaded so far.
-  fetch(API + "/releases?per_page=100", gh)
-    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
-    .then(function (rels) {
-      var total = 0;
-      rels.forEach(function (rel) {
-        (rel.assets || []).forEach(function (a) {
-          if (!/^SHA256SUMS/i.test(a.name)) total += a.download_count || 0;
-        });
-      });
-      document.querySelectorAll("[data-downloads]").forEach(function (el) {
-        el.setAttribute("data-count", total);
-        if (counted) countUp(el);
-      });
-      var words = total.toLocaleString() + (total === 1 ? " download" : " downloads");
-      document.querySelectorAll("[data-downloads-inline]").forEach(function (el) { el.textContent = words; });
-      live.total = total;
-      renderLive();
-    })
-    .catch(function () {});
 })();
