@@ -111,15 +111,6 @@ for good. Every step, with pictures: **[Catch downloads from your browser](docs/
 | <img src="docs/images/mynox-choice-dark.webp" alt="MyNoX Download Manager in the MyNoX Choice theme, dark" width="820" /> | ![image](assets/image.png) |
 | | |
 
-| | |
-| --- | --- |
-| | |
-| | |
-| | |
-| | |
-| | |
-| | |
-
 ## User guide
 
 The full guide is in **[docs/](docs/README.md)**: getting started, browser integration, videos,
