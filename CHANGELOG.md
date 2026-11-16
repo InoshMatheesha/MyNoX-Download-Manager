@@ -5,8 +5,17 @@ Each release's notes on GitHub come from its section here (`## [X.Y.Z]`, see
 
 ## [Unreleased]
 
-- The website is at https://mynox-download-manager.vercel.app, with a floating island navigation
-  bar, the total downloads of every release, and 3D motion that turns off with reduced motion.
+## [1.0.3] - 2026-11-16
+
+### Changed
+
+- **MyNoX Choice's dark mode** has depth instead of pure black: the sidebar (#0F1115), the canvas
+  (#13161B) and the cards and list (#191D24) are three steps apart, with crisp 1px borders
+  (#262B35) round the buttons, the search box and the list.
+- **MyNoX Choice's title bar** shows only the logo and "MyNoX", centred (the window keeps its
+  full title in the taskbar).
+- **Help → Home Page** opens the website, https://mynox-download-manager.vercel.app, which now
+  has a floating island navigation bar, the total downloads and 3D motion.
 
 ## [1.0.2] - 2026-11-16
 

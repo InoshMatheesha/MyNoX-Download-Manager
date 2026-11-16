@@ -6673,7 +6673,12 @@ impl App {
                 (CaptionButton::Maximize, true),
                 (CaptionButton::Minimize, true),
             ];
-            let bar = caption::title_bar(ui, rect, crate::MAIN_TITLE, &buttons);
+            // MyNoX Choice: only the logo and the name, centred (the window keeps its full title).
+            let bar = if crate::theme::current().layout == crate::palette::Layout::Choice {
+                caption::title_bar_with(ui, rect, "MyNoX", &buttons, true)
+            } else {
+                caption::title_bar(ui, rect, crate::MAIN_TITLE, &buttons)
+            };
             if let Some(h) = self.main_hwnd {
                 // The sizing frame above the bar (Windows 11, #208) in the bar's colour.
                 crate::win32::caption_colour(h, [bar.top.r(), bar.top.g(), bar.top.b()]);

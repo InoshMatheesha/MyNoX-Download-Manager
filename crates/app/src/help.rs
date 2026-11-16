@@ -22,8 +22,8 @@ pub const CHECK_EVERY: i64 = 24 * 3600;
 /// The check at start waits this long (the window, the list and the downloads first).
 pub const CHECK_AFTER_START: std::time::Duration = std::time::Duration::from_secs(5);
 
-/// The home page: the repository; the user guide is docs/*.md there (DOCS).
-pub const SITE: &str = REPO;
+/// The home page: MyNoX's website; the user guide is docs/*.md in the repository (DOCS).
+pub const SITE: &str = "https://mynox-download-manager.vercel.app";
 /// The user guide's folder on GitHub, which renders docs/*.md.
 const DOCS: &str = "https://github.com/InoshMatheesha/MyNoX-Download-Manager/blob/main/docs/";
 
@@ -1162,7 +1162,8 @@ mod tests {
             at("queues-and-scheduler.md#the-scheduler-window", "ar"),
             format!("{docs}queues-and-scheduler.md#the-scheduler-window")
         );
-        assert_eq!(at("", "fr"), REPO);
+        // The home page is the website.
+        assert_eq!(at("", "fr"), "https://mynox-download-manager.vercel.app");
     }
 
     /// The repository's root.

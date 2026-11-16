@@ -6101,6 +6101,18 @@ pub mod caption {
         title: &str,
         buttons: &[(CaptionButton, bool)],
     ) -> TitleBar {
+        title_bar_with(ui, rect, title, buttons, false)
+    }
+
+    /// [`title_bar`]; `brand`: the logo and `title` centred together, as one mark (MyNoX
+    /// Choice's main window).
+    pub fn title_bar_with(
+        ui: &mut Ui,
+        rect: Rect,
+        title: &str,
+        buttons: &[(CaptionButton, bool)],
+        brand: bool,
+    ) -> TitleBar {
         // MYNOX_TEST_ACTIVE: every bar drawn as the active window's (pictures of windows off the
         // screens, which never have the focus).
         static ALWAYS_ACTIVE: std::sync::LazyLock<bool> =
@@ -6147,8 +6159,12 @@ pub mod caption {
         FRAME_MAX.with(|c| c.set((false, false)));
         let buttons_w = from_end;
         // Without an icon, the title keeps a little room from the bar's start.
-        let icon_w = if st.icon { CAPTION_ICON_W } else { 12.0 };
-        if st.icon {
+        let icon_w = if st.icon && !brand {
+            CAPTION_ICON_W
+        } else {
+            12.0
+        };
+        if st.icon && !brand {
             let icon_c = if rtl {
                 pos2(rect.right() - 16.0, rect.center().y)
             } else {
@@ -6157,7 +6173,9 @@ pub mod caption {
             egui::Image::new(egui::include_image!("../assets/icons/app/mynox-32.png"))
                 .paint_at(ui, Rect::from_center_size(icon_c.round(), vec2(16.0, 16.0)));
         }
-        let font = if st.bold {
+        let font = if brand {
+            FontId::new(13.5, egui::FontFamily::Name("segoe-bold".into()))
+        } else if st.bold {
             FontId::new(segoe().size, egui::FontFamily::Name("tahoma-bold".into()))
         } else {
             segoe()
@@ -6191,6 +6209,18 @@ pub mod caption {
             (anchor, x)
         };
         let galley = p.layout_no_wrap(shown.clone(), font.clone(), ink);
+        // The brand: the logo and the name side by side, centred on the bar as one.
+        let (anchor, x) = if brand {
+            let w = 18.0 + 8.0 + galley.size().x;
+            let left = (rect.center().x - w / 2.0).round();
+            egui::Image::new(egui::include_image!("../assets/icons/app/mynox-32.png")).paint_at(
+                ui,
+                Rect::from_center_size(pos2(left + 9.0, rect.center().y), vec2(18.0, 18.0)),
+            );
+            (egui::Align2::LEFT_CENTER, left + 26.0)
+        } else {
+            (anchor, x)
+        };
         let drawn = anchor.anchor_size(pos2(x, rect.center().y), galley.size());
         let c = crate::theme::colors();
         match st.era {
@@ -6232,7 +6262,7 @@ pub mod caption {
         }
         // Without an icon, no system-menu place (Alt+Space and a right-click on the bar still
         // open the system menu).
-        let icon = if !st.icon {
+        let icon = if !st.icon || brand {
             Rect::from_min_size(rect.min, egui::Vec2::ZERO)
         } else if rtl {
             Rect::from_min_max(pos2(rect.right() - CAPTION_ICON_W, rect.top()), rect.max)

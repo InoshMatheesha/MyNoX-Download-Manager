@@ -628,7 +628,8 @@ caption = "Test browser integration... says whether the browser reaches MyNoX."
 
 [[shot]]
 id = "site-theme-classic"
-page = "README.md"
+page = "themes.md"
+under = "Gallery"
 take = "theme:classic+@main"
 # The title bar, the menus, the toolbar, the categories and the list's rows: the theme's look.
 crop = [0, 0, 930, 300]
@@ -637,7 +638,8 @@ caption = "Classic"
 
 [[shot]]
 id = "site-theme-native"
-page = "README.md"
+page = "themes.md"
+under = "Gallery"
 take = "theme:native+@main"
 # The title bar, the menus, the toolbar, the categories and the list's rows: the theme's look.
 crop = [0, 0, 930, 300]
@@ -646,7 +648,8 @@ caption = "Native"
 
 [[shot]]
 id = "site-theme-high-contrast"
-page = "README.md"
+page = "themes.md"
+under = "Gallery"
 take = "theme:high-contrast+@main"
 # The title bar, the menus, the toolbar, the categories and the list's rows: the theme's look.
 crop = [0, 0, 930, 300]
@@ -655,7 +658,8 @@ caption = "High contrast"
 
 [[shot]]
 id = "site-theme-metro"
-page = "README.md"
+page = "themes.md"
+under = "Gallery"
 take = "theme:metro+@main"
 # The title bar, the menus, the toolbar, the categories and the list's rows: the theme's look.
 crop = [0, 0, 930, 300]
@@ -664,7 +668,8 @@ caption = "Metro"
 
 [[shot]]
 id = "site-theme-adwaita"
-page = "README.md"
+page = "themes.md"
+under = "Gallery"
 take = "theme:adwaita+@main"
 # The title bar, the menus, the toolbar, the categories and the list's rows: the theme's look.
 crop = [0, 0, 930, 300]
@@ -673,7 +678,8 @@ caption = "Adwaita"
 
 [[shot]]
 id = "site-theme-breeze"
-page = "README.md"
+page = "themes.md"
+under = "Gallery"
 take = "theme:breeze+@main"
 # The title bar, the menus, the toolbar, the categories and the list's rows: the theme's look.
 crop = [0, 0, 930, 300]
@@ -682,7 +688,8 @@ caption = "Breeze"
 
 [[shot]]
 id = "site-theme-luna"
-page = "README.md"
+page = "themes.md"
+under = "Gallery"
 take = "theme:luna+@main"
 # The title bar, the menus, the toolbar, the categories and the list's rows: the theme's look.
 crop = [0, 0, 930, 300]
@@ -691,7 +698,8 @@ caption = "Luna"
 
 [[shot]]
 id = "site-theme-aero"
-page = "README.md"
+page = "themes.md"
+under = "Gallery"
 take = "theme:aero+@main"
 # The title bar, the menus, the toolbar, the categories and the list's rows: the theme's look.
 crop = [0, 0, 930, 300]
@@ -700,7 +708,8 @@ caption = "Aero"
 
 [[shot]]
 id = "site-theme-aqua"
-page = "README.md"
+page = "themes.md"
+under = "Gallery"
 take = "theme:aqua+@main"
 # The title bar, the menus, the toolbar, the categories and the list's rows: the theme's look.
 crop = [0, 0, 930, 300]
@@ -709,7 +718,8 @@ caption = "Aqua"
 
 [[shot]]
 id = "site-theme-emerald"
-page = "README.md"
+page = "themes.md"
+under = "Gallery"
 take = "theme:emerald+@main"
 # The title bar, the menus, the toolbar, the categories and the list's rows: the theme's look.
 crop = [0, 0, 930, 300]
@@ -718,7 +728,8 @@ caption = "Emerald"
 
 [[shot]]
 id = "site-theme-mynox-choice"
-page = "README.md"
+page = "themes.md"
+under = "Gallery"
 take = "theme:mynox-choice+@main"
 # The sidebar, the header, the action bar and the list card: the theme's own layout.
 crop = [0, 0, 930, 300]

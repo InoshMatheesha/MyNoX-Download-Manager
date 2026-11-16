@@ -124,8 +124,7 @@ code { background: var(--surface-2); border: 1px solid var(--line); border-radiu
   max-width: 0; opacity: 0; font-size: 13px; font-weight: 600; color: #a1a1aa;
   transition: max-width 0.55s var(--spring), opacity 0.3s ease, margin 0.5s var(--spring);
 }
-.live-dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6); animation: live 2.4s ease-out infinite; }
-@keyframes live { 0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55); } 70%, 100% { box-shadow: 0 0 0 7px rgba(74, 222, 128, 0); } }
+.live-dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.18); }
 .island-links {
   display: flex; align-items: center; gap: 2px; overflow: hidden; white-space: nowrap;
   max-width: 560px; opacity: 1; margin-left: 10px;
@@ -440,6 +439,6 @@ h1 .line + .line { animation-delay: 0.12s; }
   .chip { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  h1 .line, .hero .pill, .hero .lead, .hero-cta, .hero .fine, .hero-shot, .chip, .orb, .chip-bar i, .live-dot { animation: none !important; }
+  h1 .line, .hero .pill, .hero .lead, .hero-cta, .hero .fine, .hero-shot, .chip, .orb, .chip-bar i { animation: none !important; }
   .hero-shot { --tilt: 0deg; --lift: 1; }
 }

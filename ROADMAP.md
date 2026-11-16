@@ -6,6 +6,12 @@ are in [CHANGELOG.md](CHANGELOG.md). Ideas and bug reports are welcome in
 
 ✅ done · 🔄 being built · 📋 planned
 
+## Version 1.0.3
+
+- ✅ MyNoX Choice's dark mode in three surfaces with crisp borders
+- ✅ The title bar's centred logo and name
+- ✅ The website on mynox-download-manager.vercel.app, opened by Help → Home Page
+
 ## Version 1.0.2
 
 - ✅ MyNoX Choice as the default theme, in graphite and white with a real light mode

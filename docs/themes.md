@@ -26,6 +26,43 @@ Always dark and folding the sidebar to icons at its foot. The header names the v
 on a card with a progress bar under each download's status. The menus and every keyboard
 shortcut are the same as in the other themes.
 
+## Gallery
+
+Every built-in theme, its main window in the light variant.
+
+![The main window in the MyNoX Choice theme](images/help/site-theme-mynox-choice.webp)
+*MyNoX Choice*
+
+![The main window in the Classic theme](images/help/site-theme-classic.webp)
+*Classic*
+
+![The main window in the Native theme](images/help/site-theme-native.webp)
+*Native*
+
+![The main window in the High contrast theme](images/help/site-theme-high-contrast.webp)
+*High contrast*
+
+![The main window in the Metro theme](images/help/site-theme-metro.webp)
+*Metro*
+
+![The main window in the Adwaita theme](images/help/site-theme-adwaita.webp)
+*Adwaita*
+
+![The main window in the Breeze theme](images/help/site-theme-breeze.webp)
+*Breeze*
+
+![The main window in the Luna theme](images/help/site-theme-luna.webp)
+*Luna*
+
+![The main window in the Aero theme](images/help/site-theme-aero.webp)
+*Aero*
+
+![The main window in the Aqua theme](images/help/site-theme-aqua.webp)
+*Aqua*
+
+![The main window in the Emerald theme](images/help/site-theme-emerald.webp)
+*Emerald*
+
 ## Where theme files go
 
 Theme files you make or download go in MyNoX's themes folder. **View → Theme → Open themes folder**

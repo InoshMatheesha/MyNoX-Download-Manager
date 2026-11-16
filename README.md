@@ -6,10 +6,17 @@
 
 <h3 align="center">A fast, free download manager for Windows.</h3>
 
-<p align="center"><a href="https://mynox-download-manager.vercel.app"><b>mynox-download-manager.vercel.app</b></a></p>
+<p align="center">
+  <a href="https://mynox-download-manager.vercel.app"><b>Website</b></a> ·
+  <a href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest"><b>Download</b></a> ·
+  <a href="docs/README.md"><b>User guide</b></a> ·
+  <a href="CHANGELOG.md"><b>Changelog</b></a>
+</p>
 
 <p align="center">
+  <a href="https://mynox-download-manager.vercel.app"><img src="https://img.shields.io/badge/website-mynox--download--manager.vercel.app-18181b?style=flat-square" alt="Website: mynox-download-manager.vercel.app"></a>
   <a href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest"><img src="https://img.shields.io/github/v/release/InoshMatheesha/MyNoX-Download-Manager?style=flat-square&label=Download&color=1e6fff" alt="Download the latest release"></a>
+  <a href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases"><img src="https://img.shields.io/github/downloads/InoshMatheesha/MyNoX-Download-Manager/total?style=flat-square&label=downloads&color=1e6fff" alt="Total downloads"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-1e6fff?style=flat-square" alt="Windows 10 and 11">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-1e6fff?style=flat-square" alt="GPL-3.0"></a>
 </p>
