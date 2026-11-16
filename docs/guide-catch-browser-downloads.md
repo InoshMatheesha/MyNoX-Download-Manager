@@ -8,7 +8,7 @@ Set up the extension once, and every download link you click in Firefox, Chrome,
 
 MyNoX must be installed with the setup, with **Set up browser integration (Chrome, Edge, Brave, Firefox)** ticked. It is ticked by default. If you're not sure, run the setup again. A portable copy can't do this.
 
-The extension comes with MyNoX: the setup puts it in the `extension` folder inside MyNoX's folder, and every [release on GitHub](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest) has it as `MyNoX-<version>-extension-chromium.zip` (Chrome, Edge, Brave, Opera, Vivaldi) and `MyNoX-<version>-extension-firefox.xpi` (Firefox). MyNoX's **Add MyNoX Download Manager to your browser** window, which opens at each start until a browser's extension has reached MyNoX, opens these steps with **Show me how**.
+The extension comes with MyNoX: the setup (and the portable copy) puts it in the `extension` folder inside MyNoX's folder.
 
 Once it is set up, a download link goes like this:
 
@@ -21,12 +21,21 @@ Once it is set up, a download link goes like this:
 3. ![Download complete, with Open, Open with..., Open folder and Close](images/help/catch-complete.webp)
    *Download complete: Open the file, or Open folder.*
 
+## The quick way: one click
+
+1. Open **Tasks → Browser extension...** (in the MyNoX Choice theme, **Add to browser** at the bottom of the sidebar). The same window opens by itself at each start until a browser's extension has reached MyNoX.
+2. Click **Add it now** beside your browser. MyNoX opens the browser's extensions page, copies the extension's folder, and shows the three clicks left to do there.
+3. In the browser: turn on **Developer mode**, click **Load unpacked**, press **Ctrl+V** in the folder box and click **Select Folder**. For Firefox: **Load Temporary Add-on...**, **Ctrl+V**, **Open**.
+4. MyNoX's window says **Connected** once the extension has reached it.
+
+The sections below are the same steps by hand.
+
 ## In Chrome, Edge, Brave, Opera or Vivaldi
 
 1. Open your browser's extensions page: type `chrome://extensions`, `edge://extensions`, `brave://extensions`, `opera://extensions` or `vivaldi://extensions` in the address bar.
 2. Turn on **Developer mode** (a switch at the top right; in Edge, at the bottom left).
 3. Click **Load unpacked**.
-4. Choose the `extension\chromium` folder inside MyNoX's folder: `%LOCALAPPDATA%\Programs\MyNoX Download Manager\extension\chromium` if you installed MyNoX for yourself, `C:\Program Files\MyNoX Download Manager\extension\chromium` for everyone. You can paste the path into the folder box. Or download `MyNoX-<version>-extension-chromium.zip` from the [latest release](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest), unzip it, and choose that folder.
+4. Choose the `extension\chromium` folder inside MyNoX's folder: `%LOCALAPPDATA%\Programs\MyNoX Download Manager\extension\chromium` if you installed MyNoX for yourself, `C:\Program Files\MyNoX Download Manager\extension\chromium` for everyone. You can paste the path into the folder box. A portable copy has the same folder beside its `mynox.exe`.
 5. **MyNoX Download Manager** appears. Make sure it is turned on, and pin it to the toolbar if you like.
 6. Go to a web page and click a download link, for example a ZIP or an EXE: MyNoX opens **Download File Info**. Click **Start Download**.
 
@@ -38,7 +47,7 @@ Firefox installs add-ons for good only when Mozilla has signed them. Until MyNoX
 
 1. Type `about:debugging#/runtime/this-firefox` in the address bar.
 2. Click **Load Temporary Add-on...**.
-3. Choose `mynox-firefox.xpi` from the `extension` folder inside MyNoX's folder, or `MyNoX-<version>-extension-firefox.xpi` from the [latest release](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest).
+3. Choose `mynox-firefox.xpi` from the `extension` folder inside MyNoX's folder.
 4. Go to a web page and click a download link: MyNoX opens **Download File Info**. Click **Start Download**.
 
 Firefox removes a temporary add-on when it closes, so repeat these steps after a restart. Firefox Developer Edition, Nightly and ESR can keep it: set `xpinstall.signatures.required` to `false` in `about:config`, then open the `.xpi` file with Firefox (**File → Open File**).

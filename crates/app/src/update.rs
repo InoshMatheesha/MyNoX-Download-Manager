@@ -156,7 +156,20 @@ fn apply(install: Install, file: &Path) -> Result<Next, String> {
             ]);
             Ok(Next::Restart(cmd))
         }
-        Install::PortableZip | Install::PlainZip => {
+        // The portable .exe unpacks the new programs over this copy (its `data` stays), after
+        // closing MyNoX (/exit), and starts it again (tools/installer/mynox-portable.iss).
+        Install::Portable => {
+            let mut cmd = Command::new(file);
+            cmd.args([
+                "/VERYSILENT",
+                "/SUPPRESSMSGBOXES",
+                "/NORESTART",
+                "/relaunch=1",
+            ]);
+            cmd.arg(format!("/DIR={}", dir.display()));
+            Ok(Next::Restart(cmd))
+        }
+        Install::PlainZip => {
             let out = unpack_dir()?;
             mynox_tools::update::unzip(file, &out).map_err(|e| e.to_string())?;
             let new = mynox_tools::update::single_folder(&out);
@@ -293,7 +306,7 @@ mod tests {
         // An unsigned release, another kind's file, a build from source: no.
         let unsigned = a(&["MyNoX-0.2.2-setup.exe", "SHA256SUMS.txt"]);
         assert_eq!(asset_for(Install::Installer, "0.2.2", &unsigned), None);
-        assert_eq!(asset_for(Install::PortableZip, "0.2.2", &full), None);
+        assert_eq!(asset_for(Install::Portable, "0.2.2", &full), None);
         assert_eq!(asset_for(Install::Source, "0.2.2", &full), None);
     }
 

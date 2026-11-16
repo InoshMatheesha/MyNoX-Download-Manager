@@ -26,6 +26,10 @@ use crate::store;
 use crate::winui;
 use mynox_ipc as ipc;
 
+// MyNoX Choice's own main window layout (a child of this module, beside it on disk).
+#[path = "choice.rs"]
+mod choice;
+
 /// A node of the Categories tree, what the list shows (saved: the last one comes back).
 #[derive(Clone, Copy, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
 pub(crate) enum View {
@@ -182,6 +186,8 @@ enum Cmd {
     ShowAll,
     /// Header right-click → Reset columns.
     ResetColumns,
+    /// The browser extension's window: one click adds it to a browser.
+    BrowserExtension,
     None,
 }
 
@@ -696,6 +702,8 @@ pub struct App {
     popup: Option<(Popup, Pos2, u64)>,
     /// Counts menu opens: each open is a new menu window, even at the same place.
     popup_serial: u64,
+    /// MyNoX Choice's layout state (app/choice.rs).
+    choice: choice::State,
     /// The column layout last seen, to notice changes that need saving.
     last_layout: Option<list::Layout>,
     /// Main download queue (0), synchronization queue (1).
@@ -1222,6 +1230,7 @@ impl App {
             alt_alone: false,
             popup: None,
             popup_serial: 0,
+            choice: choice::State::default(),
             last_layout: None,
             queues,
             failures: HashMap::new(),
@@ -1415,6 +1424,14 @@ impl App {
             },
             icon: file_icon(&it.file_name),
             queued: queued.contains(&it.id),
+            // Done so far, for MyNoX Choice's progress bars.
+            progress: if it.status == Status::Complete {
+                Some(1.0)
+            } else {
+                it.size
+                    .filter(|s| *s > 0)
+                    .map(|s| (it.downloaded.min(s) as f64 / s as f64) as f32)
+            },
             cells: [
                 it.file_name.clone(),
                 String::new(),
@@ -2156,6 +2173,12 @@ impl App {
             "safari-steps" => {
                 let mut offer = crate::extension::Extension::new();
                 offer.open_safari_steps();
+                self.extension = Some(offer);
+            }
+            // The one-click helper's steps for Chrome, without opening it (screenshots).
+            "extension-quick" => {
+                let mut offer = crate::extension::Extension::new();
+                offer.preview_quick();
                 self.extension = Some(offer);
             }
             "language" => self.run(Cmd::ChooseLanguage, None, ctx),
@@ -5565,6 +5588,7 @@ impl App {
             Cmd::ClearFilters => self.list.filters = vec![None; list::COLS],
             Cmd::ResetColumns => self.list.reset_columns(),
             Cmd::ShowAll => self.view = View::All,
+            Cmd::BrowserExtension => self.extension = Some(crate::extension::Extension::new()),
             Cmd::SelectAll => {
                 let ids = self.shown_ids();
                 self.selection.apply(crate::selection::Pick::All, &ids);
@@ -5750,6 +5774,8 @@ impl App {
                 I("&Link grabber...", Cmd::LinkGrabber, true, false),
                 // i18n: Tasks menu: the RSS feeds window (feeds of torrents, and rules that add them)
                 I("&RSS feeds...", Cmd::RssFeeds(false), true, false),
+                // i18n: Tasks menu: the window that adds MyNoX's extension to your browsers in one click
+                I("Browser extensi&on...", Cmd::BrowserExtension, true, false),
                 Sep,
                 I(
                     "Show &drop target",
@@ -5958,6 +5984,13 @@ impl App {
         let on = |id: &str| chosen == id;
         // i18n: View → Theme: MyNoX's own look, the default (IDM's layout, Windows 11's controls)
         items.push(Radio("Classic", Cmd::Theme("classic"), true, on("classic")));
+        // i18n: View → Theme: MyNoX's own theme with its own layout (a sidebar, a header, cards), a name: keep "MyNoX Choice" as written
+        items.push(Radio(
+            "MyNoX Choice",
+            Cmd::Theme("mynox-choice"),
+            true,
+            on("mynox-choice"),
+        ));
         // i18n: View → Theme: the system's own colours (its accent colour, its high contrast)
         items.push(Radio("Native", Cmd::Theme("native"), true, on("native")));
         // i18n: View → Theme: black and white with strong edges, for low vision
@@ -6647,6 +6680,84 @@ impl App {
         }
     }
 
+    /// The Categories tree's keys (MyNoX Choice's library too); returns (keys free, event).
+    fn tree_keyboard(
+        &mut self,
+        ctx: &egui::Context,
+        rows: &[(TreeRow<'static>, Option<View>, Branch)],
+    ) -> (bool, Option<TreeEvent>) {
+        let free = self.popup.is_none()
+            && self.open_menu.is_none()
+            && ctx.memory(|m| m.focused().is_none());
+        if free
+            && ctx.input_mut(|i| {
+                i.consume_key(egui::Modifiers::NONE, egui::Key::Tab)
+                    || i.consume_key(egui::Modifiers::SHIFT, egui::Key::Tab)
+            })
+        {
+            self.tree_keys = !self.tree_keys;
+            self.list.set_keys(!self.tree_keys);
+            crate::chrome::show_cues(ctx);
+        }
+        let mut tree_event = None;
+        if free && self.tree_keys {
+            let at = rows
+                .iter()
+                .position(|(_, v, _)| *v == Some(self.view))
+                .unwrap_or(0);
+            let with_view: Vec<usize> = (0..rows.len()).filter(|k| rows[*k].1.is_some()).collect();
+            let pos = with_view.iter().position(|k| *k == at).unwrap_or(0);
+            let key = |k| ctx.input_mut(|i| i.consume_key(egui::Modifiers::NONE, k));
+            let to = if key(egui::Key::ArrowDown) {
+                with_view.get(pos + 1).copied()
+            } else if key(egui::Key::ArrowUp) {
+                pos.checked_sub(1).and_then(|p| with_view.get(p).copied())
+            } else if key(egui::Key::Home) {
+                with_view.first().copied()
+            } else if key(egui::Key::End) {
+                with_view.last().copied()
+            } else {
+                None
+            };
+            if let Some(k) = to {
+                tree_event = Some(TreeEvent::Select(k));
+            }
+            let open = rows[at].0.expander;
+            let (left, right) = if winui::rtl() {
+                (egui::Key::ArrowRight, egui::Key::ArrowLeft)
+            } else {
+                (egui::Key::ArrowLeft, egui::Key::ArrowRight)
+            };
+            if (open == Some(true) && key(left)) || (open == Some(false) && key(right)) {
+                tree_event = Some(TreeEvent::Toggle(at));
+            }
+        }
+        (free, tree_event)
+    }
+
+    /// A click, a key or a menu in the Categories tree (or MyNoX Choice's library).
+    fn tree_event(&mut self, ev: TreeEvent, rows: &[(TreeRow<'static>, Option<View>, Branch)]) {
+        // A click in the tree gives it the keys.
+        self.tree_keys = true;
+        self.list.set_keys(false);
+        match ev {
+            TreeEvent::Close => self.show_categories = false,
+            TreeEvent::Select(k) => match rows[k].1 {
+                Some(v) => self.view = v,
+                None => self.toggle(rows[k].2),
+            },
+            TreeEvent::Toggle(k) => self.toggle(rows[k].2),
+            TreeEvent::Context(k, at) => {
+                // Leaves and nodes with a view; "Queues" (a branch without one) has
+                // the queue menu, all greyed.
+                let node = rows[k].1;
+                if node.is_some() || rows[k].2 == Branch::Queues {
+                    self.open_popup(Popup::Node(node), at);
+                }
+            }
+        }
+    }
+
     fn paint(&mut self, ui: &mut Ui) {
         let ctx = ui.ctx().clone();
         let full = ui.max_rect();
@@ -6739,8 +6850,12 @@ impl App {
             self.alt_alone = false;
         }
 
+        // MyNoX Choice: its sidebar takes the leading edge, the menu bar starts after it.
+        let choice = crate::theme::current().layout == crate::palette::Layout::Choice;
+        let side_w = if choice { self.choice_side_w() } else { 0.0 };
+        let (mo, mw) = (pos2(o.x + side_w, o.y), w - side_w);
         // Menu bar and its popups: which menu is open is chrome::menubar_next's to say.
-        if let Some(event) = chrome::menu_bar(ui, o, w, self.open_menu) {
+        if let Some(event) = chrome::menu_bar(ui, mo, mw, self.open_menu) {
             self.open_menu = chrome::menubar_next(self.open_menu, event);
         }
         // A menu opened by Left or Right is drawn in the same pass as the one it replaces (a
@@ -6751,7 +6866,7 @@ impl App {
             let x = chrome::menus(ui.painter())[i].1;
             let entries = self.menu_entries(i);
             // Under the item's leading edge (the menu's top-right in RTL).
-            let at = pos2(winui::mx(o.x + x), o.y + chrome::MENU_H - 1.0);
+            let at = pos2(winui::mx(mo.x + x), mo.y + chrome::MENU_H - 1.0);
             let event = match chrome::popup(
                 &ctx,
                 MenuKind::Bar,
@@ -6777,7 +6892,7 @@ impl App {
                     let press =
                         ui.input(|x| x.pointer.press_origin().filter(|_| x.pointer.any_pressed()));
                     let press_on_title = press
-                        .is_some_and(|at| chrome::menubar_title_at(ui.painter(), o, at).is_some());
+                        .is_some_and(|at| chrome::menubar_title_at(ui.painter(), mo, at).is_some());
                     Some(MenuBarEvent::Dismissed { press_on_title })
                 }
             };
@@ -6790,59 +6905,66 @@ impl App {
             }
         }
 
+        // MyNoX Choice: its sidebar, header and action bar stand for the toolbar and Categories.
+        let choice_list = choice.then(|| self.choice_chrome(ui, o, w, h, &mut chosen));
         // Toolbar — full labels (IDM truncates "Delete Co...", "Start Qu...": user decision).
-        let picked = self.chosen(None);
-        let running = picked.iter().any(|i| i.live.is_some());
-        let resumable = picked.iter().any(|i| i.can_start());
-        let deletable = picked.iter().any(|i| i.live.is_none());
-        let any_running = self.items.iter().any(|i| i.live.is_some());
-        let any_complete = self.items.iter().any(|i| i.status == Status::Complete);
-        let buttons = [
-            (Icon::AddUrl, "Add URL", true, Cmd::AddUrl),
-            (Icon::AddTorrent, "Add Torrent", true, Cmd::OpenTorrentFile),
-            // i18n: verb: continue the selected downloads
-            (Icon::Resume, "Resume", resumable, Cmd::Resume),
-            // i18n: verb: stop the selected downloads
-            (Icon::Stop, "Stop", running, Cmd::Stop),
-            (Icon::StopAll, "Stop All", any_running, Cmd::StopAll),
-            // i18n: verb: delete the selected downloads
-            (Icon::Delete, "Delete", deletable, Cmd::Remove),
-            (
-                Icon::DeleteCompleted,
-                "Delete Completed",
-                any_complete,
-                Cmd::DeleteCompleted,
-            ),
-            // i18n: plural noun: opens the Options window (settings)
-            (Icon::Options, "Options", true, Cmd::Options),
-            // i18n: noun: the tool that starts and stops queues on time
-            (Icon::Scheduler, "Scheduler", true, Cmd::Scheduler),
-            (
-                Icon::StartQueue,
-                "Start Queue",
-                // The button acts on the main queue (the others: its arrow, the menus).
-                self.queues.first().is_some_and(|q| !q.running),
-                Cmd::StartQueue(0),
-            ),
-            (
-                Icon::StopQueue,
-                "Stop Queue",
-                self.queues.first().is_some_and(|q| q.running),
-                Cmd::StopQueue(0),
-            ),
-        ];
-        let tb: Vec<(Icon, &str, bool)> = buttons.iter().map(|(i, l, e, _)| (*i, *l, *e)).collect();
-        match chrome::toolbar(ui, o, w, &tb) {
-            Some(ToolbarEvent::Click(k)) => chosen = Some((buttons[k].3, None)),
-            Some(ToolbarEvent::Drop(k, at)) => match buttons[k].0 {
-                Icon::AddTorrent => self.open_popup(Popup::TorrentDrop, at),
-                icon => self.open_popup(Popup::QueueDrop(matches!(icon, Icon::StartQueue)), at),
-            },
-            None => {}
+        if !choice {
+            let picked = self.chosen(None);
+            let running = picked.iter().any(|i| i.live.is_some());
+            let resumable = picked.iter().any(|i| i.can_start());
+            let deletable = picked.iter().any(|i| i.live.is_none());
+            let any_running = self.items.iter().any(|i| i.live.is_some());
+            let any_complete = self.items.iter().any(|i| i.status == Status::Complete);
+            let buttons = [
+                (Icon::AddUrl, "Add URL", true, Cmd::AddUrl),
+                (Icon::AddTorrent, "Add Torrent", true, Cmd::OpenTorrentFile),
+                // i18n: verb: continue the selected downloads
+                (Icon::Resume, "Resume", resumable, Cmd::Resume),
+                // i18n: verb: stop the selected downloads
+                (Icon::Stop, "Stop", running, Cmd::Stop),
+                (Icon::StopAll, "Stop All", any_running, Cmd::StopAll),
+                // i18n: verb: delete the selected downloads
+                (Icon::Delete, "Delete", deletable, Cmd::Remove),
+                (
+                    Icon::DeleteCompleted,
+                    "Delete Completed",
+                    any_complete,
+                    Cmd::DeleteCompleted,
+                ),
+                // i18n: plural noun: opens the Options window (settings)
+                (Icon::Options, "Options", true, Cmd::Options),
+                // i18n: noun: the tool that starts and stops queues on time
+                (Icon::Scheduler, "Scheduler", true, Cmd::Scheduler),
+                (
+                    Icon::StartQueue,
+                    "Start Queue",
+                    // The button acts on the main queue (the others: its arrow, the menus).
+                    self.queues.first().is_some_and(|q| !q.running),
+                    Cmd::StartQueue(0),
+                ),
+                (
+                    Icon::StopQueue,
+                    "Stop Queue",
+                    self.queues.first().is_some_and(|q| q.running),
+                    Cmd::StopQueue(0),
+                ),
+            ];
+            let tb: Vec<(Icon, &str, bool)> =
+                buttons.iter().map(|(i, l, e, _)| (*i, *l, *e)).collect();
+            match chrome::toolbar(ui, o, w, &tb) {
+                Some(ToolbarEvent::Click(k)) => chosen = Some((buttons[k].3, None)),
+                Some(ToolbarEvent::Drop(k, at)) => match buttons[k].0 {
+                    Icon::AddTorrent => self.open_popup(Popup::TorrentDrop, at),
+                    icon => self.open_popup(Popup::QueueDrop(matches!(icon, Icon::StartQueue)), at),
+                },
+                None => {}
+            }
         }
 
         // Categories pane.
-        let list_left = if self.show_categories {
+        let list_left = if choice {
+            0.0
+        } else if self.show_categories {
             let rows = self.tree_rows();
             let tree: Vec<TreeRow<'_>> = rows.iter().map(|(r, ..)| r.clone()).collect();
             // The splitter: the 4 px gap between the pane and the list, dragged sideways.
@@ -6874,55 +6996,8 @@ impl App {
             if sr.drag_stopped() {
                 self.dirty = true;
             }
-            // The tree's keys while it has them (Tab moves between it and the list): Up / Down
-            // through the nodes, Left / Right close and open a branch, Home / End.
-            let free = self.popup.is_none()
-                && self.open_menu.is_none()
-                && ctx.memory(|m| m.focused().is_none());
-            if free
-                && ctx.input_mut(|i| {
-                    i.consume_key(egui::Modifiers::NONE, egui::Key::Tab)
-                        || i.consume_key(egui::Modifiers::SHIFT, egui::Key::Tab)
-                })
-            {
-                self.tree_keys = !self.tree_keys;
-                self.list.set_keys(!self.tree_keys);
-                crate::chrome::show_cues(&ctx);
-            }
-            let mut tree_event = None;
-            if free && self.tree_keys {
-                let at = rows
-                    .iter()
-                    .position(|(_, v, _)| *v == Some(self.view))
-                    .unwrap_or(0);
-                let with_view: Vec<usize> =
-                    (0..rows.len()).filter(|k| rows[*k].1.is_some()).collect();
-                let pos = with_view.iter().position(|k| *k == at).unwrap_or(0);
-                let key = |k| ctx.input_mut(|i| i.consume_key(egui::Modifiers::NONE, k));
-                let to = if key(egui::Key::ArrowDown) {
-                    with_view.get(pos + 1).copied()
-                } else if key(egui::Key::ArrowUp) {
-                    pos.checked_sub(1).and_then(|p| with_view.get(p).copied())
-                } else if key(egui::Key::Home) {
-                    with_view.first().copied()
-                } else if key(egui::Key::End) {
-                    with_view.last().copied()
-                } else {
-                    None
-                };
-                if let Some(k) = to {
-                    tree_event = Some(TreeEvent::Select(k));
-                }
-                let open = rows[at].0.expander;
-                let (left, right) = if winui::rtl() {
-                    (egui::Key::ArrowRight, egui::Key::ArrowLeft)
-                } else {
-                    (egui::Key::ArrowLeft, egui::Key::ArrowRight)
-                };
-                if (open == Some(true) && key(left)) || (open == Some(false) && key(right)) {
-                    tree_event = Some(TreeEvent::Toggle(at));
-                }
-            }
+            // The tree's keys while it has them (Tab moves between it and the list).
+            let (free, tree_event) = self.tree_keyboard(&ctx, &rows);
             if let Some(ev) = chrome::categories(
                 ui,
                 &mut self.icons,
@@ -6934,25 +7009,7 @@ impl App {
             )
             .or(tree_event)
             {
-                // A click in the tree gives it the keys.
-                self.tree_keys = true;
-                self.list.set_keys(false);
-                match ev {
-                    TreeEvent::Close => self.show_categories = false,
-                    TreeEvent::Select(k) => match rows[k].1 {
-                        Some(v) => self.view = v,
-                        None => self.toggle(rows[k].2),
-                    },
-                    TreeEvent::Toggle(k) => self.toggle(rows[k].2),
-                    TreeEvent::Context(k, at) => {
-                        // Leaves and nodes with a view; "Queues" (a branch without one) has
-                        // the queue menu, all greyed.
-                        let node = rows[k].1;
-                        if node.is_some() || rows[k].2 == Branch::Queues {
-                            self.open_popup(Popup::Node(node), at);
-                        }
-                    }
-                }
+                self.tree_event(ev, &rows);
             }
             6.0 + cat_w + 4.0
         } else {
@@ -6963,10 +7020,12 @@ impl App {
         let (ids, rows) = self.list_rows();
         self.selection.retain(&ids);
         let (selected, focus) = self.selection.rows(&ids);
-        let outer = egui::Rect::from_min_max(
-            pos2(o.x + list_left, o.y + chrome::MENU_H + chrome::pane_top()),
-            pos2(o.x + w - 7.0, o.y + h - STRIP_H - 4.0),
-        );
+        let outer = choice_list.unwrap_or_else(|| {
+            egui::Rect::from_min_max(
+                pos2(o.x + list_left, o.y + chrome::MENU_H + chrome::pane_top()),
+                pos2(o.x + w - 7.0, o.y + h - STRIP_H - 4.0),
+            )
+        });
         self.list.menu_open = self.popup.is_some() || self.open_menu.is_some();
         // Another node shows from its top (its rows aren't the last one's).
         if self.list_view != self.view {
@@ -7031,7 +7090,10 @@ impl App {
         {
             chosen = Some((cmd, None));
         }
-        self.status_strip(ui, o, w, h, ids.len());
+        // MyNoX Choice draws its own status bar (app/choice.rs).
+        if !choice {
+            self.status_strip(ui, o, w, h, ids.len());
+        }
         if let Some((i, pos)) = r.context {
             self.open_popup(Popup::Item(i.map(|i| ids[i])), pos);
         }

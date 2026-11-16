@@ -6625,3 +6625,47 @@ unit	{n} MB	{n} МБ
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} МБ/с
+#, machine
+	Add to browser	Добавить в браузер
+#, machine
+	Browser connected	Браузер подключён
+#, machine
+	Download speed	Скорость загрузки
+#, machine
+	Idle	Простой
+#, machine
+	Library	Библиотека
+#, machine
+	More torrent options	Другие параметры торрента
+#, machine
+	Nothing is downloading right now	Сейчас ничего не загружается
+#, machine
+menu	Browser extensi&on...	Расширение &браузера...
+#, machine
+	Add it now	Добавить сейчас
+#, machine
+	Add the extension to your browser	Добавить расширение в браузер
+#, machine
+	Almost there: three clicks in {browser}	Почти готово: три щелчка в {browser}
+#, machine
+	Click "Load Temporary Add-on..." on the page that just opened.	Нажмите "Load Temporary Add-on..." на только что открытой странице.
+#, machine
+	Click "Load unpacked".	Нажмите "Load unpacked".
+#, machine
+	Copy again	Скопировать снова
+#, machine
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	Готово: Firefox хранит его до закрытия (Developer Edition и ESR хранят его постоянно).
+#, machine
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	В поле файла нажмите Ctrl+V (MyNoX скопировал файл) и нажмите Открыть.
+#, machine
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	В поле папки нажмите Ctrl+V (MyNoX скопировал папку) и нажмите Выбор папки.
+#, machine
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	MyNoX открыл страницу расширений браузера и скопировал расположение расширения. Выполните там эти шаги:
+#, machine
+	Open the page again	Открыть страницу снова
+#, machine
+	Turn on "Developer mode" at the bottom left of the page that just opened.	Включите "Developer mode" внизу слева на только что открытой странице.
+#, machine
+	Turn on "Developer mode" at the top right of the page that just opened.	Включите "Developer mode" вверху справа на только что открытой странице.
+#, machine
+	Waiting for the extension to reach MyNoX...	Ожидание подключения расширения к MyNoX...

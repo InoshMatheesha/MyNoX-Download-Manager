@@ -48,6 +48,8 @@ pub struct Extension {
     set_up_seen: u64,
     /// The steps that add Safari's extension, while that window is open.
     steps: Option<SafariSteps>,
+    /// The one-click helper's steps for a browser, while that window is open.
+    quick: Option<QuickAdd>,
 }
 
 /// Whether `row` (a browser as the window lists it) is among the browsers seen (as Options
@@ -98,7 +100,18 @@ impl Extension {
             looked: std::time::Instant::now(),
             set_up_seen: 0,
             steps: None,
+            quick: None,
         }
+    }
+
+    /// The one-click helper's steps for Chrome, shown without opening it (`/show extension-quick`).
+    pub fn preview_quick(&mut self) {
+        self.quick = Some(QuickAdd {
+            browser: "Google Chrome".to_owned(),
+            program: None,
+            gecko: false,
+            path: bundled(false).unwrap_or_else(|| PathBuf::from("extension").join("chromium")),
+        });
     }
 
     /// The Safari steps, open at once (`/show safari-steps`: screenshots).
@@ -123,6 +136,7 @@ impl Extension {
         let extra = crate::dialogs::grow_extra(ctx, "extension-banner");
         let mut answer = None;
         let mut open_steps = false;
+        let mut quick: Option<QuickAdd> = None;
         let outcome = window(
             ctx,
             "extension",
@@ -132,7 +146,7 @@ impl Extension {
             false,
             winui::BG(),
             |ui, o| {
-                self.body(ui, o, h, &mut answer, &mut open_steps);
+                self.body(ui, o, h, &mut answer, &mut open_steps, &mut quick);
                 match answer.take() {
                     Some(true) => Outcome::Done(()),
                     Some(false) => Outcome::Closed,
@@ -144,6 +158,14 @@ impl Extension {
         );
         if open_steps && self.steps.is_none() {
             self.steps = Some(SafariSteps);
+        }
+        if quick.is_some() {
+            self.quick = quick;
+        }
+        if let Some(q) = &mut self.quick
+            && !matches!(q.show(ctx, self.connected), Outcome::Open)
+        {
+            self.quick = None;
         }
         if let Some(steps) = &mut self.steps
             && !matches!(steps.show(ctx), Outcome::Open)
@@ -160,6 +182,7 @@ impl Extension {
         h: f32,
         answer: &mut Option<bool>,
         open_steps: &mut bool,
+        quick: &mut Option<QuickAdd>,
     ) {
         let p = ui.painter().clone();
         let (ink, muted) = (winui::TEXT(), winui::MUTED());
@@ -207,6 +230,9 @@ impl Extension {
             let label = if safari {
                 // i18n: button in the browser extension's window, on Safari's row: open the steps that turn the extension on
                 "How to Add"
+            } else if page.is_none() && bundled(is_gecko(name)).is_some() {
+                // i18n: button in the browser extension's window: one click opens the browser's extensions page and copies the extension's folder
+                "Add it now"
             } else if page.is_none() {
                 // i18n: button in the browser extension's window: open the tutorial that adds the extension
                 "Show me how"
@@ -245,6 +271,12 @@ impl Extension {
             );
             if add.clicked() && safari {
                 *open_steps = true;
+            } else if add.clicked()
+                && page.is_none()
+                && let Some(q) = QuickAdd::start(ui.ctx(), name, program.clone(), is_gecko(name))
+            {
+                // One click: the browser's extensions page, the folder copied, the steps shown.
+                *quick = Some(q);
             } else if add.clicked() {
                 // No store page: the tutorial on the website, in the interface language.
                 let url = page.clone().unwrap_or_else(|| {
@@ -320,17 +352,15 @@ impl Extension {
         let y = h - 36.0;
         // The fallback, when a store can't be used (a managed browser, a store turned off): the
         // tutorial, which adds it by hand.
-        if store.is_some()
-            && winui::link(
-                ui,
-                &p,
-                o.x + 18.0,
-                o.y + y + 17.0,
-                // i18n: link in the browser extension's window: the tutorial that adds it without the browser's store
-                "Install it by hand",
-                "by-hand",
-            )
-        {
+        if winui::link(
+            ui,
+            &p,
+            o.x + 18.0,
+            o.y + y + 17.0,
+            // i18n: link in the browser extension's window: the tutorial that adds it without the browser's store
+            "Install it by hand",
+            "by-hand",
+        ) {
             crate::help::open_page(mynox_ipc::extension::GUIDE_DOC);
         }
         // As wide as their labels in this language (#192), Don't ask again only while no
@@ -367,6 +397,290 @@ impl Extension {
                 *answer = Some(true);
             }
         }
+    }
+}
+
+/// MyNoX's own copy of the extension (Chromium folder or Firefox .xpi) beside the program.
+pub fn bundled(gecko: bool) -> Option<PathBuf> {
+    let exe = std::env::current_exe().ok()?;
+    let dir = exe.parent()?;
+    let mut places = vec![dir.join("extension")];
+    // A build in a checkout: target/<profile>/mynox.exe, the extension in target/extension.
+    if let Some(target) = dir.parent() {
+        places.push(target.join("extension"));
+    }
+    places
+        .into_iter()
+        .map(|d| {
+            if gecko {
+                d.join("mynox-firefox.xpi")
+            } else {
+                d.join("chromium")
+            }
+        })
+        .find(|p| p.exists())
+}
+
+/// The page of a browser where extensions are added by hand.
+fn extensions_page(browser: &str, gecko: bool) -> &'static str {
+    match browser {
+        _ if gecko => "about:debugging#/runtime/this-firefox",
+        "Microsoft Edge" => "edge://extensions/",
+        "Brave" => "brave://extensions/",
+        "Opera" | "Opera GX" => "opera://extensions",
+        "Vivaldi" => "vivaldi://extensions/",
+        _ => "chrome://extensions/",
+    }
+}
+
+/// The one-click helper: extensions page opened, folder copied, the three steps shown.
+pub struct QuickAdd {
+    browser: String,
+    program: Option<PathBuf>,
+    gecko: bool,
+    path: PathBuf,
+}
+
+const QUICK_STEPS: f32 = 3.0 * 30.0;
+
+impl QuickAdd {
+    /// Copies the extension's place and opens the extensions page; None without a copy here.
+    pub fn start(
+        ctx: &egui::Context,
+        browser: &str,
+        program: Option<PathBuf>,
+        gecko: bool,
+    ) -> Option<QuickAdd> {
+        let path = bundled(gecko)?;
+        let q = QuickAdd {
+            browser: browser.to_owned(),
+            program,
+            gecko,
+            path,
+        };
+        q.copy(ctx);
+        q.open_page();
+        Some(q)
+    }
+
+    fn copy(&self, ctx: &egui::Context) {
+        ctx.copy_text(self.path.display().to_string());
+    }
+
+    fn open_page(&self) {
+        let url = extensions_page(&self.browser, self.gecko);
+        match &self.program {
+            #[cfg(windows)]
+            Some(program) => crate::win32::open_in(program, url),
+            #[cfg(unix)]
+            Some(program) => crate::unix::open_in(program, url),
+            None => crate::launch::open(url),
+        }
+    }
+
+    /// The steps for this browser, in its own words for its buttons.
+    fn steps(&self) -> [String; 3] {
+        let t = |s: &str| crate::i18n::t(s).to_owned();
+        if self.gecko {
+            [
+                // i18n: one-click helper, Firefox, step 1; the quoted button is Firefox's own words (keep English when unsure)
+                t("Click \"Load Temporary Add-on...\" on the page that just opened."),
+                // i18n: one-click helper, Firefox, step 2
+                t("In the file box, press Ctrl+V (MyNoX copied the file) and click Open."),
+                // i18n: one-click helper, Firefox, step 3
+                t(
+                    "Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).",
+                ),
+            ]
+        } else {
+            [
+                if self.browser == "Microsoft Edge" {
+                    // i18n: one-click helper, Edge, step 1; the quoted switch is Edge's own words (keep English when unsure)
+                    t("Turn on \"Developer mode\" at the bottom left of the page that just opened.")
+                } else {
+                    // i18n: one-click helper, Chrome and its family, step 1; the quoted switch is the browser's own words (keep English when unsure)
+                    t("Turn on \"Developer mode\" at the top right of the page that just opened.")
+                },
+                // i18n: one-click helper, Chrome and its family, step 2; the quoted button is the browser's own words (keep English when unsure)
+                t("Click \"Load unpacked\"."),
+                // i18n: one-click helper, Chrome and its family, step 3
+                t(
+                    "In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.",
+                ),
+            ]
+        }
+    }
+
+    pub fn show(&mut self, ctx: &egui::Context, connected: bool) -> Outcome<()> {
+        let extra = crate::dialogs::grow_extra(ctx, "quick-banner")
+            + crate::dialogs::grow_extra(ctx, "quick-steps");
+        let h = BANNER + 18.0 + QUICK_STEPS + 12.0 + 26.0 + 14.0 + 22.0 + 54.0;
+        let name = if self.browser.is_empty() {
+            crate::i18n::t("Your browser").to_owned()
+        } else {
+            self.browser.clone()
+        };
+        window(
+            ctx,
+            "extension-quick",
+            // i18n: title of the one-click helper's window that adds the extension to a browser
+            "Add the extension to your browser",
+            [W, h + extra],
+            false,
+            winui::BG(),
+            |ui, o| {
+                let h = h + extra;
+                let p = ui.painter().clone();
+                let banner_extra = winui::banner(
+                    ui,
+                    &p,
+                    o,
+                    W,
+                    "quick-banner",
+                    &crate::i18n::fmt(
+                        // i18n: headline of the one-click helper; {browser} = Google Chrome, Microsoft Edge...
+                        crate::i18n::t("Almost there: three clicks in {browser}"),
+                        &[("browser", &name)],
+                    ),
+                    crate::i18n::t(
+                        "MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:",
+                    ),
+                );
+                let o = o + egui::vec2(0.0, banner_extra);
+                let (ink, muted) = (winui::TEXT(), winui::MUTED());
+                let mut y = BANNER + 18.0;
+                let mut lines_extra = 0.0;
+                for (k, step) in self.steps().iter().enumerate() {
+                    // A numbered disc in the accent.
+                    let c = egui::pos2(winui::mx(o.x + 31.0), o.y + y + 8.0);
+                    p.circle_filled(c, 10.0, winui::accent());
+                    let n = format!("{}", k + 1);
+                    let nw = winui::text_width_font(&p, winui::tahoma_bold(), &n);
+                    winui::text_font(
+                        &p,
+                        winui::tahoma_bold(),
+                        o.x + 31.0 - nw / 2.0,
+                        o.y + y + 12.0,
+                        &n,
+                        egui::Color32::WHITE,
+                    );
+                    let lines = winui::paragraph(
+                        &p,
+                        o.x + 52.0,
+                        o.y + y + 12.0,
+                        step,
+                        ink,
+                        o.x + W - 18.0,
+                        14.0,
+                    );
+                    let more = 14.0 * (lines.max(1) as f32 - 1.0);
+                    y += 30.0 + more;
+                    lines_extra += more;
+                }
+                crate::dialogs::grow_px(ui.ctx(), "quick-steps", lines_extra);
+                // Where the extension is, copied; copy it again or show it in its folder.
+                y += 12.0;
+                let shown = self.path.display().to_string();
+                let placed = winui::buttons_to_right(
+                    &p,
+                    W - 18.0,
+                    8.0,
+                    &[("Copy again", 90.0), ("Open folder", 90.0)],
+                    160.0,
+                );
+                let field_right = placed[0].0 - 8.0;
+                winui::readonly_field(
+                    ui,
+                    winui::r(o, 18.0, y, field_right - 18.0, 25.0),
+                    &shown,
+                    winui::BG(),
+                    true,
+                    "quick-path",
+                );
+                // i18n: button in the one-click helper: copy the extension's folder to the clipboard again
+                if winui::button(
+                    ui,
+                    winui::r(o, placed[0].0, y, placed[0].1, 25.0),
+                    "Copy again",
+                    ButtonKind::Normal,
+                    false,
+                    None,
+                )
+                .clicked()
+                {
+                    self.copy(ui.ctx());
+                }
+                // i18n: button in the one-click helper: show the extension's folder in File Explorer
+                if winui::button(
+                    ui,
+                    winui::r(o, placed[1].0, y, placed[1].1, 25.0),
+                    "Open folder",
+                    ButtonKind::Normal,
+                    false,
+                    None,
+                )
+                .clicked()
+                {
+                    let dir = if self.gecko {
+                        self.path.parent().map(|d| d.to_path_buf())
+                    } else {
+                        Some(self.path.clone())
+                    };
+                    if let Some(dir) = dir {
+                        crate::launch::open(dir);
+                    }
+                }
+                y += 26.0 + 14.0;
+                let (line, color) = if connected {
+                    (
+                        crate::i18n::t("Connected: downloads from your browser now come here."),
+                        winui::SUCCESS(),
+                    )
+                } else {
+                    // i18n: one-click helper: the extension hasn't reached MyNoX yet
+                    (
+                        crate::i18n::t("Waiting for the extension to reach MyNoX..."),
+                        muted,
+                    )
+                };
+                winui::paragraph(
+                    &p,
+                    o.x + 18.0,
+                    o.y + y + 10.0,
+                    line,
+                    color,
+                    o.x + W - 18.0,
+                    14.0,
+                );
+                winui::etched_h(&p, o.x + 16.0, o.y + h - 46.0 - banner_extra, W - 32.0);
+                let by = h - 36.0 - banner_extra;
+                // i18n: link in the one-click helper: open the browser's extensions page again
+                if winui::link(
+                    ui,
+                    &p,
+                    o.x + 18.0,
+                    o.y + by + 17.0,
+                    "Open the page again",
+                    "quick-again",
+                ) {
+                    self.open_page();
+                }
+                let close = winui::buttons_to_right(&p, W - 18.0, 8.0, &[("Close", 90.0)], 200.0);
+                let close = winui::button(
+                    ui,
+                    winui::r(o, close[0].0, by, close[0].1, 25.0),
+                    "Close",
+                    ButtonKind::Default,
+                    false,
+                    None,
+                );
+                if close.clicked() || winui::enter_pressed(ui) || winui::escape_pressed(ui) {
+                    Outcome::Closed
+                } else {
+                    Outcome::Open
+                }
+            },
+        )
     }
 }
 
@@ -698,6 +1012,27 @@ pub fn checks(settings: &crate::settings::Settings) -> Vec<Check> {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn each_browser_opens_its_own_extensions_page() {
+        assert_eq!(
+            super::extensions_page("Google Chrome", false),
+            "chrome://extensions/"
+        );
+        assert_eq!(
+            super::extensions_page("Microsoft Edge", false),
+            "edge://extensions/"
+        );
+        assert_eq!(
+            super::extensions_page("Brave", false),
+            "brave://extensions/"
+        );
+        assert_eq!(
+            super::extensions_page("Firefox", true),
+            "about:debugging#/runtime/this-firefox"
+        );
+    }
+
     use super::*;
 
     /// #41: Helium says it is Chrome; Zen gives its own name; each row reads its own status.

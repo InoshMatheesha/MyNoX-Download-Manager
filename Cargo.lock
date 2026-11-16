@@ -4738,7 +4738,7 @@ checksum = "743fb55ba31b18fb1ecef6bdc9aa2743314978ac084044301a7eee33fb99a20d"
 
 [[package]]
 name = "mynox-app"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "arboard",
  "base64 0.23.1",
@@ -4800,7 +4800,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-cli"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "anyhow",
  "clap",
@@ -4819,7 +4819,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-crash"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "breakpad-symbols",
  "chrono",
@@ -4844,7 +4844,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-debrid"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "bytes",
  "futures",
@@ -4863,7 +4863,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-engine"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "base64 0.23.1",
  "bytes",
@@ -4907,7 +4907,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-extract"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "flate2",
  "lzma-rust2",
@@ -4920,7 +4920,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-geo"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "lzma-rust2",
  "png 0.18.1",
@@ -4929,7 +4929,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-ipc"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "craft-atomic",
  "dirs 7.0.0",
@@ -4941,7 +4941,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-labserver"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "anyhow",
  "axum",
@@ -4966,7 +4966,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-mcp"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "mynox-ipc",
  "rmcp",
@@ -4980,7 +4980,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-nmhost"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "chrono",
  "mynox-ipc",
@@ -4991,7 +4991,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-remote"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "aws-lc-rs",
  "axum",
@@ -5012,7 +5012,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-tools"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "aws-lc-rs",
  "base64 0.23.1",
@@ -5036,7 +5036,7 @@ dependencies = [
 
 [[package]]
 name = "mynox-torrent"
-version = "0.5.4"
+version = "1.0.1"
 dependencies = [
  "flate2",
  "librqbit",

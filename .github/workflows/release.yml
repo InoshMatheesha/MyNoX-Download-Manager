@@ -1,6 +1,5 @@
-# Release: builds the Windows downloads and the browser extension, and on a vX.Y.Z tag publishes them.
-# - Windows (tools/installer/build.ps1): the installer, the portable zip and the plain zip.
-# - The extension (tools/extension/pack.ps1): MyNoX-<version>-extension-chromium.zip and -firefox.xpi.
+# Release: builds the Windows downloads and on a vX.Y.Z tag publishes them.
+# - Windows (tools/installer/build.ps1): the x64 setup and the portable .exe (the extension inside).
 # - A pushed tag vX.Y.Z (matching Cargo.toml) publishes a GitHub release with SHA256SUMS.txt, signed
 #   with the MYNOX_RELEASE_KEY secret when it is set (Help -> Check for updates installs only signed releases).
 # - Run by hand (Actions -> Release -> Run workflow) it only builds and keeps the files as artifacts.
@@ -101,19 +100,15 @@ jobs:
           $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" |
             Sort-Object FullName -Descending | Select-Object -First 1
           "command=`"$($signtool.FullName)`" sign /fd sha256 /tr http://timestamp.digicert.com /td sha256 /f `"$pfx`" /p `"$env:PASSWORD`" `$f" >> $env:GITHUB_OUTPUT
-      - name: Installer, zips and extension
+      - name: Setup and portable .exe
         shell: pwsh
         env:
           MYNOX_SIGN_COMMAND: ${{ steps.cert.outputs.command }}
-        run: |
-          ./tools/installer/build.ps1
-          $v = [regex]::Match((Get-Content Cargo.toml -Raw), '(?m)^version\s*=\s*"([^"]+)"').Groups[1].Value
-          Copy-Item target/extension/mynox-chromium.zip "target/dist/MyNoX-$v-extension-chromium.zip"
-          Copy-Item target/extension/mynox-firefox.xpi "target/dist/MyNoX-$v-extension-firefox.xpi"
+        run: ./tools/installer/build.ps1
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: windows
-          path: target/dist/*.*
+          path: target/dist/*.exe
 
   publish:
     permissions:

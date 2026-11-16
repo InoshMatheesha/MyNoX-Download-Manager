@@ -24,7 +24,7 @@ Firefox 140 or later is needed. Load `mynox-firefox.xpi` from the `extension` fo
 
 ### Chrome, Edge, Brave, Opera and Vivaldi
 
-Load it unpacked: turn on **Developer mode** on the browser's extensions page, click **Load unpacked** and choose the `extension\chromium` folder ([the tutorial](guide-catch-browser-downloads.md#in-chrome-edge-brave-opera-or-vivaldi) has every step). Its files are in the `extension` folder where MyNoX is installed: `%LOCALAPPDATA%\Programs\MyNoX Download Manager\extension` if you installed it for yourself, or `Program Files\MyNoX Download Manager\extension` if you installed it for everyone. Every release also has them as their own download, `...-extension-chromium.zip` (unzip it first).
+Load it unpacked: turn on **Developer mode** on the browser's extensions page, click **Load unpacked** and choose the `extension\chromium` folder ([the tutorial](guide-catch-browser-downloads.md#in-chrome-edge-brave-opera-or-vivaldi) has every step). Its files are in the `extension` folder where MyNoX is installed: `%LOCALAPPDATA%\Programs\MyNoX Download Manager\extension` if you installed it for yourself, or `Program Files\MyNoX Download Manager\extension` if you installed it for everyone. **Add it now** in **Tasks → Browser extension...** opens the extensions page and copies the folder for you.
 
 1. Open the extensions page: `chrome://extensions`, `edge://extensions` or `brave://extensions`.
 2. Turn on **Developer mode**.
@@ -46,15 +46,15 @@ Safari lets an extension neither see nor stop the browser's downloads, so what w
 - **A click on a link to a file type MyNoX takes** goes to MyNoX. A download the page starts by itself (a script, or a link with no file name in its address that the server answers with a file) stays with Safari: use right-click → **Download with MyNoX Download Manager** for those.
 - **Not available:** sharing the browser's proxy or VPN, and a download from a form.
 
-### From the plain zip
+### From a portable copy
 
-The `-x64.zip` copy has no installer, but you can register the helper yourself. Open a command prompt in MyNoX's folder and run:
+A portable copy registers nothing by itself, but you can register the helper yourself (this writes to the registry). Open a command prompt in MyNoX's folder and run:
 
 ```
 mynox-nmhost.exe --register
 ```
 
-This is for your Windows account only. `--unregister` undoes it. Then load the extension as above, from the zip's `extension` folder.
+This is for your Windows account only. `--unregister` undoes it. Then load the extension as above, from the copy's `extension` folder.
 
 ## What it takes
 

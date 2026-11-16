@@ -6625,3 +6625,47 @@ unit	{n} MB	{n} МБ
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} МБ/с
+#, machine
+	Add to browser	Додати до браузера
+#, machine
+	Browser connected	Браузер під'єднано
+#, machine
+	Download speed	Швидкість завантаження
+#, machine
+	Idle	Простій
+#, machine
+	Library	Бібліотека
+#, machine
+	More torrent options	Інші параметри торрента
+#, machine
+	Nothing is downloading right now	Зараз нічого не завантажується
+#, machine
+menu	Browser extensi&on...	Розширення &браузера...
+#, machine
+	Add it now	Додати зараз
+#, machine
+	Add the extension to your browser	Додати розширення до браузера
+#, machine
+	Almost there: three clicks in {browser}	Майже готово: три клацання в {browser}
+#, machine
+	Click "Load Temporary Add-on..." on the page that just opened.	Натисніть "Load Temporary Add-on..." на щойно відкритій сторінці.
+#, machine
+	Click "Load unpacked".	Натисніть "Load unpacked".
+#, machine
+	Copy again	Скопіювати знову
+#, machine
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	Готово: Firefox зберігає його до закриття (Developer Edition і ESR зберігають назавжди).
+#, machine
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	У полі файлу натисніть Ctrl+V (MyNoX скопіював файл) і натисніть Відкрити.
+#, machine
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	У полі папки натисніть Ctrl+V (MyNoX скопіював папку) і натисніть Вибрати папку.
+#, machine
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	MyNoX відкрив сторінку розширень браузера і скопіював розташування розширення. Виконайте там ці кроки:
+#, machine
+	Open the page again	Відкрити сторінку знову
+#, machine
+	Turn on "Developer mode" at the bottom left of the page that just opened.	Увімкніть "Developer mode" внизу ліворуч на щойно відкритій сторінці.
+#, machine
+	Turn on "Developer mode" at the top right of the page that just opened.	Увімкніть "Developer mode" вгорі праворуч на щойно відкритій сторінці.
+#, machine
+	Waiting for the extension to reach MyNoX...	Очікування, поки розширення з'єднається з MyNoX...

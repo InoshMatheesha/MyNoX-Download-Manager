@@ -12,12 +12,19 @@ Open **View → Theme** and click a theme: the whole window changes at once, not
 **View → Dark Mode support** and **View → Always dark** then choose its light or dark side, as
 for the classic look ([Dark mode](getting-started.md#dark-mode)).
 
-The built-in themes are **Classic** (MyNoX's own look, the default), **Native** (your system's
+The built-in themes are **Classic** (the default), **MyNoX Choice**, **Native** (your system's
 accent colour and contrast), **High contrast**, and the style themes **Metro**, **Adwaita**,
 **Breeze**, **Luna**, **Aero**, **Aqua** and **Emerald**, each with its own control shapes and
 icons, and on Windows its own title bar. [Getting started](getting-started.md#themes) describes
-each one; the website's [Themes page](https://github.com/InoshMatheesha/MyNoX-Download-Manager) shows them
-all, light and dark.
+each one; the [README](../README.md#themes) shows them.
+
+**MyNoX Choice** changes the layout too: a midnight sidebar with the downloads library (its
+categories and queues, with their counts), a big **Add URL** button, **Add Torrent** and its
+menu, **Add to browser** for the extension, a live download speed card, and Options, Scheduler,
+Always dark and folding the sidebar to icons at its foot. The header names the view and opens
+**Find**; the action bar has the toolbar's commands and a **Speed Limiter** switch; the list sits
+on a card with a progress bar under each download's status. The menus and every keyboard
+shortcut are the same as in the other themes.
 
 ## Where theme files go
 
@@ -141,6 +148,7 @@ focus = "ring"
 - **`[controls]`** — the shape of text boxes, check boxes, buttons, progress bars, scroll bars,
   the focus mark and the title bar.
 - **`icons`** — `color`, `mono` (one colour) or `accent`.
+- **`layout`** — `classic` (the default) or `choice`, MyNoX Choice's sidebar layout.
 - **`contrast = "high"`** — strengthens every edge and text colour on top of the rest.
 
 Every colour role, size and control style, with what it sets, is listed on the website's

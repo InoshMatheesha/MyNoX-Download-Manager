@@ -64,6 +64,9 @@ pub fn install_fonts(defs: &mut egui::FontDefinitions, font_dir: Option<&std::pa
         ("tahoma", "tahoma.ttf"),
         ("tahoma-bold", "tahomabd.ttf"),
         ("arial-bold", "arialbd.ttf"),
+        // MyNoX Choice's headings (app/choice.rs).
+        ("segoe-semibold", "seguisb.ttf"),
+        ("segoe-bold", "segoeuib.ttf"),
     ] {
         let fonts = match font_dir.and_then(|d| std::fs::read(d.join(file)).ok()) {
             Some(bytes) => {

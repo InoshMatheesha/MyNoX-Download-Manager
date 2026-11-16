@@ -1,14 +1,11 @@
 # Builds the Windows release into target/dist/:
-#   MyNoX-<version>-setup.exe     the installer (tools/installer/mynox.iss)
-#   MyNoX-<version>-portable.zip  the same programs with a `data` folder (portable
-#                                                 mode: settings beside the exe, no registry)
-#   MyNoX-<version>-x64.zip       the same programs, data in %APPDATA% as installed
+#   MyNoX-<version>-setup.exe     the x64 installer (tools/installer/mynox.iss)
+#   MyNoX-<version>-portable.exe  the portable copy: unpacks with a `data` folder, no registry
 #   SHA256SUMS.txt
 # Needs Inno Setup 6 (ISCC.exe on PATH, in $env:ISCC, or in its default folders).
 # Code signing: set $env:MYNOX_SIGN_COMMAND to a signtool command line with $f for the file, e.g.
 #   signtool sign /fd sha256 /tr http://timestamp.digicert.com /td sha256 /a $f
-# Inno Setup then signs the programs (in place, so the zip carries them signed too), the
-# installer and its uninstaller.
+# Inno Setup then signs the programs, the installer, its uninstaller and the portable .exe.
 param([switch]$NoBuild, [string]$SignCommand = $env:MYNOX_SIGN_COMMAND)
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -52,58 +49,11 @@ if ($SignCommand) { $isccArgs += @("/DSign", "/Smynoxsign=$SignCommand") }
 & $iscc @isccArgs (Join-Path $PSScriptRoot "mynox.iss")
 if ($LASTEXITCODE) { throw "ISCC failed" }
 
-# The zips: the same programs; the portable one adds a `data` folder next to the exe, which
-# switches the app to portable mode. The plain zip keeps its data in %APPDATA% as installed.
-function New-Zip([string]$name, [bool]$portable) {
-  $stage = Join-Path $dist "stage\$name"
-  if (Test-Path $stage) { Remove-Item -LiteralPath $stage -Recurse -Force }
-  New-Item -ItemType Directory -Force $stage | Out-Null
-  foreach ($exe in "mynox.exe", "mynox-nmhost.exe", "mynox-cli.exe", "mynox-mcp.exe") {
-    Copy-Item (Join-Path $bin $exe) $stage
-  }
-  New-Item -ItemType Directory -Force (Join-Path $stage "extension") | Out-Null
-  Copy-Item (Join-Path $root "target\extension\chromium") (Join-Path $stage "extension\chromium") -Recurse
-  Copy-Item (Join-Path $root "target\extension\mynox-firefox.xpi") (Join-Path $stage "extension")
-  Copy-Item (Join-Path $root "LICENSE") (Join-Path $stage "LICENSE.txt")
-  Copy-Item (Join-Path $root "ATTRIBUTION.md") (Join-Path $stage "ATTRIBUTION.txt")
-  if ($portable) {
-    New-Item -ItemType Directory -Force (Join-Path $stage "data") | Out-Null
-    Set-Content -Encoding utf8 (Join-Path $stage "data\README.txt") @"
-This folder makes MyNoX Download Manager portable: the download list and settings are kept
-here instead of in your profile, and nothing is written to the registry. Delete the folder to
-use the profile instead. Browser integration needs the installer.
-"@
-  }
-  $zip = Join-Path $dist "$name.zip"
-  if (Test-Path $zip) { Remove-Item -LiteralPath $zip -Force }
-  # Freshly copied programs can be held for a moment by an antivirus scan: retry.
-  foreach ($try in 1..10) {
-    try {
-      # Entries under the folder's name, with "/" as zip requires (Windows PowerShell's
-      # CreateFromDirectory writes "\", which other systems' tools take as part of the name).
-      $base = Split-Path -Parent $stage
-      $archive = [System.IO.Compression.ZipFile]::Open($zip, [System.IO.Compression.ZipArchiveMode]::Create)
-      try {
-        foreach ($f in Get-ChildItem -LiteralPath $stage -Recurse -File | Sort-Object FullName) {
-          $entry = $f.FullName.Substring($base.Length).TrimStart('\', '/').Replace('\', '/')
-          [void][System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive, $f.FullName,
-            $entry, [System.IO.Compression.CompressionLevel]::Optimal)
-        }
-      } finally { $archive.Dispose() }
-      break
-    } catch {
-      if (Test-Path $zip) { Remove-Item -LiteralPath $zip -Force }
-      if ($try -eq 10) { throw }
-      Start-Sleep -Seconds 2
-    }
-  }
-}
-Add-Type -AssemblyName System.IO.Compression, System.IO.Compression.FileSystem
-New-Zip "MyNoX-$version-portable" $true
-New-Zip "MyNoX-$version-x64" $false
-Remove-Item -LiteralPath (Join-Path $dist "stage") -Recurse -Force
+# The portable .exe: the same programs unpacked with a `data` folder (tools/installer/mynox-portable.iss).
+& $iscc @isccArgs (Join-Path $PSScriptRoot "mynox-portable.iss")
+if ($LASTEXITCODE) { throw "ISCC (portable) failed" }
 
-$files = Get-ChildItem $dist -File | Where-Object { $_.Name -like "MyNoX-$version-*" }
+$files = Get-ChildItem $dist -File | Where-Object { $_.Name -like "MyNoX-$version-*.exe" }
 $files | ForEach-Object { "{0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name } |
   Set-Content -Encoding ascii (Join-Path $dist "SHA256SUMS.txt")
 $files | ForEach-Object { "{0}  {1:N1} MB" -f $_.Name, ($_.Length / 1MB) }

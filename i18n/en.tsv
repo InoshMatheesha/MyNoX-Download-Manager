@@ -50,10 +50,10 @@
 #. count in the download list (sizes, speeds, status)
 #. {n} = a number (keep the braces as they are)
 @plural	{n} byte|{n} bytes	{n} byte|{n} bytes
-#. count in the main window
+#. count in the main window; count in choice.rs
 #. {n} = a number (keep the braces as they are)
 @plural	{n} download|{n} downloads	{n} download|{n} downloads
-#. count in the main window
+#. count in the main window; count in choice.rs
 #. {n} = a number (keep the braces as they are)
 @plural	{n} downloading|{n} downloading	{n} downloading|{n} downloading
 #. count in extracting archives (a download's log, the Archive password window)
@@ -77,7 +77,7 @@
 #. a number of peers (computers sharing a torrent), after where they came from
 #. {n} = a number (keep the braces as they are)
 @plural	{n} peer|{n} peers	{n} peer|{n} peers
-#. count in the main window
+#. count in the main window; count in choice.rs
 #. {n} = a number (keep the braces as they are)
 @plural	{n} selected|{n} selected	{n} selected|{n} selected
 #. count in the Options window
@@ -220,6 +220,9 @@
 #. button in rssdlg.rs
 #. RSS feeds window: button that subscribes to the feed whose address is typed
 	Add feed	Add feed
+#. text in extension.rs
+#. button in the browser extension's window: one click opens the browser's extensions page and copies the extension's folder
+	Add it now	Add it now
 #. text in playlistdlg.rs
 #. title of the question asked before a playlist adds many downloads
 	Add many downloads	Add many downloads
@@ -239,11 +242,17 @@
 #. window title in extension.rs
 #. title of the window that shows how to turn on the Safari extension
 	Add the extension to Safari	Add the extension to Safari
+#. window title in extension.rs
+#. title of the one-click helper's window that adds the extension to a browser
+	Add the extension to your browser	Add the extension to your browser
 #. text in extension.rs
 	Add the free extension: files you download in your browser come here, and videos get a Download button.	Add the free extension: files you download in your browser come here, and videos get a Download button.
 #. text in rssdlg.rs
 #. RSS feeds window, Download rules: add the torrents to the list without starting them
 	Add them without starting them	Add them without starting them
+#. text in choice.rs
+#. MyNoX Choice sidebar: one click to add the browser extension
+	Add to browser	Add to browser
 #. message or event log entry in the main window; text in the Link grabber window
 #. Link grabber button: add the ticked links to the download queue without starting them (IDM's OK)
 	Add to queue	Add to queue
@@ -326,6 +335,9 @@
 #. checkbox under the number of connections per download; {n} is 32
 #. {n} = a number (keep the braces as they are)
 	Allow more than {n} connections	Allow more than {n} connections
+#. text in extension.rs
+#. headline of the one-click helper; {browser} = Google Chrome, Microsoft Edge...
+	Almost there: three clicks in {browser}	Almost there: three clicks in {browser}
 #. text in errors.rs
 	already being downloaded: {path}	already being downloaded: {path}
 #. text in the Link grabber window
@@ -525,6 +537,9 @@
 #. button in categories.rs; button in the Options window
 #. the trailing ... means it opens a window: keep it
 	Browse...	Browse...
+#. text in choice.rs
+#. MyNoX Choice sidebar: the browser extension reached MyNoX
+	Browser connected	Browser connected
 #. text in extension.rs
 	Browser integration isn't set up on this computer, so no browser can reach MyNoX Download Manager yet.	Browser integration isn't set up on this computer, so no browser can reach MyNoX Download Manager yet.
 #. page title in the Options window
@@ -577,7 +592,8 @@
 	cannot resume: {detail}	cannot resume: {detail}
 #. group box title in the Options window; text in the Options window
 	Capture downloads from the following browsers:	Capture downloads from the following browsers:
-#. text in extension.rs
+#. text in choice.rs; text in extension.rs
+#. MyNoX Choice sidebar: tooltip of the browser extension's button
 #. the headline of the window that offers the browser extension
 	Catch downloads from your browser	Catch downloads from your browser
 #. text in the main window (menus, toolbar, Categories pane)
@@ -687,6 +703,12 @@
 #. button in the download list
 #. verb: clears this filter
 	Clear	Clear
+#. text in extension.rs
+#. one-click helper, Firefox, step 1; the quoted button is Firefox's own words (keep English when unsure)
+	Click "Load Temporary Add-on..." on the page that just opened.	Click "Load Temporary Add-on..." on the page that just opened.
+#. text in extension.rs
+#. one-click helper, Chrome and its family, step 2; the quoted button is the browser's own words (keep English when unsure)
+	Click "Load unpacked".	Click "Load unpacked".
 #. text in a download's progress window
 #. column title: the peer's torrent program
 	Client	Client
@@ -759,6 +781,9 @@
 	Copied to the clipboard.	Copied to the clipboard.
 #. button in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 	Copy	Copy
+#. button in extension.rs
+#. button in the one-click helper: copy the extension's folder to the clipboard again
+	Copy again	Copy again
 #. button in the Options window
 #. button: copy the sign-in code
 	Copy code	Copy code
@@ -917,6 +942,9 @@
 #. text in the Options window; text in a download's progress window
 #. button: close the window (the device is paired)
 	Done	Done
+#. text in extension.rs
+#. one-click helper, Firefox, step 3
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).
 #. button in the Options window
 #. button (short): move the account down the list
 	Down	Down
@@ -956,6 +984,9 @@
 #. text in rssdlg.rs
 #. RSS feeds window: the tab of the rules that add articles by themselves
 	Download rules	Download rules
+#. text in choice.rs
+#. MyNoX Choice sidebar: heading of the card that shows the download speed
+	Download speed	Download speed
 #. text in a download's progress window
 #. tab title: how the download is going
 	Download status	Download status
@@ -1235,7 +1266,8 @@
 #. button in the Find window
 #. verb: button that starts the search
 	Find	Find
-#. what a keyboard shortcut does in the Help menu's windows (About, updates, shortcuts, Tell a friend)
+#. text in choice.rs; what a keyboard shortcut does in the Help menu's windows (About, updates, shortcuts, Tell a friend)
+#. MyNoX Choice header: the search box's placeholder (opens Find)
 	Find a download	Find a download
 #. message or event log entry in the main window; window title in the Find window
 	Find file	Find file
@@ -1486,6 +1518,9 @@
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Iceland	Iceland
+#. text in choice.rs
+#. MyNoX Choice sidebar: the speed card while nothing downloads
+	Idle	Idle
 #. text in the Options window
 	If a duplicate download link is added:	If a duplicate download link is added:
 #. text in the Options window
@@ -1504,6 +1539,12 @@
 	In a queue	In a queue
 #. what a keyboard shortcut does in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 	In the categories: the selected category's menu	In the categories: the selected category's menu
+#. text in extension.rs
+#. one-click helper, Firefox, step 2
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.
+#. text in extension.rs
+#. one-click helper, Chrome and its family, step 3
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.
 #. text in the Options window
 #. Options → Accounts: the account's sign-in is in the system's keyring (Linux), which is locked now; MyNoX never unlocks it
 	in the locked keyring	in the locked keyring
@@ -1704,6 +1745,9 @@
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Liberia	Liberia
+#. text in choice.rs
+#. MyNoX Choice sidebar: heading above All Downloads, Unfinished, Finished and the queues
+	Library	Library
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Libya	Libya
@@ -1908,6 +1952,9 @@
 #. text in remote.rs
 #. remote control page (on a phone): its menu's button
 	More	More
+#. text in choice.rs
+#. MyNoX Choice sidebar: tooltip of the arrow beside Add Torrent (magnet links, RSS feeds...)
+	More torrent options	More torrent options
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Morocco	Morocco
@@ -2013,6 +2060,8 @@
 #. text in unix.rs
 #. Linux, at start, on the terminal: the libraries an X11 window needs aren't installed, so the window opens through Wayland instead, where menus can't be placed under what was clicked; {libraries} = their file names, left as they are
 	MyNoX Download Manager's X11 window needs {libraries}, which this system lacks: it opens on Wayland instead, where its menus may open away from their titles.	MyNoX Download Manager's X11 window needs {libraries}, which this system lacks: it opens on Wayland instead, where its menus may open away from their titles.
+#. text in extension.rs
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:
 #. text in remote.rs
 #. remote control page (on a phone): no pairing code is shown in MyNoX; "Pair a device" is MyNoX's button
 	MyNoX shows no code now. Click Pair a device there first.	MyNoX shows no code now. Click Pair a device there first.
@@ -2217,6 +2266,9 @@
 	Note: Internet servers may break connection when the speed is too limited! Thus it's not\nrecommended to use Speed Limiter to download from servers that do not support\n"resume" feature.	Note: Internet servers may break connection when the speed is too limited! Thus it's not\nrecommended to use Speed Limiter to download from servers that do not support\n"resume" feature.
 #. text in the Options window
 	Note: These settings don't relate to queue processing	Note: These settings don't relate to queue processing
+#. text in choice.rs
+#. MyNoX Choice header: under the view's name while no download runs
+	Nothing is downloading right now	Nothing is downloading right now
 #. message or event log entry in the main window
 	Nothing to download in {item}: drop links, a .torrent file, or a list of addresses (.txt, .ef2).	Nothing to download in {item}: drop links, a .torrent file, or a list of addresses (.txt, .ef2).
 #. text in the Scheduler window
@@ -2303,8 +2355,9 @@
 #. title of the message when a downloaded file can't be opened
 #. verb: opens the file
 	Open	Open
-#. button in crashui.rs; button in a dialog box; button in torrentfiles.rs
+#. button in crashui.rs; button in a dialog box; button in extension.rs; button in torrentfiles.rs
 #. crash report window button: show the report's file in its folder
+#. button in the one-click helper: show the extension's folder in File Explorer
 #. button that opens the torrent's containing folder in the file manager
 	Open folder	Open folder
 #. checkbox in the Add torrent window
@@ -2324,6 +2377,9 @@
 #. button in the Options window
 #. button: open the service's page where the code is typed
 	Open the page	Open the page
+#. link (opens a web page) in extension.rs
+#. link in the one-click helper: open the browser's extensions page again
+	Open the page again	Open the page again
 #. text in crashui.rs
 #. crash report window button: open the GitHub issue already filed (and copy the report to add it there)
 	Open the reported issue	Open the reported issue
@@ -3572,6 +3628,12 @@
 #. step 6 of turning on the Safari extension; the quoted switch name is what Safari's settings show in this language: use Apple's own words for it, or keep the English name when unsure
 	Turn on "Allow unsigned extensions".	Turn on "Allow unsigned extensions".
 #. text in extension.rs
+#. one-click helper, Edge, step 1; the quoted switch is Edge's own words (keep English when unsure)
+	Turn on "Developer mode" at the bottom left of the page that just opened.	Turn on "Developer mode" at the bottom left of the page that just opened.
+#. text in extension.rs
+#. one-click helper, Chrome and its family, step 1; the quoted switch is the browser's own words (keep English when unsure)
+	Turn on "Developer mode" at the top right of the page that just opened.	Turn on "Developer mode" at the top right of the page that just opened.
+#. text in extension.rs
 #. step 8 of turning on the Safari extension
 	Turn on "MyNoX Download Manager" and allow it on all websites.	Turn on "MyNoX Download Manager" and allow it on all websites.
 #. text in extension.rs
@@ -3794,6 +3856,9 @@
 #. Options → Remote → Pair a device: how long the code stays valid; {time} = minutes:seconds ("9:58")
 #. {time} = a time of day (keep the braces as they are)
 	Waiting for the device. The code works for {time}.	Waiting for the device. The code works for {time}.
+#. text in extension.rs
+#. the trailing ... means it is still going on: keep it
+	Waiting for the extension to reach MyNoX...	Waiting for the extension to reach MyNoX...
 #. message or event log entry in the main window
 	Waiting: the download limit is reached (Scheduler)	Waiting: the download limit is reached (Scheduler)
 #. text in the Scheduler window
@@ -4613,6 +4678,11 @@ menu	Breeze	Breeze
 #. verb: opens this category's download folder
 menu	Browse	Browse
 #. menu command in the main window
+#. Tasks menu: the window that adds MyNoX's extension to your browsers in one click
+#. & marks the keyboard shortcut letter: keep one & before a letter of the translation
+#. the trailing ... means it opens a window: keep it
+menu	Browser extensi&on...	Browser extensi&on...
+#. menu command in the main window
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	By &Description	By &Description
 #. menu command in the main window
@@ -4759,6 +4829,9 @@ menu	Metro	Metro
 #. menu command in the main window
 menu	Move/Rename (Ctrl-M)	Move/Rename (Ctrl-M)
 #. menu command in the main window
+#. View → Theme: MyNoX's own theme with its own layout (a sidebar, a header, cards), a name: keep "MyNoX Choice" as written
+menu	MyNoX Choice	MyNoX Choice
+#. menu command in the main window
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	MyNoX Download Manager &Home Page	MyNoX Download Manager &Home Page
 #. menu command in the main window
@@ -4844,7 +4917,7 @@ menu	Select &all	Select &all
 menu	Show &drop target	Show &drop target
 #. menu command in the main window
 menu	Show MyNoX Download Manager	Show MyNoX Download Manager
-#. menu command in the main window
+#. menu command in the main window; menu command in choice.rs
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	Speed &Limiter	Speed &Limiter
 #. menu command in the main window
@@ -4917,9 +4990,9 @@ menubar	&Tasks	&Tasks
 #. menu bar title in the main window (menus, toolbar, Categories pane)
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menubar	&View	&View
-#. toolbar button in the main window
+#. toolbar button in the main window; toolbar button in choice.rs
 toolbar	Add Torrent	Add Torrent
-#. toolbar button in the main window
+#. toolbar button in the main window; toolbar button in choice.rs
 toolbar	Add URL	Add URL
 #. toolbar button in the main window
 #. verb: delete the selected downloads

@@ -1,0 +1,97 @@
+# MyNoX Choice - MoOdY69's own theme: midnight sidebar layout, electric blue accent.
+
+name = "MyNoX Choice"
+layout = "choice"
+icons = "accent"
+icon-set = "metro"
+
+[controls]
+field-focus = "ring"
+check = "fluent"
+button = "fluent"
+progress = "line"
+scroll = "overlay"
+caption = "metro"
+focus = "ring"
+
+[sizes]
+radius = 8
+"radius.button" = 8
+"radius.part" = 6
+"radius.check" = 5
+"radius.flyout" = 12
+"radius.menu-item" = 6
+"radius.egui" = 8
+"radius.popup" = 10
+border = 1
+"focus-line" = 2
+"list.row" = 28
+"list.header" = 30
+
+[seeds.light]
+background = "#f3f5fb"
+surface = "#ffffff"
+header = "#f7f9fd"
+text = "#0e1630"
+accent = "#2f6bff"
+selection = "#dce6ff"
+error = "#c8243c"
+warning = "#8f5200"
+success = "#0d7a52"
+
+[seeds.dark]
+background = "#0b1020"
+surface = "#111a2e"
+header = "#141e36"
+text = "#e8edf8"
+accent = "#5b8cff"
+selection = "#22408a"
+error = "#ff8a9b"
+warning = "#ffcd6b"
+success = "#45dca0"
+
+[light]
+# The midnight title bar, as the sidebar under it.
+caption = "#0a1128"
+"caption.text" = "#ffffff"
+"caption.text.inactive" = "#8d97b5"
+"caption.hot" = "#ffffff1f"
+"caption.pressed" = "#ffffff14"
+# The menu bar sits on the canvas.
+menubar = "#f3f5fb"
+"menubar.bottom" = "#f3f5fb"
+"menubar.line" = "#f3f5fb"
+"menubar.hot" = "#e4e9f5"
+"menubar.open" = "#dce4f6"
+"selection.text" = "#0e1630"
+"list.grid" = "#eef1f8"
+"list.frame" = "#dde3ef"
+"progress.bar" = "#2f6bff"
+"progress.track" = "#e6ebf6"
+"meter.fill" = "#2f6bff"
+"focus.ring" = "#2f6bff"
+"chip.web" = "#dfe8ff"
+"chip.torrent" = "#ece4ff"
+"chip.text" = "#0e1630"
+
+[dark]
+caption = "#070c1a"
+"caption.text" = "#ffffff"
+"caption.text.inactive" = "#7b86a6"
+"caption.hot" = "#ffffff1f"
+"caption.pressed" = "#ffffff14"
+menubar = "#0b1020"
+"menubar.bottom" = "#0b1020"
+"menubar.line" = "#0b1020"
+"menubar.hot" = "#18223d"
+"menubar.open" = "#1d2a4b"
+"selection.text" = "#ffffff"
+"list.grid" = "#18213a"
+"list.frame" = "#222d4a"
+"progress.bar" = "#5b8cff"
+"progress.track" = "#1c2640"
+"meter.fill" = "#5b8cff"
+"focus.ring" = "#5b8cff"
+"chip.web" = "#1c2f63"
+"chip.torrent" = "#2e2459"
+"chip.text" = "#e8edf8"

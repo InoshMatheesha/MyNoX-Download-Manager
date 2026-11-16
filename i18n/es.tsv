@@ -6625,3 +6625,47 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/s
+#, machine
+	Add to browser	Añadir al navegador
+#, machine
+	Browser connected	Navegador conectado
+#, machine
+	Download speed	Velocidad de descarga
+#, machine
+	Idle	Inactivo
+#, machine
+	Library	Biblioteca
+#, machine
+	More torrent options	Más opciones de torrent
+#, machine
+	Nothing is downloading right now	No se está descargando nada ahora
+#, machine
+menu	Browser extensi&on...	E&xtensión del navegador...
+#, machine
+	Add it now	Añadir ahora
+#, machine
+	Add the extension to your browser	Añadir la extensión a tu navegador
+#, machine
+	Almost there: three clicks in {browser}	Ya casi: tres clics en {browser}
+#, machine
+	Click "Load Temporary Add-on..." on the page that just opened.	Haz clic en "Load Temporary Add-on..." en la página que se acaba de abrir.
+#, machine
+	Click "Load unpacked".	Haz clic en "Load unpacked".
+#, machine
+	Copy again	Copiar de nuevo
+#, machine
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	Listo: Firefox la mantiene hasta que se cierra (Developer Edition y ESR la mantienen para siempre).
+#, machine
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	En el cuadro del archivo, pulsa Ctrl+V (MyNoX copió el archivo) y haz clic en Abrir.
+#, machine
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	En el cuadro de la carpeta, pulsa Ctrl+V (MyNoX copió la carpeta) y haz clic en Seleccionar carpeta.
+#, machine
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	MyNoX abrió la página de extensiones del navegador y copió dónde está la extensión. Sigue estos pasos allí:
+#, machine
+	Open the page again	Abrir la página otra vez
+#, machine
+	Turn on "Developer mode" at the bottom left of the page that just opened.	Activa "Developer mode" abajo a la izquierda de la página que se acaba de abrir.
+#, machine
+	Turn on "Developer mode" at the top right of the page that just opened.	Activa "Developer mode" arriba a la derecha de la página que se acaba de abrir.
+#, machine
+	Waiting for the extension to reach MyNoX...	Esperando a que la extensión llegue a MyNoX...

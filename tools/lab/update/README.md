@@ -45,7 +45,7 @@ tools\lab\update\upd-win.ps1 ... -Shots -ShotDir <folder>   # plus screenshots, 
 
 Needs Python 3 and gpg (Git for Windows has one). The work folder is `target\update-e2e`, emptied first: the copies, releases, keys and `log.txt` are there.
 
-Each copy is portable (`data\` beside its program), so `Install::PortableZip`. The windows open off the screens and nothing is clicked: closing a window is its title bar's `WM_CLOSE`.
+Each copy is portable (`data\` beside its program), so `Install::Portable`. Since 1.0.1 a portable copy updates from the portable .exe (`MyNoX-<version>-portable.exe`, run silently with `/DIR` and `/relaunch=1`), not a zip: this lab still serves a zip, so it needs a portable .exe asset before it passes again. The windows open off the screens and nothing is clicked: closing a window is its title bar's `WM_CLOSE`.
 
 `-Shots` also captures Download complete and the "Installing the update..." state in English, German and Arabic, light and dark, with PrintWindow (`tools\lab\cap-own.ps1`).
 

@@ -16,11 +16,8 @@ if (-not $NoBuild) {
   & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "build.ps1")
   if ($LASTEXITCODE) { throw "build.ps1 failed" }
 }
-Copy-Item (Join-Path $root "target\extension\mynox-chromium.zip") (Join-Path $dist "MyNoX-$version-extension-chromium.zip") -Force
-Copy-Item (Join-Path $root "target\extension\mynox-firefox.xpi") (Join-Path $dist "MyNoX-$version-extension-firefox.xpi") -Force
-
-# This version's files only, then one SHA256SUMS.txt for all of them.
-$files = Get-ChildItem $dist -File | Where-Object { $_.Name -like "MyNoX-$version-*" } | Sort-Object Name
+# This version's setup and portable .exe only, then one SHA256SUMS.txt for both.
+$files = Get-ChildItem $dist -File | Where-Object { $_.Name -like "MyNoX-$version-*.exe" } | Sort-Object Name
 if (-not $files) { throw "no MyNoX-$version-* files in $dist" }
 Remove-Item (Join-Path $dist "SHA256SUMS.txt*") -ErrorAction SilentlyContinue
 $sums = $files | ForEach-Object { "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)" }

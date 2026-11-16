@@ -6625,3 +6625,47 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/sn
+#, machine
+	Add to browser	Tarayıcıya ekle
+#, machine
+	Browser connected	Tarayıcı bağlandı
+#, machine
+	Download speed	İndirme hızı
+#, machine
+	Idle	Boşta
+#, machine
+	Library	Kitaplık
+#, machine
+	More torrent options	Diğer torrent seçenekleri
+#, machine
+	Nothing is downloading right now	Şu anda hiçbir şey indirilmiyor
+#, machine
+menu	Browser extensi&on...	Tarayıcı u&zantısı...
+#, machine
+	Add it now	Şimdi ekle
+#, machine
+	Add the extension to your browser	Uzantıyı tarayıcınıza ekleyin
+#, machine
+	Almost there: three clicks in {browser}	Az kaldı: {browser} içinde üç tıklama
+#, machine
+	Click "Load Temporary Add-on..." on the page that just opened.	Az önce açılan sayfada "Load Temporary Add-on..." düğmesine tıklayın.
+#, machine
+	Click "Load unpacked".	"Load unpacked" düğmesine tıklayın.
+#, machine
+	Copy again	Yeniden kopyala
+#, machine
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	Tamam: Firefox onu kapanana kadar tutar (Developer Edition ve ESR kalıcı olarak tutar).
+#, machine
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	Dosya kutusunda Ctrl+V tuşlarına basın (MyNoX dosyayı kopyaladı) ve Aç'a tıklayın.
+#, machine
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	Klasör kutusunda Ctrl+V tuşlarına basın (MyNoX klasörü kopyaladı) ve Klasör Seç'e tıklayın.
+#, machine
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	MyNoX tarayıcının uzantılar sayfasını açtı ve uzantının yerini kopyaladı. Orada şu adımları izleyin:
+#, machine
+	Open the page again	Sayfayı yeniden aç
+#, machine
+	Turn on "Developer mode" at the bottom left of the page that just opened.	Az önce açılan sayfanın sol altındaki "Developer mode" seçeneğini açın.
+#, machine
+	Turn on "Developer mode" at the top right of the page that just opened.	Az önce açılan sayfanın sağ üstündeki "Developer mode" seçeneğini açın.
+#, machine
+	Waiting for the extension to reach MyNoX...	Uzantının MyNoX'a ulaşması bekleniyor...

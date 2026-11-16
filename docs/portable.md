@@ -6,19 +6,21 @@ The portable copy of MyNoX runs from any folder, including a USB stick, without 
 
 ## How it works
 
-`MyNoX-<version>-portable.zip` holds the same programs as the setup, plus a folder named `data` next to `mynox.exe`. When that folder is there and MyNoX can write to it, MyNoX is in portable mode:
+`MyNoX-<version>-portable.exe` unpacks the same programs as the setup, plus a folder named `data` next to `mynox.exe`. When that folder is there and MyNoX can write to it, MyNoX is in portable mode:
 
 - The download list, settings, helpers for video and galleries (yt-dlp, ffmpeg, gallery-dl), torrent data, your [theme files](themes.md) (`data\themes`) and the logs are kept in `data`, not in your Windows profile.
 - Passwords (Sites Logins, the proxy's, debrid accounts) stay in `data` too, instead of in Windows Credential Manager. They are sealed for your Windows account: on another computer, or another account, type them again (and sign in to a debrid account again).
 - Nothing is written to the registry.
 
-Delete the `data` folder (or make it read-only) and the same copy behaves like the plain zip: it keeps its data in `%APPDATA%\mynox`.
+Delete the `data` folder (or make it read-only) and the same copy keeps its data in `%APPDATA%\mynox`, like an installed one.
 
 ## Set it up
 
-1. Download `MyNoX-<version>-portable.zip` from [Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases).
-2. Unzip it where you want MyNoX to live, for example `E:\MyNoX` on a USB stick.
-3. Run `mynox.exe` from there.
+1. Download `MyNoX-<version>-portable.exe` from [Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases).
+2. Run it and choose where MyNoX should live, for example `E:\MyNoX` on a USB stick. Nothing is installed: it only unpacks there.
+3. Run `mynox.exe` from that folder (the last page can start it for you).
+
+**Help → Check for updates** updates a portable copy in its own folder: it downloads the new portable .exe, checks it, and unpacks it over the programs, keeping `data`.
 
 On the first start MyNoX asks for the language; see [Languages](languages.md).
 

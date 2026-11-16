@@ -6625,3 +6625,47 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/秒
+#, machine
+	Add to browser	添加到浏览器
+#, machine
+	Browser connected	浏览器已连接
+#, machine
+	Download speed	下载速度
+#, machine
+	Idle	空闲
+#, machine
+	Library	资料库
+#, machine
+	More torrent options	更多种子选项
+#, machine
+	Nothing is downloading right now	当前没有正在下载的内容
+#, machine
+menu	Browser extensi&on...	浏览器扩展(&O)...
+#, machine
+	Add it now	立即添加
+#, machine
+	Add the extension to your browser	将扩展添加到浏览器
+#, machine
+	Almost there: three clicks in {browser}	快好了：在 {browser} 中点击三次
+#, machine
+	Click "Load Temporary Add-on..." on the page that just opened.	在刚打开的页面上点击 "Load Temporary Add-on..."。
+#, machine
+	Click "Load unpacked".	点击 "Load unpacked"。
+#, machine
+	Copy again	再次复制
+#, machine
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	完成：Firefox 会保留它直到关闭（Developer Edition 和 ESR 会一直保留）。
+#, machine
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	在文件框中按 Ctrl+V（MyNoX 已复制该文件），然后点击“打开”。
+#, machine
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	在文件夹框中按 Ctrl+V（MyNoX 已复制该文件夹），然后点击“选择文件夹”。
+#, machine
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	MyNoX 已打开浏览器的扩展页面并复制了扩展所在位置。请在该页面完成以下步骤：
+#, machine
+	Open the page again	再次打开页面
+#, machine
+	Turn on "Developer mode" at the bottom left of the page that just opened.	打开刚打开页面左下角的 "Developer mode"。
+#, machine
+	Turn on "Developer mode" at the top right of the page that just opened.	打开刚打开页面右上角的 "Developer mode"。
+#, machine
+	Waiting for the extension to reach MyNoX...	正在等待扩展连接到 MyNoX...

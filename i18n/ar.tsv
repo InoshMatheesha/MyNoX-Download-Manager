@@ -5058,3 +5058,47 @@ unit	{n} MB	{n} ميغابايت
 #. unit after a number in the download list (sizes, speeds, status)
 #. {n} = a number (keep the braces as they are)
 unit	{n} MB/sec	{n} ميغابايت/ثانية
+#, machine
+	Add to browser	إضافة إلى المتصفح
+#, machine
+	Browser connected	المتصفح متصل
+#, machine
+	Download speed	سرعة التنزيل
+#, machine
+	Idle	خامل
+#, machine
+	Library	المكتبة
+#, machine
+	More torrent options	خيارات تورنت أخرى
+#, machine
+	Nothing is downloading right now	لا يتم تنزيل أي شيء الآن
+#, machine
+menu	Browser extensi&on...	&ملحق المتصفح...
+#, machine
+	Add it now	أضفه الآن
+#, machine
+	Add the extension to your browser	أضف الملحق إلى متصفحك
+#, machine
+	Almost there: three clicks in {browser}	أوشكت على الانتهاء: ثلاث نقرات في {browser}
+#, machine
+	Click "Load Temporary Add-on..." on the page that just opened.	انقر على "Load Temporary Add-on..." في الصفحة التي فُتحت للتو.
+#, machine
+	Click "Load unpacked".	انقر على "Load unpacked".
+#, machine
+	Copy again	انسخ مرة أخرى
+#, machine
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	تم: يحتفظ به Firefox حتى يُغلق (يحتفظ به Developer Edition وESR دائمًا).
+#, machine
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	في مربع الملف، اضغط Ctrl+V (نسخ MyNoX الملف) ثم انقر على فتح.
+#, machine
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	في مربع المجلد، اضغط Ctrl+V (نسخ MyNoX المجلد) ثم انقر على تحديد مجلد.
+#, machine
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	فتح MyNoX صفحة ملحقات المتصفح ونسخ مكان الملحق. اتبع هذه الخطوات هناك:
+#, machine
+	Open the page again	افتح الصفحة مرة أخرى
+#, machine
+	Turn on "Developer mode" at the bottom left of the page that just opened.	شغّل "Developer mode" أسفل يسار الصفحة التي فُتحت للتو.
+#, machine
+	Turn on "Developer mode" at the top right of the page that just opened.	شغّل "Developer mode" أعلى يمين الصفحة التي فُتحت للتو.
+#, machine
+	Waiting for the extension to reach MyNoX...	في انتظار وصول الملحق إلى MyNoX...

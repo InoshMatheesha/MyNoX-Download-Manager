@@ -20,25 +20,43 @@ MyNoX splits every download over several connections, resumes it after the inter
 cuts out, catches the links you click in your browser, saves videos, handles torrents, and runs
 your queues on a schedule. No ads, no trial, no sign-up.
 
+## New in 1.0.1: the MyNoX Choice theme
+
+**View → Theme → MyNoX Choice** gives MyNoX a layout of its own, not only new colours: a midnight
+sidebar with your downloads library and a big **Add URL** button, a header with search, an action
+bar with a **Speed Limiter** switch, the list on a card with a progress bar under every download,
+and a live download speed card. Every menu and shortcut is still where it was.
+
+<p align="center">
+  <img src="docs/images/mynox-choice-light.webp" alt="MyNoX Download Manager in the MyNoX Choice theme, light" width="820">
+</p>
+<p align="center">
+  <img src="docs/images/mynox-choice-dark.webp" alt="MyNoX Download Manager in the MyNoX Choice theme, dark" width="820">
+</p>
+
 ## Download
 
 Get the newest version from **[Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest)**:
 
 | File | For |
 |---|---|
-| `MyNoX-<version>-setup.exe` | **Most people.** Installs MyNoX, sets up browser integration and keeps your settings across updates. |
-| `MyNoX-<version>-portable.zip` | A copy that runs from any folder or USB stick and keeps its data beside it. |
-| `MyNoX-<version>-x64.zip` | The same programs without the setup, data in your profile. |
-| `MyNoX-<version>-extension-chromium.zip` | The browser extension for Chrome, Edge, Brave, Opera and Vivaldi. |
-| `MyNoX-<version>-extension-firefox.xpi` | The browser extension for Firefox. |
-| `SHA256SUMS.txt` (+ `.sig`) | Checksums of every file, signed for the built-in updater. |
+| `MyNoX-<version>-setup.exe` | **Most people.** The 64-bit setup: installs MyNoX, sets up browser integration and keeps your settings across updates. |
+| `MyNoX-<version>-portable.exe` | The portable copy: unpacks MyNoX into any folder or USB stick, keeps its data beside it and writes nothing to the registry. |
+| `SHA256SUMS.txt` (+ `.sig`) | The checksums of both files, signed: the built-in updater checks them before it installs. |
 
 Windows may show **"Windows protected your PC"** for a new download: click **More info → Run anyway**.
 
 ## Add the browser extension
 
-The setup already registered MyNoX with your browsers; the extension is the last step. It comes
-with MyNoX, in the `extension` folder where MyNoX is installed, and with every release.
+The setup already registered MyNoX with your browsers; the extension is the last step, and it
+comes inside MyNoX.
+
+**One click:** open **Tasks → Browser extension...** (in MyNoX Choice, **Add to browser** in the
+sidebar) and click **Add it now** beside your browser. MyNoX opens the browser's extensions page,
+copies the extension's folder and shows the three clicks left: **Developer mode** on, **Load
+unpacked**, **Ctrl+V** and **Select Folder**. It says **Connected** when it's done.
+
+By hand:
 
 **Chrome, Edge, Brave, Opera, Vivaldi**
 
@@ -46,14 +64,14 @@ with MyNoX, in the `extension` folder where MyNoX is installed, and with every r
 2. Turn on **Developer mode**.
 3. Click **Load unpacked** and choose
    `%LOCALAPPDATA%\Programs\MyNoX Download Manager\extension\chromium`
-   (or unzip `MyNoX-<version>-extension-chromium.zip` from the release and choose that folder).
+   (a portable copy has it beside its `mynox.exe`).
 4. Click any download link: MyNoX opens **Download File Info**.
 
 **Firefox**
 
 1. Open `about:debugging#/runtime/this-firefox`.
 2. Click **Load Temporary Add-on...** and choose `mynox-firefox.xpi` from MyNoX's `extension`
-   folder (or `MyNoX-<version>-extension-firefox.xpi` from the release).
+   folder.
 
 Firefox drops a temporary add-on when it closes; Developer Edition, Nightly and ESR can keep it
 for good. Every step, with pictures: **[Catch downloads from your browser](docs/guide-catch-browser-downloads.md)**.
@@ -72,7 +90,8 @@ for good. Every step, with pictures: **[Catch downloads from your browser](docs/
 - **Queues and scheduler** - download overnight, then shut down, sleep or hang up.
 - **Categories** - files sorted into Compressed, Documents, Music, Programs and Video folders.
 - **Portable mode**, **remote control** from your phone, a **command line** and an **automation API**.
-- **86 languages**, right-to-left included, and themes in light and dark.
+- **86 languages**, right-to-left included, and themes in light and dark, among them
+  **MyNoX Choice** with its own sidebar layout.
 - **Updates itself** - **Help → Check for updates** installs a new release after checking its signature.
 
 ## Screenshots
@@ -86,11 +105,12 @@ for good. Every step, with pictures: **[Catch downloads from your browser](docs/
 
 | | |
 |---|---|
-| ![The main window in the Classic theme](docs/images/help/site-theme-classic.webp) | ![The main window in the Metro theme](docs/images/help/site-theme-metro.webp) |
-| ![The main window in the Native theme](docs/images/help/site-theme-native.webp) | ![The main window in the Aero theme](docs/images/help/site-theme-aero.webp) |
-| ![The main window in the Luna theme](docs/images/help/site-theme-luna.webp) | ![The main window in the Emerald theme](docs/images/help/site-theme-emerald.webp) |
-| ![The main window in the Aqua theme](docs/images/help/site-theme-aqua.webp) | ![The main window in the High contrast theme](docs/images/help/site-theme-high-contrast.webp) |
-| ![The main window in the Adwaita theme](docs/images/help/site-theme-adwaita.webp) | ![The main window in the Breeze theme](docs/images/help/site-theme-breeze.webp) |
+| ![The main window in the MyNoX Choice theme](docs/images/help/site-theme-mynox-choice.webp) | ![The main window in the Classic theme](docs/images/help/site-theme-classic.webp) |
+| ![The main window in the Metro theme](docs/images/help/site-theme-metro.webp) | ![The main window in the Native theme](docs/images/help/site-theme-native.webp) |
+| ![The main window in the Aero theme](docs/images/help/site-theme-aero.webp) | ![The main window in the Luna theme](docs/images/help/site-theme-luna.webp) |
+| ![The main window in the Emerald theme](docs/images/help/site-theme-emerald.webp) | ![The main window in the Aqua theme](docs/images/help/site-theme-aqua.webp) |
+| ![The main window in the High contrast theme](docs/images/help/site-theme-high-contrast.webp) | ![The main window in the Adwaita theme](docs/images/help/site-theme-adwaita.webp) |
+| ![The main window in the Breeze theme](docs/images/help/site-theme-breeze.webp) | |
 
 ## User guide
 
@@ -111,6 +131,12 @@ powershell -File tools\installer\build.ps1     # setup + zips into target\dist
 
 With the GNU toolchain, put MSYS2's MinGW-w64 (`C:\msys64\mingw64\bin`) on PATH first.
 [CONTRIBUTING.md](CONTRIBUTING.md) has the checks to run before a pull request.
+
+## Thanks
+
+MyNoX Download Manager is built on **[Mister Download Manager](https://github.com/anefzaoui/misterdownloadmanager)**
+by Ahmed Nefzaoui and its contributors, free software under the GPL. Thank you for the work that
+made MyNoX possible.
 
 ## Licence
 

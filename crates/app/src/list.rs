@@ -21,6 +21,20 @@ pub fn row_h() -> f32 {
     crate::theme::metrics().list_row
 }
 
+// Is MyNoX Choice's layout on (no frame, centred rows, rounded selection, progress bars)?
+fn choice() -> bool {
+    crate::theme::current().layout == crate::palette::Layout::Choice
+}
+
+// How far a row's text and icon move down to sit centred in a tall row (0 in the classic sizes).
+fn text_dy() -> f32 {
+    if row_h() > 20.0 {
+        ((row_h() - 17.0) / 2.0).floor()
+    } else {
+        0.0
+    }
+}
+
 // The active theme's colours (crate::palette, #45).
 themed! {
     /// The list's border (it was #828790 in dark too): the lists' and tables' one edge.
@@ -330,6 +344,8 @@ pub struct Row {
     /// In a queue: the Q column shows a queue icon (IDM: stacked files).
     pub queued: bool,
     pub cells: [String; COLS],
+    /// Done, 0 to 1, when the size is known (MyNoX Choice draws it under the Status).
+    pub progress: Option<f32>,
 }
 
 #[derive(Default)]
@@ -517,8 +533,13 @@ pub fn show(
         outer.right() - 1.0,
         outer.bottom() - 1.0,
     );
-    winui::solid(&p, screen(outer), FRAME());
-    fill(&p, l + 1.0, t + 1.0, r - 1.0, b - 1.0, BG());
+    // MyNoX Choice's card is the list's frame.
+    if choice() {
+        fill(&p, l, t, r, b, BG());
+    } else {
+        winui::solid(&p, screen(outer), FRAME());
+        fill(&p, l + 1.0, t + 1.0, r - 1.0, b - 1.0, BG());
+    }
     let (cl, ct, cr, cb) = (l + 2.0, t + 2.0, r - 2.0, b - 2.0);
     let font = winui::tahoma();
 
@@ -753,7 +774,19 @@ pub fn show(
             *x0..=*x1,
             ct..=ct + header_h(),
         )));
-        text_font(&clip, font.clone(), x0 + 6.0, ct + 15.0, &label, TEXT());
+        let hdy = if choice() {
+            ((header_h() - 24.0) / 2.0).floor()
+        } else {
+            0.0
+        };
+        text_font(
+            &clip,
+            font.clone(),
+            x0 + 6.0,
+            ct + 15.0 + hdy,
+            &label,
+            TEXT(),
+        );
     }
 
     // ---- body ------------------------------------------------------------------------------
@@ -818,6 +851,7 @@ pub fn show(
     let last_right = cols.last().map_or(cl, |s| s.2);
     let mut cut_under_pointer = None;
     let keys_in_use = winui::keyboard_in_use(ui.ctx());
+    let (choice, dy) = (choice(), text_dy());
     // A screen reader's row: the name, then Status and Size, selected or not, its place among all
     // the rows, where it is (out of view: above or below the list).
     let ppp = ui.ctx().pixels_per_point();
@@ -888,7 +922,14 @@ pub fn show(
                 // The row above its grid line; the focused row has a dotted outline (every other
                 // pixel), in the fill's inverse on a selected row. Both modes alike.
                 let (right, bottom) = (last_right - 1.0, top + row_h() - 2.0);
-                if sel {
+                if sel && choice {
+                    // Rounded, inset from the card's sides.
+                    let rc = Rect::from_min_max(
+                        pos2(cl + 2.0, top + 1.0),
+                        pos2(right - 1.0, bottom + 1.0),
+                    );
+                    bp.rect_filled(screen(rc), 7.0, SELECTED());
+                } else if sel {
                     fill(&bp, cl, top, right, bottom, SELECTED());
                 }
                 if has_focus {
@@ -903,20 +944,29 @@ pub fn show(
                 // Unfocused (Find, Properties, a menu has the keys): still shown, in the inactive
                 // selection grey, as Explorer shows it, so what a command acts on stays visible.
                 let bottom = top + row_h() - 2.0;
-                fill(
-                    &bp,
-                    cl,
-                    top,
-                    last_right - 1.0,
-                    bottom,
-                    winui::SELECTED_INACTIVE(),
-                );
+                if choice {
+                    let rc = Rect::from_min_max(
+                        pos2(cl + 2.0, top + 1.0),
+                        pos2(last_right - 2.0, bottom + 1.0),
+                    );
+                    bp.rect_filled(screen(rc), 7.0, winui::SELECTED_INACTIVE());
+                } else {
+                    fill(
+                        &bp,
+                        cl,
+                        top,
+                        last_right - 1.0,
+                        bottom,
+                        winui::SELECTED_INACTIVE(),
+                    );
+                }
             }
             for (c, x0, x1) in &cols {
                 // The file-type icon sits in the File Name column, wherever it is.
                 let tx = if *c == 0 {
-                    icons.paint_in(ui, &bp, row.icon.clone(), pos2(x0 + 4.0, top));
-                    x0 + 22.0
+                    let ix = if choice { x0 + 8.0 } else { x0 + 4.0 };
+                    icons.paint_in(ui, &bp, row.icon.clone(), pos2(ix, top + dy));
+                    if choice { x0 + 30.0 } else { x0 + 22.0 }
                 } else {
                     x0 + 6.0
                 };
@@ -925,7 +975,7 @@ pub fn show(
                         ui,
                         &bp,
                         IconKey::Silk("page_white_stack"),
-                        pos2(x0 + 2.0, top),
+                        pos2(x0 + 2.0, top + dy),
                     );
                 }
                 let cell = Rect::from_min_max(pos2(*x0, top), pos2(*x1 - 1.0, top + row_h()));
@@ -973,10 +1023,28 @@ pub fn show(
                     winui::SELECTION_TEXT()
                 } else if failed {
                     winui::ERROR()
+                } else if choice && *c == 3 {
+                    status_ink(row.status_group)
                 } else {
                     TEXT()
                 };
-                text_font(&clip, font.clone(), tx, top + 12.0, &s, ink);
+                // MyNoX Choice: the Status sits above a thin progress bar.
+                let bar = choice && *c == 3 && row.progress.is_some();
+                let ty = if bar {
+                    top + 12.0 + dy - 3.0
+                } else {
+                    top + 12.0 + dy
+                };
+                text_font(&clip, font.clone(), tx, ty, &s, ink);
+                if bar && let Some(f) = row.progress {
+                    progress_line(
+                        &clip,
+                        (tx, (x1 - 8.0).max(tx + 8.0)),
+                        top + row_h() - 8.0,
+                        f,
+                        row.status_group,
+                    );
+                }
             }
         }
         // The grid line is the item's own last row (top + 16), so icons are not clipped; in
@@ -1258,20 +1326,52 @@ fn chip(
     // Room: the pill starts 5 px in, pads its text 6 px each side, and ends 3 px before the cell.
     let label = &winui::ellipsize(p, font, full, (x1 - x0 - 5.0 - 12.0 - 3.0).max(0.0));
     let w = winui::text_width_font(p, font.clone(), label).round();
-    let pill = Rect::from_min_size(
-        pos2(x0 + 5.0, top + 2.0),
-        egui::vec2(w + 12.0, row_h() - 4.0),
-    );
-    p.rect_filled(winui::rect(pill), (row_h() - 4.0) / 2.0, fill);
+    // A tall row (MyNoX Choice) keeps the pill 18 px, centred.
+    let (ph, pt) = if row_h() > 20.0 {
+        (18.0, top + ((row_h() - 18.0) / 2.0).floor())
+    } else {
+        (row_h() - 4.0, top + 2.0)
+    };
+    let pill = Rect::from_min_size(pos2(x0 + 5.0, pt), egui::vec2(w + 12.0, ph));
+    p.rect_filled(winui::rect(pill), ph / 2.0, fill);
     text_font(
         p,
         font.clone(),
         pill.left() + 6.0,
-        top + 12.0,
+        top + 12.0 + text_dy(),
         label,
         crate::theme::colors().chip_text,
     );
     label != full
+}
+
+// MyNoX Choice's Status colour for a status group.
+fn status_ink(group: &str) -> Color32 {
+    let c = crate::theme::colors();
+    match group {
+        "Downloading" => c.accent,
+        "Complete" => c.success,
+        "Error" => c.error,
+        "Waiting" => c.warning,
+        _ => c.muted,
+    }
+}
+
+// MyNoX Choice's thin progress bar under a row's Status, from x0 to x1 (English).
+fn progress_line(p: &egui::Painter, (x0, x1): (f32, f32), y: f32, f: f32, group: &str) {
+    let c = crate::theme::colors();
+    let track = Rect::from_min_max(pos2(x0, y), pos2(x1, y + 3.0));
+    p.rect_filled(winui::rect(track), 1.5, c.progress_track);
+    let f = f.clamp(0.0, 1.0);
+    if f > 0.0 {
+        let done = Rect::from_min_max(track.min, pos2(x0 + (x1 - x0) * f, y + 3.0));
+        let ink = match group {
+            "Complete" => c.success,
+            "Error" => c.error,
+            _ => c.progress_bar,
+        };
+        p.rect_filled(winui::rect(done), 1.5, ink);
+    }
 }
 
 /// Where a column's funnel sits in its header: at the right, left of the sort chevron.
@@ -1557,6 +1657,7 @@ mod tests {
             icon: IconKey::Silk("page_white"),
             queued,
             cells,
+            progress: None,
         }
     }
 

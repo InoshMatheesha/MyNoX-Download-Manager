@@ -6625,3 +6625,47 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/秒
+#, machine
+	Add to browser	ブラウザーに追加
+#, machine
+	Browser connected	ブラウザーに接続済み
+#, machine
+	Download speed	ダウンロード速度
+#, machine
+	Idle	待機中
+#, machine
+	Library	ライブラリ
+#, machine
+	More torrent options	その他のトレント オプション
+#, machine
+	Nothing is downloading right now	現在ダウンロード中のものはありません
+#, machine
+menu	Browser extensi&on...	ブラウザー拡張機能(&O)...
+#, machine
+	Add it now	今すぐ追加
+#, machine
+	Add the extension to your browser	拡張機能をブラウザーに追加
+#, machine
+	Almost there: three clicks in {browser}	あと少し: {browser} で 3 回クリック
+#, machine
+	Click "Load Temporary Add-on..." on the page that just opened.	開いたページで "Load Temporary Add-on..." をクリックします。
+#, machine
+	Click "Load unpacked".	"Load unpacked" をクリックします。
+#, machine
+	Copy again	もう一度コピー
+#, machine
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	完了: Firefox は閉じるまで保持します (Developer Edition と ESR は保持し続けます)。
+#, machine
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	ファイル欄で Ctrl+V を押し (MyNoX がファイルをコピー済み)、[開く] をクリックします。
+#, machine
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	フォルダー欄で Ctrl+V を押し (MyNoX がフォルダーをコピー済み)、[フォルダーの選択] をクリックします。
+#, machine
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	MyNoX がブラウザーの拡張機能ページを開き、拡張機能の場所をコピーしました。そのページで次の手順を行ってください:
+#, machine
+	Open the page again	ページをもう一度開く
+#, machine
+	Turn on "Developer mode" at the bottom left of the page that just opened.	開いたページの左下にある "Developer mode" をオンにします。
+#, machine
+	Turn on "Developer mode" at the top right of the page that just opened.	開いたページの右上にある "Developer mode" をオンにします。
+#, machine
+	Waiting for the extension to reach MyNoX...	拡張機能が MyNoX に接続するのを待っています...

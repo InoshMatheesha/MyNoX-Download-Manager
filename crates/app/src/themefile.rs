@@ -468,6 +468,10 @@ pub fn parse(
                 Some(name) => theme.icon_set = Some(name.to_owned().into()),
                 None => warnings.push("icon-set: a set's name".into()),
             },
+            "layout" => match value.as_str().and_then(crate::palette::Layout::from_key) {
+                Some(l) => theme.layout = l,
+                None => warnings.push(format!("layout: {value} is not classic or choice")),
+            },
             "icons" => match value.as_str().and_then(IconStyle::from_key) {
                 Some(s) => theme.icons = s,
                 None => warnings.push(format!("icons: {value} is not color, mono or accent")),

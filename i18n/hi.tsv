@@ -6625,3 +6625,47 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/सेकंड
+#, machine
+	Add to browser	ब्राउज़र में जोड़ें
+#, machine
+	Browser connected	ब्राउज़र कनेक्ट है
+#, machine
+	Download speed	डाउनलोड गति
+#, machine
+	Idle	निष्क्रिय
+#, machine
+	Library	लाइब्रेरी
+#, machine
+	More torrent options	और टोरेंट विकल्प
+#, machine
+	Nothing is downloading right now	अभी कुछ भी डाउनलोड नहीं हो रहा है
+#, machine
+menu	Browser extensi&on...	ब्राउज़र एक्सटेंशन(&O)...
+#, machine
+	Add it now	अभी जोड़ें
+#, machine
+	Add the extension to your browser	एक्सटेंशन को अपने ब्राउज़र में जोड़ें
+#, machine
+	Almost there: three clicks in {browser}	बस थोड़ा और: {browser} में तीन क्लिक
+#, machine
+	Click "Load Temporary Add-on..." on the page that just opened.	अभी खुले पेज पर "Load Temporary Add-on..." पर क्लिक करें।
+#, machine
+	Click "Load unpacked".	"Load unpacked" पर क्लिक करें।
+#, machine
+	Copy again	फिर से कॉपी करें
+#, machine
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	हो गया: Firefox इसे बंद होने तक रखता है (Developer Edition और ESR इसे हमेशा रखते हैं)।
+#, machine
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	फ़ाइल बॉक्स में Ctrl+V दबाएँ (MyNoX ने फ़ाइल कॉपी कर दी है) और खोलें पर क्लिक करें।
+#, machine
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	फ़ोल्डर बॉक्स में Ctrl+V दबाएँ (MyNoX ने फ़ोल्डर कॉपी कर दिया है) और फ़ोल्डर चुनें पर क्लिक करें।
+#, machine
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	MyNoX ने ब्राउज़र का एक्सटेंशन पेज खोल दिया है और एक्सटेंशन का स्थान कॉपी कर दिया है। वहाँ ये चरण करें:
+#, machine
+	Open the page again	पेज फिर से खोलें
+#, machine
+	Turn on "Developer mode" at the bottom left of the page that just opened.	अभी खुले पेज के नीचे बाईं ओर "Developer mode" चालू करें।
+#, machine
+	Turn on "Developer mode" at the top right of the page that just opened.	अभी खुले पेज के ऊपर दाईं ओर "Developer mode" चालू करें।
+#, machine
+	Waiting for the extension to reach MyNoX...	एक्सटेंशन के MyNoX तक पहुँचने की प्रतीक्षा की जा रही है...

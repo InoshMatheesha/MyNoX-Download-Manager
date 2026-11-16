@@ -13,8 +13,8 @@ use crate::{Error, signed_by_mynox, sum_for};
 pub enum Install {
     /// Windows, the setup program.
     Installer,
-    /// Windows, the portable zip (a `data` folder next to the program).
-    PortableZip,
+    /// Windows, the portable copy (a `data` folder next to the program), from the portable .exe.
+    Portable,
     /// Windows, the plain zip.
     PlainZip,
     /// macOS, the app from the .dmg.
@@ -44,7 +44,7 @@ impl Install {
             return Install::Source;
         }
         if mynox_ipc::portable_dir().is_some() {
-            return Install::PortableZip;
+            return Install::Portable;
         }
         let Some(exe) = std::env::current_exe().ok() else {
             return Install::Source;
@@ -83,7 +83,7 @@ impl Install {
     pub fn label(self) -> &'static str {
         match self {
             Install::Installer => "The installer (setup.exe)",
-            Install::PortableZip => "The portable zip",
+            Install::Portable => "The portable copy",
             Install::PlainZip => "The plain zip",
             Install::Dmg => "The .dmg",
             Install::AppImage => "The AppImage",
@@ -97,7 +97,7 @@ impl Install {
 
     pub const ALL: [Install; 10] = [
         Install::Installer,
-        Install::PortableZip,
+        Install::Portable,
         Install::PlainZip,
         Install::Dmg,
         Install::AppImage,
@@ -116,7 +116,7 @@ impl Install {
     pub fn assets(self, version: &str) -> Vec<String> {
         let (tail, ext) = match self {
             Install::Installer => ("setup", ".exe"),
-            Install::PortableZip => ("portable", ".zip"),
+            Install::Portable => ("portable", ".exe"),
             Install::PlainZip => ("x64", ".zip"),
             // One app per processor (tools/installer/build-macos.sh, #25). 0.2.4 and older look
             // for the universal one, find it missing and offer the release's page instead.
@@ -130,7 +130,7 @@ impl Install {
         };
         let name = |tail: &str| format!("MyNoX-{version}-{tail}{ext}");
         match self {
-            Install::Installer | Install::PortableZip | Install::PlainZip => vec![name(tail)],
+            Install::Installer | Install::Portable | Install::PlainZip => vec![name(tail)],
             _ => vec![name(tail), name(&format!("{tail}-experimental"))],
         }
     }
@@ -418,8 +418,8 @@ Connection: close
             ["MyNoX-0.2.2-setup.exe"]
         );
         assert_eq!(
-            Install::PortableZip.assets("0.2.2"),
-            ["MyNoX-0.2.2-portable.zip"]
+            Install::Portable.assets("0.2.2"),
+            ["MyNoX-0.2.2-portable.exe"]
         );
         assert_eq!(Install::PlainZip.assets("0.2.2"), ["MyNoX-0.2.2-x64.zip"]);
         // Linux and macOS: the plain name first, then the one up to 0.2.x.

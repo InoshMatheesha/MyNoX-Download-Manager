@@ -2,18 +2,17 @@
 
 [← Back to docs index](README.md)
 
-MyNoX runs on 64-bit Windows 10 and Windows 11, and on 64-bit Linux: see [On Linux](#on-linux).
-Builds for macOS are new and still experimental: see [On a Mac](#on-a-mac).
+MyNoX runs on 64-bit Windows 10 and Windows 11.
 
 ## Choose a download
 
-Every version is on the [Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases) page, with three files for Windows:
+Every version is on the [Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases) page, with these files:
 
 | File | What it is |
 |---|---|
 | `MyNoX-<version>-setup.exe` | The installer. Pick this one unless you have a reason not to. It can set up browser integration and open `.torrent` files and magnet links with MyNoX. |
-| `MyNoX-<version>-portable.zip` | A portable copy. The download list and settings stay in a `data` folder next to the program, and nothing is written to the registry. Browser integration needs the installer. See [Portable mode](portable.md). |
-| `MyNoX-<version>-x64.zip` | The same programs without an installer. It keeps its data in `%APPDATA%\mynox`, like an installed copy. |
+| `MyNoX-<version>-portable.exe` | A portable copy. It unpacks MyNoX into the folder you choose (a USB stick too); the download list and settings stay in a `data` folder next to the program, and nothing is written to the registry. See [Portable mode](portable.md). |
+| `SHA256SUMS.txt` and `.sig` | The checksums of both files, signed: **Help → Check for updates** checks them before it installs. |
 
 ## Install with the setup
 
@@ -88,9 +87,14 @@ MyNoX follows your system: when Windows (or your desktop's light/dark preference
 
 ## Themes
 
-**View → Theme** changes MyNoX's look at once, keeping its layout:
+**View → Theme** changes MyNoX's look at once:
 
 - **Classic**: MyNoX's own look, the default.
+- **MyNoX Choice**: MyNoX's own theme with a layout of its own: a midnight sidebar with the
+  downloads library, a big **Add URL** button, **Add to browser** and a live speed card; a header
+  with the view's name and a search box; an action bar with a **Speed Limiter** switch; and the
+  list on a rounded card with a progress bar under each download. Fold the sidebar to icons with
+  the button at its foot. The menus and shortcuts stay the same.
 - **Native**: your system's colours. Windows' accent colour (Settings → Personalization →
   Colors) and, when it is on, its contrast theme; the desktop's accent colour and its higher
   contrast setting on Linux (GNOME 47 and later, KDE Plasma); the accent colour on macOS. It
@@ -119,8 +123,8 @@ MyNoX follows your system: when Windows (or your desktop's light/dark preference
   neutral greys for structure, emerald fills that always carry near-black text rather than white,
   6-point corners on every control, and Metro's one-colour icons.
 
-![View → Theme open: Classic, Native, High contrast, Metro, Adwaita, Breeze, Luna, Aero, Aqua and Emerald, and Open themes folder](images/help/view-theme.webp)
-*View → Theme switches at once, keeping the layout.*
+![View → Theme open: Classic, MyNoX Choice, Native, High contrast, Metro, Adwaita, Breeze, Luna, Aero, Aqua and Emerald, and Open themes folder](images/help/view-theme.webp)
+*View → Theme switches at once.*
 
 <!-- pictures -->
 

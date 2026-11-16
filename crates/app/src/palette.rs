@@ -582,6 +582,25 @@ impl Controls {
     }
 }
 
+/// How the main window is laid out: the classic menu, toolbar and Categories pane, or MyNoX
+/// Choice's sidebar, header and action bar (the same commands, menus and list).
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Default)]
+pub enum Layout {
+    #[default]
+    Classic,
+    Choice,
+}
+
+impl Layout {
+    pub fn from_key(s: &str) -> Option<Self> {
+        match s {
+            "classic" => Some(Layout::Classic),
+            "choice" => Some(Layout::Choice),
+            _ => None,
+        }
+    }
+}
+
 /// A whole theme: its two variants, its sizes and its icons.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Theme {
@@ -597,6 +616,8 @@ pub struct Theme {
     pub icon_set: Option<Cow<'static, str>>,
     /// How each kind of control is drawn.
     pub controls: Controls,
+    /// The main window's layout.
+    pub layout: Layout,
 }
 
 impl Theme {
@@ -616,13 +637,14 @@ pub static CLASSIC: Theme = Theme {
     icons: IconStyle::Color,
     icon_set: None,
     controls: Controls::CLASSIC,
+    layout: Layout::Classic,
 };
 
 /// The built-in themes that don't change by themselves, the default first: the classic look
 /// (written out above), then the ones shipped as theme files (`assets/themes/`, in the format
 /// users write, so they double as examples). Native follows the system and is made when chosen
 /// (`crate::native`).
-pub fn builtins() -> [&'static Theme; 9] {
+pub fn builtins() -> [&'static Theme; 10] {
     static HIGH_CONTRAST: std::sync::LazyLock<Theme> = std::sync::LazyLock::new(|| {
         crate::themefile::builtin(
             "high-contrast",
@@ -651,6 +673,13 @@ pub fn builtins() -> [&'static Theme; 9] {
     static EMERALD: std::sync::LazyLock<Theme> = std::sync::LazyLock::new(|| {
         crate::themefile::builtin("emerald", include_str!("../assets/themes/emerald.toml"))
     });
+    // MyNoX's own: its own layout too (`Layout::Choice`, app/choice.rs).
+    static CHOICE: std::sync::LazyLock<Theme> = std::sync::LazyLock::new(|| {
+        crate::themefile::builtin(
+            "mynox-choice",
+            include_str!("../assets/themes/mynox-choice.toml"),
+        )
+    });
     [
         &CLASSIC,
         &HIGH_CONTRAST,
@@ -661,6 +690,7 @@ pub fn builtins() -> [&'static Theme; 9] {
         &AERO,
         &AQUA,
         &EMERALD,
+        &CHOICE,
     ]
 }
 
@@ -868,6 +898,11 @@ mod tests {
                 "Emerald",
                 include_str!("../assets/themes/emerald.toml"),
             ),
+            (
+                "mynox-choice",
+                "MyNoX Choice",
+                include_str!("../assets/themes/mynox-choice.toml"),
+            ),
         ] {
             let v: serde_json::Value = toml::from_str(text).unwrap();
             let l = crate::themefile::parse(id, &v, |_| {
@@ -958,6 +993,19 @@ mod tests {
             assert!(contrast(p.chip_text, p.chip_torrent) >= 4.5);
             assert!(contrast(p.text, p.window) >= 4.5);
         }
+        // MyNoX Choice: its own layout, readable texts; every other theme keeps the classic one.
+        let choice = builtins()[9];
+        assert_eq!(choice.id, "mynox-choice");
+        assert_eq!(choice.layout, Layout::Choice);
+        assert_eq!(choice.icon_set.as_deref(), Some("metro"));
+        for p in [&choice.light, &choice.dark] {
+            assert!(contrast(p.text, p.window) >= 4.5);
+            assert!(contrast(p.text, p.list) >= 4.5);
+            assert!(contrast(p.chip_text, p.chip_web) >= 4.5);
+            assert!(contrast(p.chip_text, p.chip_torrent) >= 4.5);
+            assert!(contrast(p.selection_text, p.selection) >= 4.5);
+        }
+        assert!(builtins()[..9].iter().all(|t| t.layout == Layout::Classic));
     }
 
     /// The classic look's dark secondary and error texts read on every dark surface they sit on

@@ -6625,3 +6625,47 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/s
+#, machine
+	Add to browser	Zum Browser hinzufügen
+#, machine
+	Browser connected	Browser verbunden
+#, machine
+	Download speed	Download-Geschwindigkeit
+#, machine
+	Idle	Leerlauf
+#, machine
+	Library	Bibliothek
+#, machine
+	More torrent options	Weitere Torrent-Optionen
+#, machine
+	Nothing is downloading right now	Gerade wird nichts heruntergeladen
+#, machine
+menu	Browser extensi&on...	Browser-Erweiter&ung...
+#, machine
+	Add it now	Jetzt hinzufügen
+#, machine
+	Add the extension to your browser	Erweiterung zum Browser hinzufügen
+#, machine
+	Almost there: three clicks in {browser}	Fast geschafft: drei Klicks in {browser}
+#, machine
+	Click "Load Temporary Add-on..." on the page that just opened.	Klicken Sie auf der gerade geöffneten Seite auf "Load Temporary Add-on...".
+#, machine
+	Click "Load unpacked".	Klicken Sie auf "Load unpacked".
+#, machine
+	Copy again	Erneut kopieren
+#, machine
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	Fertig: Firefox behält sie bis zum Schließen (Developer Edition und ESR behalten sie dauerhaft).
+#, machine
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	Drücken Sie im Dateifeld Strg+V (MyNoX hat die Datei kopiert) und klicken Sie auf Öffnen.
+#, machine
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	Drücken Sie im Ordnerfeld Strg+V (MyNoX hat den Ordner kopiert) und klicken Sie auf Ordner auswählen.
+#, machine
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	MyNoX hat die Erweiterungsseite des Browsers geöffnet und den Ort der Erweiterung kopiert. Führen Sie dort diese Schritte aus:
+#, machine
+	Open the page again	Seite erneut öffnen
+#, machine
+	Turn on "Developer mode" at the bottom left of the page that just opened.	Schalten Sie unten links auf der gerade geöffneten Seite "Developer mode" ein.
+#, machine
+	Turn on "Developer mode" at the top right of the page that just opened.	Schalten Sie oben rechts auf der gerade geöffneten Seite "Developer mode" ein.
+#, machine
+	Waiting for the extension to reach MyNoX...	Warten, bis die Erweiterung MyNoX erreicht...

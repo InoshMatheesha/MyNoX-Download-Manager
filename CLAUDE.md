@@ -23,7 +23,10 @@ with [README.md](README.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - `cargo run -p mynox-app -- --cli get <url> -o <dir>` - headless download with progress.
 - `tools/extension/pack.ps1` - the extension for Chromium and Firefox into `target/extension/`;
   `node tools/extension/test.mjs` - its logic against fake browser APIs.
-- `tools/installer/build.ps1` - the installer and the zips into `target/dist/`.
+- `tools/installer/build.ps1` - the x64 setup and the portable .exe (`mynox-portable.iss`) into
+  `target/dist/`; a release is those two plus the signed `SHA256SUMS.txt`.
+- The MyNoX Choice theme's own layout is `crates/app/src/choice.rs` (a child module of `app.rs`);
+  a theme picks it with `layout = "choice"`.
 - `python -I tools/icon/build_icon.py` - every icon (app, extension, Download video button) from
   `art/MyNoX Download Manager.png`.
 - A release: bump the version, push the commit, then `powershell -File tools\installer\release.ps1`

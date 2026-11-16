@@ -6611,3 +6611,47 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/秒
+#, machine
+	Add to browser	新增至瀏覽器
+#, machine
+	Browser connected	瀏覽器已連線
+#, machine
+	Download speed	下載速度
+#, machine
+	Idle	閒置
+#, machine
+	Library	媒體庫
+#, machine
+	More torrent options	更多種子選項
+#, machine
+	Nothing is downloading right now	目前沒有正在下載的內容
+#, machine
+menu	Browser extensi&on...	瀏覽器擴充功能(&O)...
+#, machine
+	Add it now	立即新增
+#, machine
+	Add the extension to your browser	將擴充功能新增至瀏覽器
+#, machine
+	Almost there: three clicks in {browser}	快完成了：在 {browser} 中按三下
+#, machine
+	Click "Load Temporary Add-on..." on the page that just opened.	在剛開啟的頁面上按一下 "Load Temporary Add-on..."。
+#, machine
+	Click "Load unpacked".	按一下 "Load unpacked"。
+#, machine
+	Copy again	再次複製
+#, machine
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	完成：Firefox 會保留它直到關閉（Developer Edition 與 ESR 會一直保留）。
+#, machine
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	在檔案方塊中按 Ctrl+V（MyNoX 已複製該檔案），然後按一下「開啟」。
+#, machine
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	在資料夾方塊中按 Ctrl+V（MyNoX 已複製該資料夾），然後按一下「選擇資料夾」。
+#, machine
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	MyNoX 已開啟瀏覽器的擴充功能頁面並複製了擴充功能所在位置。請在該頁面完成以下步驟：
+#, machine
+	Open the page again	再次開啟頁面
+#, machine
+	Turn on "Developer mode" at the bottom left of the page that just opened.	開啟剛開啟頁面左下角的 "Developer mode"。
+#, machine
+	Turn on "Developer mode" at the top right of the page that just opened.	開啟剛開啟頁面右上角的 "Developer mode"。
+#, machine
+	Waiting for the extension to reach MyNoX...	正在等待擴充功能連線至 MyNoX...

@@ -6625,3 +6625,47 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/வி
+#, machine
+	Add to browser	உலாவியில் சேர்
+#, machine
+	Browser connected	உலாவி இணைக்கப்பட்டது
+#, machine
+	Download speed	பதிவிறக்க வேகம்
+#, machine
+	Idle	செயலற்றது
+#, machine
+	Library	நூலகம்
+#, machine
+	More torrent options	மேலும் டொரண்ட் விருப்பங்கள்
+#, machine
+	Nothing is downloading right now	இப்போது எதுவும் பதிவிறக்கப்படவில்லை
+#, machine
+menu	Browser extensi&on...	உலாவி நீட்டிப்பு(&O)...
+#, machine
+	Add it now	இப்போதே சேர்
+#, machine
+	Add the extension to your browser	நீட்டிப்பை உங்கள் உலாவியில் சேர்க்கவும்
+#, machine
+	Almost there: three clicks in {browser}	கிட்டத்தட்ட முடிந்தது: {browser} இல் மூன்று கிளிக்குகள்
+#, machine
+	Click "Load Temporary Add-on..." on the page that just opened.	இப்போது திறந்த பக்கத்தில் "Load Temporary Add-on..." என்பதைக் கிளிக் செய்யவும்.
+#, machine
+	Click "Load unpacked".	"Load unpacked" என்பதைக் கிளிக் செய்யவும்.
+#, machine
+	Copy again	மீண்டும் நகலெடு
+#, machine
+	Done: Firefox keeps it until it closes (Developer Edition and ESR keep it for good).	முடிந்தது: Firefox மூடப்படும் வரை இதை வைத்திருக்கும் (Developer Edition மற்றும் ESR நிரந்தரமாக வைத்திருக்கும்).
+#, machine
+	In the file box, press Ctrl+V (MyNoX copied the file) and click Open.	கோப்புப் பெட்டியில் Ctrl+V அழுத்தவும் (MyNoX கோப்பை நகலெடுத்தது), பின் திற என்பதைக் கிளிக் செய்யவும்.
+#, machine
+	In the folder box, press Ctrl+V (MyNoX copied the folder) and click Select Folder.	கோப்புறைப் பெட்டியில் Ctrl+V அழுத்தவும் (MyNoX கோப்புறையை நகலெடுத்தது), பின் கோப்புறையைத் தேர்ந்தெடு என்பதைக் கிளிக் செய்யவும்.
+#, machine
+	MyNoX opened the browser's extensions page and copied where the extension is. Do these steps there:	MyNoX உலாவியின் நீட்டிப்புகள் பக்கத்தைத் திறந்து, நீட்டிப்பு இருக்கும் இடத்தை நகலெடுத்தது. அங்கே இந்தப் படிகளைச் செய்யவும்:
+#, machine
+	Open the page again	பக்கத்தை மீண்டும் திற
+#, machine
+	Turn on "Developer mode" at the bottom left of the page that just opened.	இப்போது திறந்த பக்கத்தின் கீழ் இடதுபுறம் உள்ள "Developer mode" ஐ இயக்கவும்.
+#, machine
+	Turn on "Developer mode" at the top right of the page that just opened.	இப்போது திறந்த பக்கத்தின் மேல் வலதுபுறம் உள்ள "Developer mode" ஐ இயக்கவும்.
+#, machine
+	Waiting for the extension to reach MyNoX...	நீட்டிப்பு MyNoX ஐ அடையும் வரை காத்திருக்கிறது...

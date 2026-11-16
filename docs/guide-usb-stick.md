@@ -6,8 +6,8 @@ The portable copy runs straight from a USB stick and keeps its list and settings
 
 ## 1. Put MyNoX on the stick
 
-1. Download `MyNoX-<version>-portable.zip` from [Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases).
-2. Unzip it onto the stick, for example to `E:\MyNoX`.
+1. Download `MyNoX-<version>-portable.exe` from [Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases).
+2. Run it and choose a folder on the stick, for example `E:\MyNoX`.
 3. Check that there is a `data` folder next to `mynox.exe`. That folder is what makes MyNoX portable. Don't delete it.
 4. Run `mynox.exe` and pick your language.
 

@@ -90,6 +90,11 @@ light and a dark palette, metrics, control styles and an icon style (`palette.rs
   buttons, progress bars, scroll bars, the focus mark, the title bar); the style themes (Metro,
   Adwaita, Breeze, Luna, Aero, Aqua, Emerald) pick theirs, and on Windows MyNoX then draws the
   title bar itself (the `caption.*` roles).
+- **Layouts.** `palette::Layout` is the main window's arrangement. Every theme keeps the classic
+  one (menu bar, toolbar, Categories pane, list) except MyNoX Choice (`layout = "choice"`), whose
+  sidebar, header, action bar, list card and status bar are drawn by `choice.rs`, a child module
+  of `app.rs`: it runs the same commands (`Cmd`), menus, popups and tree keys, and gives the
+  shared list a rect (`list.rs` then draws taller rows, a rounded selection and progress bars).
 - **Theme files.** `themefile.rs` reads TOML or JSON from the data folder's `themes` (one file,
   or `<id>/theme.toml` with icons beside it). A file names only what it changes; the rest comes
   from the theme it `inherits` (a built-in's id or another file, the classic look by default),
