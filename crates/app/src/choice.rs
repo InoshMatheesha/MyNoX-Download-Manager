@@ -33,7 +33,7 @@ pub(super) struct State {
     sampled: Option<Instant>,
 }
 
-// The sidebar's inks: always midnight, in both modes.
+// The sidebar's inks, from the title bar's colours: graphite in dark mode, light grey in light.
 struct Ink {
     side: Color32,
     text: Color32,
@@ -41,7 +41,9 @@ struct Ink {
     faint: Color32,
     hover: Color32,
     accent: Color32,
-    violet: Color32,
+    // The primary button's face and ink: the sidebar's text and background, swapped.
+    strong: Color32,
+    on_strong: Color32,
     good: Color32,
     warn: Color32,
 }
@@ -51,14 +53,15 @@ impl Ink {
         let c = crate::theme::colors();
         Ink {
             side: c.caption,
-            text: Color32::from_rgb(0xe9, 0xee, 0xfb),
-            muted: Color32::from_rgb(0x8d, 0x97, 0xb5),
-            faint: Color32::WHITE.gamma_multiply(0.07),
-            hover: Color32::WHITE.gamma_multiply(0.06),
-            accent: Color32::from_rgb(0x4c, 0x82, 0xff),
-            violet: Color32::from_rgb(0x8a, 0x6b, 0xff),
-            good: Color32::from_rgb(0x45, 0xdc, 0xa0),
-            warn: Color32::from_rgb(0xff, 0xc8, 0x57),
+            text: c.caption_text,
+            muted: mix(c.caption_text, c.caption, 0.42),
+            faint: c.caption_text.gamma_multiply(0.07),
+            hover: c.caption_text.gamma_multiply(0.06),
+            accent: c.accent,
+            strong: c.caption_text,
+            on_strong: c.caption,
+            good: c.success,
+            warn: c.warning,
         }
     }
 }
@@ -198,13 +201,13 @@ impl App {
         let pad = if rail { 12.0 } else { 16.0 };
         let bar = Rect::from_min_size(o, vec2(side, h));
         p.rect_filled(winui::rect(bar), 0.0, k.side);
-        // A faint blue glow at the top of the sidebar.
+        // A faint sheen at the top of the sidebar.
         winui::fill_shaded(
             &p,
             winui::rect(Rect::from_min_size(o, vec2(side, 180.0))),
             0.0,
             &[
-                (0.0, k.accent.gamma_multiply(0.10)),
+                (0.0, k.text.gamma_multiply(0.035)),
                 (1.0, Color32::TRANSPARENT),
             ],
         );
@@ -242,41 +245,28 @@ impl App {
         );
         winui::expose(&r, egui::Role::Button, add_label, true, None);
         let r = if rail { r.on_hover_text(add_label) } else { r };
-        let lift = if r.is_pointer_button_down_on() {
+        let lift: f32 = if r.is_pointer_button_down_on() {
             -0.10
         } else if r.hovered() {
             0.10
         } else {
             0.0
         };
-        let tone = |c: Color32| {
-            if lift >= 0.0 {
-                mix(c, Color32::WHITE, lift)
-            } else {
-                mix(c, Color32::BLACK, -lift)
-            }
-        };
+        // Under the pointer a little toward the sidebar, pressed a little more.
+        let face = mix(k.strong, k.on_strong, lift.abs() * 1.2);
         p.rect_filled(
-            winui::rect(add.translate(vec2(0.0, 3.0))),
+            winui::rect(add.translate(vec2(0.0, 2.0))),
             12.0,
-            k.accent.gamma_multiply(0.35),
+            Color32::from_black_alpha(if k.side.r() < 128 { 90 } else { 30 }),
         );
-        winui::fill_shaded(
-            &p,
-            winui::rect(add),
-            11.0,
-            &[
-                (0.0, tone(k.accent)),
-                (1.0, tone(mix(k.accent, k.violet, 0.55))),
-            ],
-        );
+        p.rect_filled(winui::rect(add), 11.0, face);
         let plus_x = if rail {
             add.center().x
         } else {
             add.left() + 22.0
         };
         let cy = add.center().y;
-        let s = Stroke::new(2.2, Color32::WHITE);
+        let s = Stroke::new(2.2, k.on_strong);
         p.line_segment([at(plus_x - 6.0, cy), at(plus_x + 6.0, cy)], s);
         p.line_segment([at(plus_x, cy - 6.0), at(plus_x, cy + 6.0)], s);
         if !rail {
@@ -286,7 +276,7 @@ impl App {
                 add.left() + 40.0,
                 mid(add.top(), add.height(), 14.0),
                 add_label,
-                Color32::WHITE,
+                k.on_strong,
             );
             let hint = "Ctrl+N";
             let f = font(11.0, 0);
@@ -297,7 +287,7 @@ impl App {
                 add.right() - 12.0 - hw,
                 mid(add.top(), add.height(), 11.0),
                 hint,
-                Color32::WHITE.gamma_multiply(0.65),
+                k.on_strong.gamma_multiply(0.6),
             );
         }
         if r.clicked() {
@@ -502,7 +492,7 @@ impl App {
                 resp
             };
             if row.selected {
-                clip.rect_filled(winui::rect(rc), 9.0, k.accent.gamma_multiply(0.24));
+                clip.rect_filled(winui::rect(rc), 9.0, k.text.gamma_multiply(0.09));
                 let bar = Rect::from_min_size(
                     pos2(rc.left() - 6.0, rc.top() + 8.0),
                     vec2(3.0, rc.height() - 16.0),
@@ -514,9 +504,7 @@ impl App {
             if keys && row.selected {
                 winui::focus_ring_round(&clip, winui::rect(rc), 9.0);
             }
-            let ink = if row.selected {
-                Color32::WHITE
-            } else if row.level == 0 {
+            let ink = if row.selected || row.level == 0 {
                 k.text
             } else {
                 k.muted
@@ -552,7 +540,7 @@ impl App {
                         rc.center().y,
                         &s,
                         if row.selected {
-                            k.accent.gamma_multiply(0.55)
+                            k.text.gamma_multiply(0.14)
                         } else {
                             k.faint
                         },
@@ -654,13 +642,13 @@ impl App {
         let (bg, edge) = if seen {
             (k.faint, Color32::TRANSPARENT)
         } else {
-            (k.accent.gamma_multiply(0.16), k.accent.gamma_multiply(0.55))
+            (k.accent.gamma_multiply(0.10), k.accent.gamma_multiply(0.45))
         };
         p.rect_filled(
             winui::rect(rc),
             10.0,
             if r.hovered() {
-                mix(bg, Color32::WHITE, 0.05)
+                mix(bg, k.text, 0.05)
             } else {
                 bg
             },
@@ -727,7 +715,10 @@ impl App {
             p,
             winui::rect(rc),
             12.0,
-            &[(0.0, k.accent.gamma_multiply(0.22)), (1.0, k.faint)],
+            &[
+                (0.0, k.text.gamma_multiply(0.06)),
+                (1.0, k.text.gamma_multiply(0.03)),
+            ],
         );
         p.rect_stroke(
             winui::rect(rc),
@@ -811,12 +802,9 @@ impl App {
             mesh.add_triangle(base, base + 2, base + 3);
         }
         p.add(egui::Shape::mesh(mesh));
-        p.add(egui::Shape::line(
-            pts.clone(),
-            Stroke::new(2.0, mix(k.accent, k.violet, 0.35)),
-        ));
+        p.add(egui::Shape::line(pts.clone(), Stroke::new(2.0, k.accent)));
         if let Some(last) = pts.last() {
-            p.circle_filled(*last, 3.5, Color32::WHITE);
+            p.circle_filled(*last, 3.5, k.side);
             p.circle_filled(*last, 2.2, k.accent);
         }
     }
@@ -891,7 +879,7 @@ impl App {
                     let cc = at(c.x, c.y);
                     p.circle_filled(cc, 7.5, k.text);
                     let bg = if r.hovered() {
-                        mix(k.side, Color32::WHITE, 0.06)
+                        mix(k.side, k.text, 0.06)
                     } else {
                         k.side
                     };
@@ -1271,6 +1259,12 @@ impl App {
                     tr.left() + 10.0
                 };
                 p.circle_filled(at(kx, tr.center().y), 7.5, Color32::WHITE);
+                // A hairline so the knob shows on a light track too.
+                p.circle_stroke(
+                    at(kx, tr.center().y),
+                    7.5,
+                    Stroke::new(1.0, Color32::from_black_alpha(28)),
+                );
                 if r.clicked() {
                     *chosen = Some((if on { Cmd::LimiterOff } else { Cmd::LimiterOn }, None));
                 }

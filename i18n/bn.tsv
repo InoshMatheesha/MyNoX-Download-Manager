@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} এমবি
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} এমবি/সেকেন্ড
+#, machine
+menu	&Minimize to the notification area	&বিজ্ঞপ্তি এলাকায় ছোট করুন
+#, machine
+menu	&Keep running when closing the window	&উইন্ডো বন্ধ করার সময় চালু রাখুন
+#, machine
+menu	&Hide to the notification area now	&বিজ্ঞপ্তি এলাকায় লুকান

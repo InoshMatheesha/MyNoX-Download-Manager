@@ -13,8 +13,6 @@ use crate::winui::{self, ButtonKind, r};
 
 /// The repository: problem reports, releases, source, licences.
 pub const REPO: &str = "https://github.com/InoshMatheesha/MyNoX-Download-Manager";
-/// Help → Support MyNoX and About's last line: the repository, to star and follow.
-pub const SPONSORS: &str = "https://github.com/InoshMatheesha/MyNoX-Download-Manager";
 const LATEST: &str =
     "https://api.github.com/repos/InoshMatheesha/MyNoX-Download-Manager/releases/latest";
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -45,15 +43,6 @@ pub fn page_url(doc: &str, _lang: &str) -> String {
 pub fn open_page(doc: &str) {
     if !crate::offscreen() {
         crate::launch::open(page_url(doc, crate::i18n::code()));
-    }
-}
-
-/// Help → Support MyNoX and About's link: the Sponsors page in the browser. Asked for only: MyNoX
-/// never brings it up by itself, and never in an off-screen test run (MYNOX_OFFSCREEN), whose
-/// clicks come from scripts, not from a person at the browser.
-pub fn support() {
-    if !crate::offscreen() {
-        crate::launch::open(SPONSORS);
     }
 }
 
@@ -754,18 +743,6 @@ impl About {
                     "credits",
                 ) {
                     crate::launch::open(format!("{REPO}/blob/main/ATTRIBUTION.md"));
-                }
-                // Its own row under them: the creator's Sponsors page (Help → Support MyNoX).
-                y += 22.0;
-                if winui::link(
-                    ui,
-                    &p,
-                    o.x + 80.0,
-                    y,
-                    "Support MyNoX on GitHub Sponsors",
-                    "support",
-                ) {
-                    support();
                 }
                 // The last row ends above OK (at 204 when it fits as planned).
                 crate::dialogs::grow_px(ui.ctx(), "about", y + 12.0 - (o.y + 194.0));

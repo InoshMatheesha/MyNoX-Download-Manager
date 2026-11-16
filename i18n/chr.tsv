@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} ᎷᏴ/ᎠᏍᏆᎶᎢ
+#, machine
+menu	&Minimize to the notification area	&Minimize ᏫᎦᏅᏁᎸ notification area
+#, machine
+menu	&Keep running when closing the window	&ᎢᎬᏱᏗᏢ ᏂᎦᎵᏍᏗᏍᎨᏍᏗ ᎢᏳᏃ ᎾᏍᎩ ᎧᏁᏌᎢ ᎢᏍᏚᏢᏍᎨᏍᏗ
+#, machine
+menu	&Hide to the notification area now	&ᎭᏫᎾᏗᏢ ᏫᎦᏅᏁᎸ notification area

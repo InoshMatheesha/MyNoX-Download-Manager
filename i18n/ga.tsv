@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/soic
+#, machine
+menu	&Minimize to the notification area	&Íoslaghdaigh go dtí an limistéar fógraí
+#, machine
+menu	&Keep running when closing the window	&Coimeád ag rith nuair a dhúnann tú an fhuinneog
+#, machine
+menu	&Hide to the notification area now	&Folaigh go dtí an limistéar fógra

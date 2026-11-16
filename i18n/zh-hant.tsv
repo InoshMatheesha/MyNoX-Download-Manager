@@ -6655,3 +6655,9 @@ menu	Browser extensi&on...	瀏覽器擴充功能(&O)...
 	Turn on "Developer mode" at the top right of the page that just opened.	開啟剛開啟頁面右上角的 "Developer mode"。
 #, machine
 	Waiting for the extension to reach MyNoX...	正在等待擴充功能連線至 MyNoX...
+#, machine
+menu	&Minimize to the notification area	&最小化到通知區域
+#, machine
+menu	&Keep running when closing the window	&關閉視窗時保持執行
+#, machine
+menu	&Hide to the notification area now	&隱藏到通知區域

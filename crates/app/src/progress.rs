@@ -402,8 +402,13 @@ impl Progress {
         frac: Option<f64>,
     ) -> Action {
         let p = ui.painter().clone();
+        let choice = choice();
         let hide = self.tabs(ui, o);
         let hide_tab = match self.tab {
+            Tab::Status if choice => {
+                status_card(ui, o, item, snap, frac);
+                false
+            }
             Tab::Status => {
                 status_page(ui, o, item, snap, frac);
                 false
@@ -420,12 +425,16 @@ impl Progress {
             ui.ctx().request_repaint();
         }
 
-        // The progress bar: IDM's green on the shared, themed track.
-        winui::meter(
-            &p,
-            r(o, 17.0, 180.0, 513.0, 16.0),
-            frac.unwrap_or(0.0) as f32,
-        );
+        // The progress bar: IDM's green on the shared, themed track; MyNoX Choice's slim rail.
+        if choice {
+            progress_rail(ui, &p, o, item, frac);
+        } else {
+            winui::meter(
+                &p,
+                r(o, 17.0, 180.0, 513.0, 16.0),
+                frac.unwrap_or(0.0) as f32,
+            );
+        }
 
         let mut action = if hide { Action::Hide } else { Action::None };
         let details_label = if self.details {
@@ -473,12 +482,18 @@ impl Progress {
         }
         let running = item.status == Status::Downloading;
         let can_resume = matches!(item.status, Status::Stopped | Status::Error);
+        // MyNoX Choice makes Pause / Resume the window's primary button.
+        let live = if choice {
+            ButtonKind::Accent
+        } else {
+            ButtonKind::Normal
+        };
         let (label, pkind) = if running {
             // i18n: verb: pause the download
-            (crate::i18n::mark("Pause"), ButtonKind::Normal)
+            (crate::i18n::mark("Pause"), live)
         } else if can_resume {
             // i18n: verb: continue the download
-            (crate::i18n::mark("Resume"), ButtonKind::Normal)
+            (crate::i18n::mark("Resume"), live)
         } else {
             (crate::i18n::mark("Pause"), ButtonKind::Disabled)
         };
@@ -513,6 +528,17 @@ impl Progress {
 
         if self.details && item.torrent.is_some() {
             self.torrent_details(ui, &p, o + egui::vec2(0.0, torrent_drop(item)), item);
+        } else if self.details && choice {
+            // MyNoX Choice: a quiet heading at the leading edge.
+            text(
+                &p,
+                o.x + 18.0,
+                o.y + 242.0,
+                crate::i18n::t("Start positions and download progress by connections"),
+                crate::theme::colors().muted,
+            );
+            segment_bar(&p, o, item, snap);
+            connections(ui, &p, o, snap);
         } else if self.details {
             winui::text_in_window(
                 ui,
@@ -560,8 +586,14 @@ impl Progress {
             })
             .collect();
         let current = tabs.iter().position(|t| t.0 == self.tab).unwrap_or(0);
-        // The page: x 18..529, y 28..171 (tabs_light's pane starts 20 px under its top).
-        if let Some(i) = winui::tabs_light(ui, o, r(o, 18.0, 8.0, 514.0, 165.0), &light, current) {
+        if choice() {
+            if let Some(i) = segments(ui, o, &english, current) {
+                self.tab = tabs[i].0;
+            }
+        } else if let Some(i) =
+            // The page: x 18..529, y 28..171 (tabs_light's pane starts 20 px under its top).
+            winui::tabs_light(ui, o, r(o, 18.0, 8.0, 514.0, 165.0), &light, current)
+        {
             self.tab = tabs[i].0;
         }
         self.tab_row_menu(ui, r(o, 18.0, 6.0, 514.0, 22.0));
@@ -977,42 +1009,7 @@ fn status_page(ui: &Ui, o: Pos2, item: &Item, snap: Option<&Snapshot>, frac: Opt
         let (rect, cut) = winui::text_fit(p, o.x + x, o.y + base, s, color, o.x + PAGE_TEXT_RIGHT);
         winui::copyable(ui, rect, key, s, cut);
     };
-    let status = match item.status {
-        // A torrent reading and checking its files says so, not "Receiving data" (#39).
-        _ if let Some(checking) = item.torrent_checking() => checking,
-        // A torrent its debrid service is downloading (#44).
-        Status::Downloading if item.at_service().is_some() => item.at_service().unwrap_or_default(),
-        Status::Downloading => {
-            // A video (yt-dlp) has no engine connections: data arriving is the sign.
-            let receiving = snap.is_some_and(|s| {
-                s.connections
-                    .iter()
-                    .any(|c| matches!(c.status, ConnStatus::Receiving))
-            }) || ((item.video.is_some() || item.torrent.is_some())
-                && item.rate() > 0.0);
-            if receiving {
-                crate::i18n::t("Receiving data...")
-            } else {
-                crate::i18n::t("Connecting...")
-            }
-            .to_owned()
-        }
-        // i18n: a download's status (state it is in, not a command): finished
-        Status::Complete => crate::i18n::t("Complete").to_owned(),
-        // i18n: a download's status (state it is in, not a command): stopped for now
-        Status::Stopped => crate::i18n::t("Paused").to_owned(),
-        // i18n: a download's status (state it is in, not a command): waiting in a queue
-        Status::Queued => crate::i18n::t("Waiting").to_owned(),
-        Status::Error => crate::i18n::fmt(
-            // i18n: a download's status: it failed, with the reason
-            crate::i18n::t("Error: {error}"),
-            &[(
-                "error",
-                // i18n: the reason a download failed is not known
-                item.error.as_deref().unwrap_or(crate::i18n::t("unknown")),
-            )],
-        ),
-    };
+    let status = status_text(item, snap);
     fit(
         "url",
         33.0,
@@ -1123,6 +1120,333 @@ fn status_page(ui: &Ui, o: Pos2, item: &Item, snap: Option<&Snapshot>, frac: Opt
             seen.as_ref(),
             &format!("progress-{}", item.id),
         );
+    }
+}
+
+/// The download's state in words: connecting, receiving, complete, paused, waiting, an error.
+fn status_text(item: &Item, snap: Option<&Snapshot>) -> String {
+    match item.status {
+        // A torrent reading and checking its files says so, not "Receiving data" (#39).
+        _ if let Some(checking) = item.torrent_checking() => checking,
+        // A torrent its debrid service is downloading (#44).
+        Status::Downloading if item.at_service().is_some() => item.at_service().unwrap_or_default(),
+        Status::Downloading => {
+            // A video (yt-dlp) has no engine connections: data arriving is the sign.
+            let receiving = snap.is_some_and(|s| {
+                s.connections
+                    .iter()
+                    .any(|c| matches!(c.status, ConnStatus::Receiving))
+            }) || ((item.video.is_some() || item.torrent.is_some())
+                && item.rate() > 0.0);
+            if receiving {
+                crate::i18n::t("Receiving data...")
+            } else {
+                crate::i18n::t("Connecting...")
+            }
+            .to_owned()
+        }
+        // i18n: a download's status (state it is in, not a command): finished
+        Status::Complete => crate::i18n::t("Complete").to_owned(),
+        // i18n: a download's status (state it is in, not a command): stopped for now
+        Status::Stopped => crate::i18n::t("Paused").to_owned(),
+        // i18n: a download's status (state it is in, not a command): waiting in a queue
+        Status::Queued => crate::i18n::t("Waiting").to_owned(),
+        Status::Error => crate::i18n::fmt(
+            // i18n: a download's status: it failed, with the reason
+            crate::i18n::t("Error: {error}"),
+            &[(
+                "error",
+                // i18n: the reason a download failed is not known
+                item.error.as_deref().unwrap_or(crate::i18n::t("unknown")),
+            )],
+        ),
+    }
+}
+
+/// Is MyNoX Choice's look on (its status page, progress rail and primary button)?
+fn choice() -> bool {
+    crate::theme::current().layout == crate::palette::Layout::Choice
+}
+
+/// Segoe UI at a size, semibold when `strong` (MyNoX Choice's families, winui::install_fonts).
+fn cfont(size: f32, strong: bool) -> egui::FontId {
+    if strong {
+        egui::FontId::new(size, egui::FontFamily::Name("segoe-semibold".into()))
+    } else {
+        egui::FontId::proportional(size)
+    }
+}
+
+/// The colour of a state: running in the accent, done in green, failed in red, waiting in amber.
+fn status_ink(item: &Item) -> Color32 {
+    let c = crate::theme::colors();
+    match item.status {
+        Status::Downloading => c.accent,
+        Status::Complete => c.success,
+        Status::Error => c.error,
+        Status::Queued => c.warning,
+        Status::Stopped => c.muted,
+    }
+}
+
+/// MyNoX Choice's Download status page: the file with its type and share done, three tiles
+/// (done, speed, time left), the state with resume capability, and the server.
+fn status_card(ui: &Ui, o: Pos2, item: &Item, snap: Option<&Snapshot>, frac: Option<f64>) {
+    let p = &ui.painter().clone();
+    let c = crate::theme::colors();
+    let at = |x: f32, y: f32| egui::pos2(o.x + x, o.y + y);
+    let (left, right) = (22.0, PAGE_TEXT_RIGHT + 6.0);
+    // The type badge: the file's extension on a soft accent square.
+    let ext = std::path::Path::new(&item.file_name)
+        .extension()
+        .and_then(|e| e.to_str())
+        .map(|e| e.chars().take(4).collect::<String>().to_uppercase())
+        .unwrap_or_default();
+    let badge = egui::Rect::from_min_size(at(left, 42.0), vec2(38.0, 38.0));
+    p.rect_filled(winui::rect(badge), 10.0, c.accent.gamma_multiply(0.13));
+    if ext.is_empty() {
+        // No extension: a download arrow.
+        let (cx, cy) = (badge.center().x, badge.center().y);
+        let s = egui::Stroke::new(1.8, c.accent);
+        let m = |x: f32, y: f32| egui::pos2(winui::mx(x), y);
+        p.line_segment([m(cx, cy - 8.0), m(cx, cy + 6.0)], s);
+        p.line_segment([m(cx - 5.0, cy + 1.0), m(cx, cy + 6.0)], s);
+        p.line_segment([m(cx + 5.0, cy + 1.0), m(cx, cy + 6.0)], s);
+    } else {
+        let f = cfont(10.5, true);
+        let w = winui::text_width_font(p, f.clone(), &ext);
+        winui::text_font(
+            p,
+            f,
+            badge.center().x - w / 2.0,
+            badge.center().y + 4.0,
+            &ext,
+            c.accent,
+        );
+    }
+    // The share done, large, at the trailing edge.
+    let percent = frac.map(|f| crate::i18n::percent(f, 1));
+    let pf = cfont(24.0, true);
+    let pw = percent
+        .as_ref()
+        .map_or(0.0, |s| winui::text_width_font(p, pf.clone(), s));
+    if let Some(s) = &percent {
+        winui::text_font(p, pf, o.x + right - pw, o.y + 68.0, s, c.text);
+    }
+    // The name and its address.
+    let tx = left + 50.0;
+    let name_right = right - if pw > 0.0 { pw + 16.0 } else { 0.0 };
+    let nf = cfont(14.0, true);
+    let name = winui::ellipsize(p, &nf, &item.file_name, (name_right - tx).max(20.0));
+    let drawn = winui::text_font(p, nf, o.x + tx, o.y + 57.0, &name, c.text);
+    winui::copyable(ui, drawn, "name", &item.file_name, name != item.file_name);
+    let url = crate::i18n::ltr(item.url.as_str());
+    let uf = cfont(11.5, false);
+    let shown = winui::ellipsize(p, &uf, &url, (name_right - tx).max(20.0));
+    let drawn = winui::text_font(p, uf, o.x + tx, o.y + 75.0, &shown, c.muted);
+    winui::copyable(ui, drawn, "url", &url, shown != url);
+
+    // Three tiles: done (of the size), speed, time left; the first is the widest.
+    let dash = || "\u{2014}".to_owned();
+    let done = match item.size {
+        Some(size) => format!("{} / {}", size3(item.downloaded), size3(size)),
+        None => size3(item.downloaded),
+    };
+    let speed = if item.status == Status::Downloading {
+        model::rate(item.rate())
+    } else {
+        dash()
+    };
+    let time_left = Some(item.time_left())
+        .filter(|s| !s.is_empty())
+        .unwrap_or_else(dash);
+    let tiles = [
+        (crate::i18n::t("Downloaded"), done, 1.4),
+        (crate::i18n::t("Transfer rate"), speed, 1.0),
+        (crate::i18n::t("Time left"), time_left, 1.0),
+    ];
+    let (gap, top, h) = (8.0, 90.0, 42.0);
+    let unit = ((right - left) - 2.0 * gap) / 3.4;
+    let face = crate::derive::mix(c.window, c.text, 0.035);
+    let mut x = left;
+    for (k, (label, value, weight)) in tiles.iter().enumerate() {
+        let w = unit * weight;
+        let tile = egui::Rect::from_min_size(at(x, top), vec2(w, h));
+        p.rect_filled(winui::rect(tile), 9.0, face);
+        p.rect_stroke(
+            winui::rect(tile),
+            9.0,
+            egui::Stroke::new(1.0, c.list_frame.gamma_multiply(0.7)),
+            egui::StrokeKind::Inside,
+        );
+        let lf = cfont(9.5, true);
+        let l = winui::ellipsize(p, &lf, &label.to_uppercase(), w - 22.0);
+        winui::text_font(p, lf, o.x + x + 11.0, o.y + top + 16.0, &l, c.muted);
+        let vf = cfont(13.0, true);
+        let v = winui::ellipsize(p, &vf, value, w - 22.0);
+        let drawn = winui::text_font(p, vf, o.x + x + 11.0, o.y + top + 34.0, &v, c.text);
+        winui::copyable(ui, drawn, ("tile", k), value, &v != value);
+        x += w + gap;
+    }
+
+    // The state: a dot in its colour and its words; resume capability at the trailing edge.
+    let status = status_text(item, snap);
+    let ink = status_ink(item);
+    let sy = 151.0;
+    let dot = egui::pos2(winui::mx(o.x + left + 5.0), o.y + sy - 4.0);
+    p.circle_filled(dot, 6.0, ink.gamma_multiply(0.22));
+    p.circle_filled(dot, 3.5, ink);
+    let resume = match item.resumable {
+        Some(true) => crate::i18n::t("Yes"),
+        Some(false) => crate::i18n::t("No"),
+        None => "",
+    };
+    let mut status_right = right;
+    if !resume.is_empty() {
+        let label = crate::i18n::t("Resume capability");
+        let vf = cfont(12.0, true);
+        let vw = winui::text_width_font(p, vf.clone(), resume);
+        let lw = winui::text_width(p, label).ceil();
+        winui::text_font(p, vf, o.x + right - vw, o.y + sy, resume, c.text);
+        text(p, o.x + right - vw - 8.0 - lw, o.y + sy, label, c.muted);
+        status_right = right - vw - lw - 24.0;
+    }
+    let sf = cfont(12.5, true);
+    let st = winui::ellipsize(p, &sf, &status, (status_right - (left + 18.0)).max(20.0));
+    let text_ink = if item.status == Status::Error {
+        c.error
+    } else {
+        c.text
+    };
+    let drawn = winui::text_font(p, sf, o.x + left + 18.0, o.y + sy, &st, text_ink);
+    winui::copyable(ui, drawn, "status", &status, st != status);
+    // Where its server is (#140): a file download's, on its own row.
+    if item.torrent.is_none() && item.video.is_none() && item.gallery.is_none() {
+        let label = crate::i18n::t("Server");
+        let lw = winui::text_width(p, label).ceil();
+        let ry = 170.0;
+        text(p, o.x + left + 18.0, o.y + ry, label, c.muted);
+        let seen = snap
+            .and_then(|s| s.server.as_ref())
+            .map(crate::whereis::Seen::from)
+            .or_else(|| item.server.clone());
+        crate::whereis::line(
+            ui,
+            o.x + left + 18.0 + lw + 10.0,
+            o.y + ry,
+            o.x + right,
+            seen.as_ref(),
+            &format!("progress-{}", item.id),
+        );
+    }
+}
+
+/// MyNoX Choice's tab row: a segmented switch, each tab as wide as its label, the chosen one
+/// raised; Left / Right move between them while the window has the keys. Returns the one clicked.
+fn segments(ui: &mut Ui, o: Pos2, labels: &[&str], current: usize) -> Option<usize> {
+    let p = ui.painter().clone();
+    let c = crate::theme::colors();
+    let f = cfont(12.0, true);
+    let widths: Vec<f32> = labels
+        .iter()
+        .map(|l| winui::text_width_font(&p, f.clone(), crate::i18n::t(l)) + 28.0)
+        .collect();
+    let total: f32 = widths.iter().sum::<f32>() + 8.0;
+    let track = egui::Rect::from_min_size(egui::pos2(o.x + 22.0, o.y + 4.0), vec2(total, 30.0));
+    p.rect_filled(
+        winui::rect(track),
+        10.0,
+        crate::derive::mix(c.window, c.text, 0.06),
+    );
+    let mut picked = None;
+    let mut x = track.left() + 4.0;
+    for (i, (label, w)) in labels.iter().zip(&widths).enumerate() {
+        let rc = egui::Rect::from_min_size(egui::pos2(x, track.top() + 4.0), vec2(*w, 22.0));
+        let resp = ui.interact(
+            winui::rect(rc),
+            egui::Id::unique(("progress-seg", label)),
+            winui::pointer_only(),
+        );
+        let label = crate::i18n::t(label);
+        winui::expose(&resp, egui::Role::Tab, label, true, Some(i == current));
+        if i == current {
+            p.rect_filled(
+                winui::rect(rc.translate(vec2(0.0, 1.0))),
+                7.0,
+                Color32::from_black_alpha(18),
+            );
+            p.rect_filled(winui::rect(rc), 7.0, c.field);
+        } else if resp.hovered() {
+            p.rect_filled(winui::rect(rc), 7.0, c.field.gamma_multiply(0.5));
+        }
+        let ink = if i == current { c.text } else { c.muted };
+        let tw = winui::text_width_font(&p, f.clone(), label);
+        winui::text_font(
+            &p,
+            f.clone(),
+            rc.center().x - tw / 2.0,
+            rc.top() + 15.0,
+            label,
+            ink,
+        );
+        if resp.clicked() {
+            picked = Some(i);
+        }
+        x += w;
+    }
+    // The arrows move along the switch when nothing else takes them (no text box focused).
+    if ui.ctx().memory(|m| m.focused().is_none()) {
+        let n = labels.len();
+        let (back, next) = if winui::rtl() {
+            (egui::Key::ArrowRight, egui::Key::ArrowLeft)
+        } else {
+            (egui::Key::ArrowLeft, egui::Key::ArrowRight)
+        };
+        if ui.input_mut(|i| i.consume_key(egui::Modifiers::CTRL, egui::Key::Tab))
+            || ui.input_mut(|i| i.consume_key(egui::Modifiers::NONE, next)) && current + 1 < n
+        {
+            picked = Some((current + 1) % n);
+        } else if ui.input_mut(|i| i.consume_key(egui::Modifiers::NONE, back)) && current > 0 {
+            picked = Some(current - 1);
+        }
+    }
+    picked
+}
+
+/// MyNoX Choice's progress bar: a slim rounded rail; with no size to measure against, a stretch
+/// that runs along it while data comes.
+fn progress_rail(ui: &Ui, p: &egui::Painter, o: Pos2, item: &Item, frac: Option<f64>) {
+    let c = crate::theme::colors();
+    let track = egui::Rect::from_min_size(egui::pos2(o.x + 17.0, o.y + 183.0), vec2(513.0, 8.0));
+    p.rect_filled(winui::rect(track), 4.0, c.progress_track);
+    let fill = match item.status {
+        Status::Complete => c.success,
+        Status::Error => c.error,
+        _ => c.progress_bar,
+    };
+    match frac {
+        Some(f) => {
+            let w = (track.width() * f.clamp(0.0, 1.0) as f32).max(if f > 0.0 { 8.0 } else { 0.0 });
+            if w > 0.0 {
+                let done = egui::Rect::from_min_size(track.min, vec2(w, track.height()));
+                p.rect_filled(winui::rect(done), 4.0, fill);
+            }
+        }
+        None if item.status == Status::Downloading => {
+            let t = ui.input(|i| i.time) as f32;
+            let span = track.width() * 0.28;
+            let x = track.left() + ((t * 0.6).fract() * (track.width() + span)) - span;
+            let run = egui::Rect::from_min_max(
+                egui::pos2(x.max(track.left()), track.top()),
+                egui::pos2((x + span).min(track.right()), track.bottom()),
+            );
+            if run.width() > 0.0 {
+                p.rect_filled(winui::rect(run), 4.0, fill);
+            }
+            ui.ctx()
+                .request_repaint_after(std::time::Duration::from_millis(33));
+        }
+        None => {}
     }
 }
 

@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} მბ
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} მბ/წმ
+#, machine
+menu	&Minimize to the notification area	&შეტყობინებების არეში მინიმიზაცია
+#, machine
+menu	&Keep running when closing the window	&ფანჯრის დახურვისას გაშვებული იყოს
+#, machine
+menu	&Hide to the notification area now	&შეტყობინებების ზონაში დამალვა

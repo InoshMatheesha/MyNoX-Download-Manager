@@ -5,6 +5,24 @@ Each release's notes on GitHub come from its section here (`## [X.Y.Z]`, see
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-11-16
+
+### New
+
+- **MyNoX Choice is the default** for a new install (an existing one keeps its theme), now in
+  graphite and white: a black-and-grey dark mode and a real light mode, the sidebar included,
+  with blue only as the accent.
+- **A new download window** in MyNoX Choice: a segmented tab switch, the file with its type and
+  share done, tiles for downloaded, speed and time left, the state with resume capability and
+  the server, a slim progress rail, and Pause as the primary button.
+- **View → Tray icon** works: Minimize to the notification area, Keep running when closing the
+  window, and Hide to the notification area now.
+- **The website** (`web-ui/`): MyNoX's download page, with the latest release's files.
+
+### Changed
+
+- **Help** no longer has Tell a friend or Support MyNoX, and About no longer links to Sponsors.
+
 ## [1.0.1] - 2026-11-16
 
 ### New

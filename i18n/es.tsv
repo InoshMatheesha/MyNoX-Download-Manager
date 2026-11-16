@@ -6669,3 +6669,9 @@ menu	Browser extensi&on...	E&xtensión del navegador...
 	Turn on "Developer mode" at the top right of the page that just opened.	Activa "Developer mode" arriba a la derecha de la página que se acaba de abrir.
 #, machine
 	Waiting for the extension to reach MyNoX...	Esperando a que la extensión llegue a MyNoX...
+#, machine
+menu	&Minimize to the notification area	&Minimizar en el área de notificación
+#, machine
+menu	&Keep running when closing the window	&Mantener en ejecución al cerrar la ventana
+#, machine
+menu	&Hide to the notification area now	&Ocultar en el área de notificación

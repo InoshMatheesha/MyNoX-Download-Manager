@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/ছেকেণ্ড
+#, machine
+menu	&Minimize to the notification area	&বিজ্ঞপ্তি এলেকালৈ সৰু কৰক
+#, machine
+menu	&Keep running when closing the window	&উইণ্ড’ বন্ধ কৰিলে চলি থাকিব
+#, machine
+menu	&Hide to the notification area now	&বিজ্ঞপ্তি এলেকালৈ লুকুৱাওক

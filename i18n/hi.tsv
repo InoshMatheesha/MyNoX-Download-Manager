@@ -6669,3 +6669,9 @@ menu	Browser extensi&on...	ब्राउज़र एक्सटेंशन(
 	Turn on "Developer mode" at the top right of the page that just opened.	अभी खुले पेज के ऊपर दाईं ओर "Developer mode" चालू करें।
 #, machine
 	Waiting for the extension to reach MyNoX...	एक्सटेंशन के MyNoX तक पहुँचने की प्रतीक्षा की जा रही है...
+#, machine
+menu	&Minimize to the notification area	&सूचना क्षेत्र में छोटा करें
+#, machine
+menu	&Keep running when closing the window	&विंडो बंद करते समय चालू रखें
+#, machine
+menu	&Hide to the notification area now	&सूचना क्षेत्र में छिपाएँ

@@ -6669,3 +6669,9 @@ menu	Browser extensi&on...	브라우저 확장 프로그램(&O)...
 	Turn on "Developer mode" at the top right of the page that just opened.	방금 열린 페이지 오른쪽 위의 "Developer mode"를 켜세요.
 #, machine
 	Waiting for the extension to reach MyNoX...	확장 프로그램이 MyNoX에 연결되기를 기다리는 중...
+#, machine
+menu	&Minimize to the notification area	&알림 영역으로 최소화
+#, machine
+menu	&Keep running when closing the window	&창을 닫을 때 계속 실행
+#, machine
+menu	&Hide to the notification area now	&알림 영역으로 숨기기

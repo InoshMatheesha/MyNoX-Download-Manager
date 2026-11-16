@@ -12,13 +12,13 @@ Open **View → Theme** and click a theme: the whole window changes at once, not
 **View → Dark Mode support** and **View → Always dark** then choose its light or dark side, as
 for the classic look ([Dark mode](getting-started.md#dark-mode)).
 
-The built-in themes are **Classic** (the default), **MyNoX Choice**, **Native** (your system's
+The built-in themes are **MyNoX Choice** (the default for a new install), **Classic**, **Native** (your system's
 accent colour and contrast), **High contrast**, and the style themes **Metro**, **Adwaita**,
 **Breeze**, **Luna**, **Aero**, **Aqua** and **Emerald**, each with its own control shapes and
 icons, and on Windows its own title bar. [Getting started](getting-started.md#themes) describes
 each one; the [README](../README.md#themes) shows them.
 
-**MyNoX Choice** changes the layout too: a midnight sidebar with the downloads library (its
+**MyNoX Choice** changes the layout too, in graphite and white with a real light mode: a sidebar with the downloads library (its
 categories and queues, with their counts), a big **Add URL** button, **Add Torrent** and its
 menu, **Add to browser** for the extension, a live download speed card, and Options, Scheduler,
 Always dark and folding the sidebar to icons at its foot. The header names the view and opens

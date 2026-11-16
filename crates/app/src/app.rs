@@ -60,8 +60,6 @@ enum Cmd {
     CheckUpdates,
     About,
     TellFriend,
-    /// Help → Support MyNoX: the creator's GitHub Sponsors page in the browser.
-    Support,
     Exit,
     Stop,
     Remove,
@@ -188,6 +186,12 @@ enum Cmd {
     ResetColumns,
     /// The browser extension's window: one click adds it to a browser.
     BrowserExtension,
+    /// View → Tray icon: Options' "Minimize to the notification area", on or off.
+    ToggleMinimizeToTray,
+    /// View → Tray icon: Options' "Keep running when closing the window", on or off.
+    ToggleCloseToTray,
+    /// View → Tray icon: the main window into the notification area now.
+    HideToTray,
     None,
 }
 
@@ -5409,7 +5413,6 @@ impl App {
                 }
             }
             Cmd::About => self.about = Some(crate::help::About),
-            Cmd::Support => crate::help::support(),
             Cmd::TellFriend => {
                 if self.tell_friend.is_none() {
                     self.tell_friend = Some(crate::help::TellFriend::new());
@@ -5589,6 +5592,19 @@ impl App {
             Cmd::ResetColumns => self.list.reset_columns(),
             Cmd::ShowAll => self.view = View::All,
             Cmd::BrowserExtension => self.extension = Some(crate::extension::Extension::new()),
+            Cmd::ToggleMinimizeToTray => {
+                self.settings.minimize_to_tray = !self.settings.minimize_to_tray;
+                self.dirty = true;
+            }
+            Cmd::ToggleCloseToTray => {
+                self.settings.close_to_tray = !self.settings.close_to_tray;
+                self.dirty = true;
+            }
+            Cmd::HideToTray => {
+                if self.tray.is_some() && self.tray_shown_now() {
+                    self.hide_to_tray(ctx);
+                }
+            }
             Cmd::SelectAll => {
                 let ids = self.shown_ids();
                 self.selection.apply(crate::selection::Pick::All, &ids);
@@ -5896,7 +5912,7 @@ impl App {
                 self.arrange_menu(),
                 // i18n: noun: the toolbar (submenu of View with its settings)
                 Sub("Toolbar", false, vec![]),
-                Sub("&Tray icon", false, vec![]),
+                self.tray_menu(),
                 off("C&ustomize URL List..."),
                 I(
                     "Dark Mode support",
@@ -5950,9 +5966,6 @@ impl App {
                 I("Check for &updates...", Cmd::CheckUpdates, true, false),
                 Sep,
                 I("&About MyNoX Download Manager", Cmd::About, true, false),
-                I("Tell a &friend", Cmd::TellFriend, true, false),
-                // MyNoX's, not IDM's: the creator's GitHub Sponsors page, asked for only.
-                I("Support &MyNoX", Cmd::Support, true, false),
             ],
         };
         // View → Theme (MyNoX's, #45), after Always dark; then Draw with (#89, #206), where wgpu is
@@ -6038,6 +6051,41 @@ impl App {
         items.push(I("Open themes folder", Cmd::OpenThemesFolder, true, false));
         // i18n: View menu: submenu choosing MyNoX's look (colours, sizes, icons): Classic, Native…
         Sub("Theme", true, items)
+    }
+
+    /// View → Tray icon: Minimize and closing to the notification area (Options → General's
+    /// settings), and hiding the window there now. Greyed where no tray shows MyNoX's icon.
+    fn tray_menu(&self) -> MenuEntry<Cmd> {
+        use MenuEntry::{Item as I, Sep, Sub};
+        let tray = self.tray.is_some() && self.tray_shown();
+        Sub(
+            "&Tray icon",
+            tray,
+            vec![
+                I(
+                    // i18n: View → Tray icon: a check item; Minimize hides MyNoX's windows to the notification area (system tray)
+                    "&Minimize to the notification area",
+                    Cmd::ToggleMinimizeToTray,
+                    true,
+                    self.settings.minimize_to_tray,
+                ),
+                I(
+                    // i18n: View → Tray icon: a check item; closing the window keeps MyNoX running in the notification area
+                    "&Keep running when closing the window",
+                    Cmd::ToggleCloseToTray,
+                    true,
+                    self.settings.close_to_tray,
+                ),
+                Sep,
+                // i18n: View → Tray icon: hide the main window to the notification area now (downloads go on)
+                I(
+                    "&Hide to the notification area now",
+                    Cmd::HideToTray,
+                    true,
+                    false,
+                ),
+            ],
+        )
     }
 
     /// View → Interface size (#262): every window larger, as a browser zooms (Ctrl + / Ctrl − /

@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} מ"ב
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} מ"ב/שנייה
+#, machine
+menu	&Minimize to the notification area	&מזעור לאזור ההודעות
+#, machine
+menu	&Keep running when closing the window	&השאר פועל בעת סגירת החלון
+#, machine
+menu	&Hide to the notification area now	&הסתר לאזור ההודעות

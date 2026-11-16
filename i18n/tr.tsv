@@ -6669,3 +6669,9 @@ menu	Browser extensi&on...	Tarayıcı u&zantısı...
 	Turn on "Developer mode" at the top right of the page that just opened.	Az önce açılan sayfanın sağ üstündeki "Developer mode" seçeneğini açın.
 #, machine
 	Waiting for the extension to reach MyNoX...	Uzantının MyNoX'a ulaşması bekleniyor...
+#, machine
+menu	&Minimize to the notification area	&Bildirim alanına küçült
+#, machine
+menu	&Keep running when closing the window	&Pencereyi kapatırken çalışmaya devam et
+#, machine
+menu	&Hide to the notification area now	&Bildirim alanına gizle

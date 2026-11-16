@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/s
+#, machine
+menu	&Minimize to the notification area	&Zmanjšaj v območje za obvestila
+#, machine
+menu	&Keep running when closing the window	&Ohrani program zagnan ob zaprtju okna
+#, machine
+menu	&Hide to the notification area now	&Skrij v območje za obvestila

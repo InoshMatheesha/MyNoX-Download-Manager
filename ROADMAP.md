@@ -6,6 +6,13 @@ are in [CHANGELOG.md](CHANGELOG.md). Ideas and bug reports are welcome in
 
 ✅ done · 🔄 being built · 📋 planned
 
+## Version 1.0.2
+
+- ✅ MyNoX Choice as the default theme, in graphite and white with a real light mode
+- ✅ The redesigned download window in MyNoX Choice
+- ✅ View → Tray icon: the notification area's settings, and hiding there now
+- ✅ The website, ready for Vercel (`web-ui/`)
+
 ## Version 1.0.1
 
 - ✅ MyNoX Choice: a theme with its own layout (sidebar, header, action bar, list card, speed card)

@@ -6669,3 +6669,9 @@ menu	Browser extensi&on...	உலாவி நீட்டிப்பு(&O)...
 	Turn on "Developer mode" at the top right of the page that just opened.	இப்போது திறந்த பக்கத்தின் மேல் வலதுபுறம் உள்ள "Developer mode" ஐ இயக்கவும்.
 #, machine
 	Waiting for the extension to reach MyNoX...	நீட்டிப்பு MyNoX ஐ அடையும் வரை காத்திருக்கிறது...
+#, machine
+menu	&Minimize to the notification area	&அறிவிப்புப் பகுதிக்குச் சுருக்கு
+#, machine
+menu	&Keep running when closing the window	&சாளரத்தை மூடும்போது இயங்கிக்கொண்டே இருக்கவும்
+#, machine
+menu	&Hide to the notification area now	&அறிவிப்புப் பகுதிக்கு மறைக்கவும்

@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/sec
+#, machine
+menu	&Minimize to the notification area	&Minimaliseren naar het systeemvak
+#, machine
+menu	&Keep running when closing the window	&Actief blijven wanneer het venster wordt gesloten
+#, machine
+menu	&Hide to the notification area now	&Verbergen in het systeemvak

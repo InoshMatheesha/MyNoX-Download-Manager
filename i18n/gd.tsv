@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/diog
+#, machine
+menu	&Minimize to the notification area	&Lùghdaich dhan raon-fiosrachaidh
+#, machine
+menu	&Keep running when closing the window	&Cùm a’ ruith nuair a dhùineas tu an uinneag
+#, machine
+menu	&Hide to the notification area now	&Falaich dhan raon-fiosrachaidh

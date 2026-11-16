@@ -25,6 +25,10 @@ with [README.md](README.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
   `node tools/extension/test.mjs` - its logic against fake browser APIs.
 - `tools/installer/build.ps1` - the x64 setup and the portable .exe (`mynox-portable.iss`) into
   `target/dist/`; a release is those two plus the signed `SHA256SUMS.txt`.
+- `web-ui/` is the website (static, for Vercel with Root Directory `web-ui`); it reads the latest
+  release from the GitHub API. Preview: `python -m http.server 8000 --directory web-ui`.
+- MyNoX Choice (`mynox-choice`) is the default theme of a new list (settings.rs); docs-shots.ps1
+  pins `classic` so the help pages' pictures stay the classic layout.
 - The MyNoX Choice theme's own layout is `crates/app/src/choice.rs` (a child module of `app.rs`);
   a theme picks it with `layout = "choice"`.
 - `python -I tools/icon/build_icon.py` - every icon (app, extension, Download video button) from

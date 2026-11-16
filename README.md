@@ -20,12 +20,13 @@ MyNoX splits every download over several connections, resumes it after the inter
 cuts out, catches the links you click in your browser, saves videos, handles torrents, and runs
 your queues on a schedule. No ads, no trial, no sign-up.
 
-## New in 1.0.1: the MyNoX Choice theme
+## MyNoX Choice: the default design
 
-**View → Theme → MyNoX Choice** gives MyNoX a layout of its own, not only new colours: a midnight
-sidebar with your downloads library and a big **Add URL** button, a header with search, an action
-bar with a **Speed Limiter** switch, the list on a card with a progress bar under every download,
-and a live download speed card. Every menu and shortcut is still where it was.
+New installs open in **MyNoX Choice**, MyNoX's own design in graphite and white, light and dark:
+a sidebar with your downloads library and a big **Add URL** button, a header with search, an
+action bar with a **Speed Limiter** switch, the list on a card with a progress bar under every
+download, a live download speed card, and a redesigned download window. Every menu and shortcut
+is still where it was; **View → Theme** has Classic and ten more themes.
 
 <p align="center">
   <img src="docs/images/mynox-choice-light.webp" alt="MyNoX Download Manager in the MyNoX Choice theme, light" width="820">
@@ -33,10 +34,14 @@ and a live download speed card. Every menu and shortcut is still where it was.
 <p align="center">
   <img src="docs/images/mynox-choice-dark.webp" alt="MyNoX Download Manager in the MyNoX Choice theme, dark" width="820">
 </p>
+<p align="center">
+  <img src="docs/images/progress-choice-light.webp" alt="The download window in MyNoX Choice: the file with its type and share done, tiles for downloaded, speed and time left, and the connections" width="548">
+</p>
 
 ## Download
 
-Get the newest version from **[Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest)**:
+Get the newest version from **[Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest)**
+(the website in [`web-ui/`](web-ui/README.md) offers the same files):
 
 | File | For |
 |---|---|

@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/ಸೆಕೆಂಡ್
+#, machine
+menu	&Minimize to the notification area	&ಅಧಿಸೂಚನೆ ಪ್ರದೇಶಕ್ಕೆ ಚಿಕ್ಕದಾಗಿಸಿ
+#, machine
+menu	&Keep running when closing the window	&ವಿಂಡೋವನ್ನು ಮುಚ್ಚಿದಾಗಲೂ ಚಾಲನೆಯಲ್ಲಿಡಿ
+#, machine
+menu	&Hide to the notification area now	&ಅಧಿಸೂಚನೆ ಪ್ರದೇಶಕ್ಕೆ ಮರೆಮಾಡಿ

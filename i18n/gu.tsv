@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/સેકન્ડ
+#, machine
+menu	&Minimize to the notification area	&સૂચના ક્ષેત્રમાં નાનું કરો
+#, machine
+menu	&Keep running when closing the window	&વિન્ડો બંધ થાય ત્યારે MyNoX ચાલુ રાખો
+#, machine
+menu	&Hide to the notification area now	&સૂચના ક્ષેત્રમાં છુપાવો

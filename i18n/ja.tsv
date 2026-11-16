@@ -6669,3 +6669,9 @@ menu	Browser extensi&on...	ブラウザー拡張機能(&O)...
 	Turn on "Developer mode" at the top right of the page that just opened.	開いたページの右上にある "Developer mode" をオンにします。
 #, machine
 	Waiting for the extension to reach MyNoX...	拡張機能が MyNoX に接続するのを待っています...
+#, machine
+menu	&Minimize to the notification area	&通知領域に最小化する
+#, machine
+menu	&Keep running when closing the window	&ウィンドウを閉じても実行を継続する
+#, machine
+menu	&Hide to the notification area now	&通知領域に隠す

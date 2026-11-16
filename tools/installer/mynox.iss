@@ -9,7 +9,7 @@
 ; Windows Credential Manager (mynox --forget-sign-ins).
 
 #ifndef AppVersion
-  #define AppVersion "1.0.1"
+  #define AppVersion "1.0.2"
 #endif
 #define AppName "MyNoX Download Manager"
 #define AppExe "mynox.exe"

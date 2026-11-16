@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/hek
+#, machine
+menu	&Minimize to the notification area	&Whakaiti ki te wāhi whakamōhiotanga
+#, machine
+menu	&Keep running when closing the window	&Kia rere tonu ina katia te matapihi
+#, machine
+menu	&Hide to the notification area now	&Huna ki te wāhi whakamōhiotanga

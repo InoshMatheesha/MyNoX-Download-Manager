@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/giây
+#, machine
+menu	&Minimize to the notification area	&Thu nhỏ vào vùng thông báo
+#, machine
+menu	&Keep running when closing the window	&Giữ MyNoX chạy khi đóng cửa sổ
+#, machine
+menu	&Hide to the notification area now	&Ẩn vào vùng thông báo

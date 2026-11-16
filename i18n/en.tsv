@@ -3120,8 +3120,6 @@
 	Sudan	Sudan
 #. text in the Options window; text in the Scheduler window
 	Sunday	Sunday
-#. link (opens a web page) in the Help menu's windows (About, updates, shortcuts, Tell a friend)
-	Support MyNoX on GitHub Sponsors	Support MyNoX on GitHub Sponsors
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Suriname	Suriname
@@ -4562,6 +4560,10 @@ menu	&Download Now	&Download Now
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	&Exit	&Exit
 #. menu command in the main window
+#. View → Tray icon: hide the main window to the notification area now (downloads go on)
+#. & marks the keyboard shortcut letter: keep one & before a letter of the translation
+menu	&Hide to the notification area now	&Hide to the notification area now
+#. menu command in the main window
 #. verb: load downloads from a file
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	&Import	&Import
@@ -4569,6 +4571,10 @@ menu	&Import	&Import
 #. View menu: submenu choosing how large MyNoX draws its windows and text (100 % to 200 %), as a browser's zoom
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	&Interface size	&Interface size
+#. menu command in the main window
+#. View → Tray icon: a check item; closing the window keeps MyNoX running in the notification area
+#. & marks the keyboard shortcut letter: keep one & before a letter of the translation
+menu	&Keep running when closing the window	&Keep running when closing the window
 #. menu command in the main window
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	&Keyboard shortcuts	&Keyboard shortcuts
@@ -4581,6 +4587,10 @@ menu	&Language...	&Language...
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 #. the trailing ... means it opens a window: keep it
 menu	&Link grabber...	&Link grabber...
+#. menu command in the main window
+#. View → Tray icon: a check item; Minimize hides MyNoX's windows to the notification area (system tray)
+#. & marks the keyboard shortcut letter: keep one & before a letter of the translation
+menu	&Minimize to the notification area	&Minimize to the notification area
 #. menu command in the main window
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	&Options	&Options
@@ -4930,12 +4940,6 @@ menu	Start now	Start now
 menu	Stop	Stop
 #. menu command in the main window
 menu	Stop Download	Stop Download
-#. menu command in the main window
-#. & marks the keyboard shortcut letter: keep one & before a letter of the translation
-menu	Support &MyNoX	Support &MyNoX
-#. menu command in the main window
-#. & marks the keyboard shortcut letter: keep one & before a letter of the translation
-menu	Tell a &friend	Tell a &friend
 #. menu command in the main window
 #. View → Draw with: a greyed note under "… didn't start here"; why: the graphics card stopped working twice (a driver update or reset)
 menu	The graphics card was lost twice in 10 minutes	The graphics card was lost twice in 10 minutes

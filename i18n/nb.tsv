@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/sek
+#, machine
+menu	&Minimize to the notification area	&Minimer til systemstatusfeltet
+#, machine
+menu	&Keep running when closing the window	&Fortsett å kjøre når vinduet lukkes
+#, machine
+menu	&Hide to the notification area now	&Skjul til varslingsområdet

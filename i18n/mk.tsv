@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} МБ
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} МБ/сек
+#, machine
+menu	&Minimize to the notification area	&Минимизирај во областа за известувања
+#, machine
+menu	&Keep running when closing the window	&Продолжи со работа при затворање на прозорецот
+#, machine
+menu	&Hide to the notification area now	&Скриј во областа за известувања

@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} Mt
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} Mt/s
+#, machine
+menu	&Minimize to the notification area	&Pienennä ilmoitusalueelle
+#, machine
+menu	&Keep running when closing the window	&Pidä käynnissä ikkunan sulkemisen jälkeen
+#, machine
+menu	&Hide to the notification area now	&Piilota ilmoitusalueelle

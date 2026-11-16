@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/s
+#, machine
+menu	&Minimize to the notification area	&Minimitza a l'àrea de notificació
+#, machine
+menu	&Keep running when closing the window	&Mantén l’execució en tancar la finestra
+#, machine
+menu	&Hide to the notification area now	&Oculta a l'àrea de notificació

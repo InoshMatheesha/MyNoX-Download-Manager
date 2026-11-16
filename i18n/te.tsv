@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/సెకను
+#, machine
+menu	&Minimize to the notification area	&నోటిఫికేషన్ ప్రాంతానికి కనిష్టీకరించు
+#, machine
+menu	&Keep running when closing the window	&విండోను మూసివేసినప్పుడు రన్ అవుతూ ఉండండి
+#, machine
+menu	&Hide to the notification area now	&నోటిఫికేషన్ ప్రాంతానికి దాచు

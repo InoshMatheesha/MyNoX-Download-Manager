@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/sek
+#, machine
+menu	&Minimize to the notification area	&Minimer til varslingsområdet
+#, machine
+menu	&Keep running when closing the window	&Hald programmet i gang når vindauget blir lukka
+#, machine
+menu	&Hide to the notification area now	&Skjul til varslingsområdet

@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/วินาที
+#, machine
+menu	&Minimize to the notification area	&ย่อเล็กสุดไปยังพื้นที่แจ้งเตือน
+#, machine
+menu	&Keep running when closing the window	&เปิดโปรแกรมทิ้งไว้เมื่อปิดหน้าต่าง
+#, machine
+menu	&Hide to the notification area now	&ซ่อนไปยังพื้นที่แจ้งเตือน

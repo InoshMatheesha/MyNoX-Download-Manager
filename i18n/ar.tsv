@@ -5102,3 +5102,9 @@ menu	Browser extensi&on...	&ملحق المتصفح...
 	Turn on "Developer mode" at the top right of the page that just opened.	شغّل "Developer mode" أعلى يمين الصفحة التي فُتحت للتو.
 #, machine
 	Waiting for the extension to reach MyNoX...	في انتظار وصول الملحق إلى MyNoX...
+#, machine
+menu	&Minimize to the notification area	&تصغير إلى منطقة الإشعارات
+#, machine
+menu	&Keep running when closing the window	&إبقاء البرنامج قيد التشغيل عند إغلاق النافذة
+#, machine
+menu	&Hide to the notification area now	&إخفاء إلى منطقة الإشعارات

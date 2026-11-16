@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/sek
+#, machine
+menu	&Minimize to the notification area	&Minimizo në zonën e njoftimeve
+#, machine
+menu	&Keep running when closing the window	&Mbaje në punë kur mbyllet dritarja
+#, machine
+menu	&Hide to the notification area now	&Fshih në zonën e njoftimeve

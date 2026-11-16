@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/ວິນາທີ
+#, machine
+menu	&Minimize to the notification area	&ຫຍໍ້ລົງໄປທີ່ພື້ນທີ່ແຈ້ງເຕືອນ
+#, machine
+menu	&Keep running when closing the window	&ສືບຕໍ່ເຮັດວຽກເມື່ອປິດໜ້າຕ່າງ
+#, machine
+menu	&Hide to the notification area now	&ເຊື່ອງໄປທີ່ພື້ນທີ່ແຈ້ງເຕືອນ

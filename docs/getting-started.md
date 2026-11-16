@@ -72,8 +72,8 @@ From top to bottom:
   - **Tasks** — add downloads, torrents, magnet links, batch downloads and videos from a page; **Torrent settings**; **Link grabber**; **RSS feeds**; show the drop target; import and export the list; exit.
   - **File** — the selected download: **Stop Download**, **Remove**, **Download Now**, **Redownload**.
   - **Downloads** — **Pause All**, **Stop All**, **Delete All Completed**, **Find**, the **Scheduler**, queues, the **Speed Limiter** and **Options**.
-  - **View** — show or hide the categories, sort the list (**Arrange files**), **Dark Mode support**, **Always dark**, **Theme**, **Interface size** (every window larger, 100 % to 200 %; **Ctrl +**, **Ctrl −** and **Ctrl 0** too), **Text** (Windows: smooth or classic letters), **Draw with** (OpenGL, or Direct3D on Windows, Vulkan on Linux, Metal on macOS) and **Language**.
-  - **Help** — help pages and tutorials (on the website, in your language when it has it), **Keyboard shortcuts**, **Report a problem**, **Check for updates**, **About**, **Tell a friend** and **Support MyNoX** (its creator's GitHub Sponsors page: optional, nothing in MyNoX changes).
+  - **View** — show or hide the categories, sort the list (**Arrange files**), **Tray icon** (Minimize to the notification area, Keep running when closing the window, Hide to the notification area now), **Dark Mode support**, **Always dark**, **Theme**, **Interface size** (every window larger, 100 % to 200 %; **Ctrl +**, **Ctrl −** and **Ctrl 0** too), **Text** (Windows: smooth or classic letters), **Draw with** (OpenGL, or Direct3D on Windows, Vulkan on Linux, Metal on macOS) and **Language**.
+  - **Help** — help pages and tutorials (on the website, in your language when it has it), **Keyboard shortcuts**, **Report a problem**, **Check for updates** and **About**.
 - **Toolbar.** **Add URL**, **Add Torrent**, **Resume**, **Stop**, **Stop All**, **Delete**, **Delete Completed**, **Options**, **Scheduler**, **Start Queue**, **Stop Queue**. The small arrow next to **Add Torrent**, **Start Queue** and **Stop Queue** opens more choices.
 - **Categories** (left). Choose what the list shows: **All Downloads**, **Unfinished**, **Finished** and **Queues**, each with its categories. Drag the gap between the pane and the list to make it wider.
 - **Download list** (right). One row per download. See [The download list](download-list.md).
@@ -89,8 +89,8 @@ MyNoX follows your system: when Windows (or your desktop's light/dark preference
 
 **View → Theme** changes MyNoX's look at once:
 
-- **Classic**: MyNoX's own look, the default.
-- **MyNoX Choice**: MyNoX's own theme with a layout of its own: a midnight sidebar with the
+- **Classic**: the original layout: a menu bar, a toolbar and the Categories pane.
+- **MyNoX Choice**: the default for a new install, in graphite and white (light and dark), with a layout of its own: a sidebar with the
   downloads library, a big **Add URL** button, **Add to browser** and a live speed card; a header
   with the view's name and a search box; an action bar with a **Speed Limiter** switch; and the
   list on a rounded card with a progress bar under each download. Fold the sidebar to icons with

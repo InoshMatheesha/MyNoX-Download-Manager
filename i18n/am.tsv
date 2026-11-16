@@ -6625,3 +6625,9 @@ unit	{n} MB	{n} ሜባ
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} ሜባ/ሰከንድ
+#, machine
+menu	&Minimize to the notification area	&ወደ ማሳወቂያ ቦታ ማሳነስ
+#, machine
+menu	&Keep running when closing the window	&መስኮቱን ሲዘጉ እንዲሰራ ያድርጉ
+#, machine
+menu	&Hide to the notification area now	&ወደ ማሳወቂያ ቦታ ደብቅ
