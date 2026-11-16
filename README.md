@@ -6,6 +6,8 @@
 
 <h3 align="center">A fast, free download manager for Windows.</h3>
 
+<p align="center"><a href="https://mynox-download-manager.vercel.app"><b>mynox-download-manager.vercel.app</b></a></p>
+
 <p align="center">
   <a href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest"><img src="https://img.shields.io/github/v/release/InoshMatheesha/MyNoX-Download-Manager?style=flat-square&label=Download&color=1e6fff" alt="Download the latest release"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-1e6fff?style=flat-square" alt="Windows 10 and 11">
@@ -37,7 +39,7 @@ is still where it was; **View → Theme** has Classic and ten more themes.
 ## Download
 
 Get the newest version from **[Releases](https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest)**
-(the website in [`web-ui/`](web-ui/README.md) offers the same files):
+or the website, **[mynox-download-manager.vercel.app](https://mynox-download-manager.vercel.app)**:
 
 | File | For |
 |---|---|

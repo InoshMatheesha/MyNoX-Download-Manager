@@ -97,30 +97,62 @@ code { background: var(--surface-2); border: 1px solid var(--line); border-radiu
 .skip:focus { left: 12px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 
-/* Navigation */
-.nav {
-  position: sticky; top: 0; z-index: 50;
-  background: var(--nav-bg);
-  backdrop-filter: saturate(160%) blur(14px);
-  -webkit-backdrop-filter: saturate(160%) blur(14px);
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease;
+/* Navigation: a floating island, open at the top, a compact pill once the page scrolls. */
+.island-wrap {
+  position: fixed; top: 14px; left: 0; right: 0; z-index: 60;
+  display: flex; justify-content: center; pointer-events: none; padding: 0 12px;
 }
-.nav.scrolled { border-bottom-color: var(--line); }
-.nav-inner { display: flex; align-items: center; gap: 24px; height: 64px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 17px; letter-spacing: -0.01em; }
-.nav-links { display: flex; gap: 4px; margin-left: 12px; }
-.nav-links a { text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 500; padding: 6px 12px; border-radius: 8px; transition: color 0.15s, background 0.15s; }
-.nav-links a:hover { color: var(--text); background: var(--surface-2); }
-.nav-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
-.icon-btn {
-  display: inline-grid; place-items: center; width: 36px; height: 36px;
-  border-radius: 9px; border: 1px solid var(--line); background: var(--surface);
-  color: var(--text-2); cursor: pointer; text-decoration: none; transition: background 0.15s, border-color 0.15s;
+.island {
+  --spring: cubic-bezier(0.32, 1.25, 0.5, 1);
+  pointer-events: auto;
+  display: flex; align-items: center; gap: 6px;
+  min-height: 52px; padding: 7px 7px 7px 16px;
+  border-radius: 999px;
+  background: rgba(10, 10, 12, 0.88);
+  color: #f4f4f5;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: saturate(180%) blur(18px);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  transition: padding 0.5s var(--spring), gap 0.5s var(--spring), border-radius 0.5s var(--spring), box-shadow 0.4s ease, transform 0.5s var(--spring);
 }
-.icon-btn:hover { background: var(--surface-2); border-color: var(--line-strong); }
-.icon-btn svg { width: 17px; height: 17px; fill: currentColor; }
-#theme-toggle svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 17px; letter-spacing: -0.01em; }
+.island .brand { color: #fafafa; font-size: 16px; }
+.island .brand img { width: 26px; height: 26px; }
+.island-live {
+  display: inline-flex; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap;
+  max-width: 0; opacity: 0; font-size: 13px; font-weight: 600; color: #a1a1aa;
+  transition: max-width 0.55s var(--spring), opacity 0.3s ease, margin 0.5s var(--spring);
+}
+.live-dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6); animation: live 2.4s ease-out infinite; }
+@keyframes live { 0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55); } 70%, 100% { box-shadow: 0 0 0 7px rgba(74, 222, 128, 0); } }
+.island-links {
+  display: flex; align-items: center; gap: 2px; overflow: hidden; white-space: nowrap;
+  max-width: 560px; opacity: 1; margin-left: 10px;
+  transition: max-width 0.6s var(--spring), opacity 0.35s ease, margin 0.5s var(--spring);
+}
+.island-links a {
+  text-decoration: none; color: #a1a1aa; font-size: 14px; font-weight: 600;
+  padding: 7px 12px; border-radius: 999px; transition: color 0.2s, background 0.2s;
+}
+.island-links a:hover { color: #fafafa; background: rgba(255, 255, 255, 0.08); }
+.island-actions { display: flex; align-items: center; gap: 4px; margin-left: 6px; }
+.island-btn {
+  display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 999px;
+  border: 0; background: transparent; color: #d4d4d8; cursor: pointer; text-decoration: none;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.island-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+.island-btn:active { transform: scale(0.92); }
+.island-btn svg { width: 18px; height: 18px; fill: currentColor; }
+#theme-toggle svg, .island-menu svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.island-menu { display: none; }
+.island-cta {
+  text-decoration: none; font-size: 14px; font-weight: 700; color: #09090b; background: #fafafa;
+  border-radius: 999px; padding: 9px 16px; margin-left: 2px; white-space: nowrap;
+  transition: transform 0.2s var(--spring), background 0.2s;
+}
+.island-cta:hover { background: #fff; transform: translateY(-1px); }
 .i-moon { display: none; }
 :root[data-theme="dark"] .i-sun { display: none; }
 :root[data-theme="dark"] .i-moon { display: block; }
@@ -128,6 +160,12 @@ code { background: var(--surface-2); border: 1px solid var(--line); border-radiu
   :root:not([data-theme="light"]) .i-sun { display: none; }
   :root:not([data-theme="light"]) .i-moon { display: block; }
 }
+/* Compact: the links fold away and the live status shows, like a Dynamic Island at rest. */
+.island.compact:not(:hover):not(:focus-within) { padding: 6px 6px 6px 14px; gap: 4px; }
+.island.compact:not(:hover):not(:focus-within) .island-links { max-width: 0; opacity: 0; margin-left: 0; }
+.island.compact:not(:hover):not(:focus-within) .island-live { max-width: 260px; opacity: 1; margin-left: 8px; }
+.island.compact:not(:hover):not(:focus-within) #theme-toggle,
+.island.compact:not(:hover):not(:focus-within) .island-actions > a.island-btn { display: none; }
 
 /* Buttons */
 .btn {
@@ -148,7 +186,7 @@ code { background: var(--surface-2); border: 1px solid var(--line); border-radiu
 .btn-block { width: 100%; }
 
 /* Hero */
-.hero { position: relative; padding: 72px 0 0; overflow: hidden; }
+.hero { position: relative; padding: 132px 0 0; overflow: hidden; }
 .hero::before {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: radial-gradient(ellipse 60% 45% at 50% 0%, var(--glow), transparent 70%);
@@ -313,8 +351,17 @@ h2 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.1; letter-spacing: -0.0
 }
 @media (max-width: 760px) {
   .wrap { padding: 0 16px; }
-  .nav-links { display: none; }
-  .hero { padding-top: 48px; }
+  .hero { padding-top: 104px; }
+  /* The island opens into a rounded panel with the links stacked. */
+  .island { flex-wrap: wrap; width: 100%; max-width: 420px; padding-left: 14px; }
+  .island-menu { display: inline-grid; }
+  .island-links { order: 9; flex-basis: 100%; flex-direction: column; align-items: stretch; max-width: none; max-height: 0; opacity: 0; margin: 0; transition: max-height 0.55s var(--spring), opacity 0.3s ease, margin 0.4s var(--spring); }
+  .island-links a { font-size: 16px; padding: 12px 14px; border-radius: 14px; }
+  .island.menu-open { border-radius: 26px; }
+  .island.menu-open .island-links { max-height: 320px; opacity: 1; margin: 8px 0 4px; }
+  .island-live { display: none; }
+  .island-actions { margin-left: auto; }
+  .island.compact:not(:hover):not(:focus-within) .island-links { max-height: 0; }
   .section { padding: 80px 0; }
   .stats-inner { grid-template-columns: repeat(2, 1fr); }
   .stats-inner > div:nth-child(3) { border-left: none; }
@@ -327,8 +374,72 @@ h2 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.1; letter-spacing: -0.0
 }
 @media (max-width: 420px) {
   .features { grid-template-columns: 1fr; }
-  .nav-cta { display: none; }
+  .island-cta { display: none; }
 }
 
 /* Manrope reads best a step heavier in the quieter paragraphs. */
 .lead, .sub, .card p, .faq details p, .note p, .checks li, .footer-brand p { font-weight: 500; }
+
+/* ---- Motion and depth ---------------------------------------------------------------------- */
+
+/* The headline rises in, line by line. */
+h1 .line { display: block; animation: rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+h1 .line + .line { animation-delay: 0.12s; }
+.hero .pill { animation: rise 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.hero .lead { animation: rise 0.9s 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.hero-cta, .hero .fine { animation: rise 0.9s 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+
+/* The hero picture starts tilted back in 3D and stands up as the page scrolls. */
+.hero-stage { position: relative; perspective: 1800px; }
+.hero-shot {
+  --tilt: 20deg; --lift: 0.93;
+  transform: rotateX(var(--tilt)) scale(var(--lift));
+  transform-origin: 50% 0%; transform-style: preserve-3d; will-change: transform;
+  animation: stand 1.2s 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+@keyframes stand { from { opacity: 0; transform: rotateX(32deg) scale(0.88) translateY(40px); } }
+.orb { position: absolute; border-radius: 50%; filter: blur(70px); pointer-events: none; opacity: 0.55; }
+.orb-a { width: 420px; height: 420px; left: -6%; top: 10%; background: var(--glow); animation: drift 18s ease-in-out infinite alternate; }
+.orb-b { width: 360px; height: 360px; right: -4%; top: 30%; background: color-mix(in srgb, var(--muted) 22%, transparent); animation: drift 22s ease-in-out infinite alternate-reverse; }
+@keyframes drift { to { transform: translate(60px, -40px) scale(1.12); } }
+
+/* Floating status chips over the picture, at their own depth. */
+.chip {
+  position: absolute; z-index: 3; display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: 16px; background: var(--surface); color: var(--text);
+  border: 1px solid var(--line-strong); box-shadow: var(--shadow-lg); font-size: 13px;
+  transform: translateZ(80px); animation: float 6s ease-in-out infinite;
+}
+.chip strong { display: block; font-size: 14px; font-weight: 700; }
+.chip-k { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.chip-left { left: -44px; bottom: 16%; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 170px; }
+.chip-right { right: -36px; top: -26px; animation-delay: -3s; }
+.chip-bar { display: block; width: 100%; height: 6px; margin-top: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+.chip-bar i { display: block; height: 100%; width: 40%; border-radius: 3px; background: var(--accent); animation: fill 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+@keyframes fill { 0% { width: 8%; } 70%, 100% { width: 100%; } }
+.chip-ok { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: color-mix(in srgb, var(--good) 16%, transparent); }
+.chip-ok svg { width: 18px; height: 18px; fill: none; stroke: var(--good); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+@keyframes float { 50% { transform: translateZ(80px) translateY(-10px); } }
+
+/* Cards tilt toward the pointer, with a soft light where it is. */
+.tilt { transform-style: preserve-3d; will-change: transform; position: relative; }
+.tilt::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 12%, transparent), transparent 45%);
+  transition: opacity 0.3s ease;
+}
+.tilt:hover::after { opacity: 1; }
+.tilt h3 { transform: translateZ(24px); }
+.features .card.tilt:hover { transform: none; }
+
+/* Sections and cards come in one after another. */
+.reveal { transition-delay: calc(var(--i, 0) * 70ms); }
+
+@media (max-width: 980px) {
+  .chip { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  h1 .line, .hero .pill, .hero .lead, .hero-cta, .hero .fine, .hero-shot, .chip, .orb, .chip-bar i, .live-dot { animation: none !important; }
+  .hero-shot { --tilt: 0deg; --lift: 1; }
+}

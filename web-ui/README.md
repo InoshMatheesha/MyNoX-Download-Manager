@@ -1,5 +1,8 @@
 # MyNoX website
 
+Live at https://mynox-download-manager.vercel.app (Vercel project `mynox-download-manager`,
+Root Directory `web-ui`; every push to `main` deploys it).
+
 The download page for MyNoX Download Manager: plain HTML, CSS and JavaScript, no build step.
 The download buttons read the latest release from the GitHub API, so a new release needs no
 change here.

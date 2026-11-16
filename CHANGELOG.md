@@ -5,6 +5,9 @@ Each release's notes on GitHub come from its section here (`## [X.Y.Z]`, see
 
 ## [Unreleased]
 
+- The website is at https://mynox-download-manager.vercel.app, with a floating island navigation
+  bar, the total downloads of every release, and 3D motion that turns off with reduced motion.
+
 ## [1.0.2] - 2026-11-16
 
 ### New
