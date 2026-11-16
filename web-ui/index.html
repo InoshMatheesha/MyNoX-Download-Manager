@@ -17,6 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="ios.css">
   <script>
     // Apply the saved or system theme before paint, so the page never flashes.
     (function () {
@@ -30,13 +31,12 @@
   <a class="skip" href="#main">Skip to content</a>
 
   <header class="island-wrap" id="top">
-    <nav class="island" aria-label="Main">
-      <a class="brand" href="#top" aria-label="MyNoX Download Manager home">
+    <nav class="island glass" aria-label="Main">
+      <a class="brand" href="#top" data-scroll-top aria-label="MyNoX Download Manager, back to the top">
         <img src="assets/logo-64.png" alt="" width="26" height="26">
         <span>MyNoX</span>
       </a>
-      <span class="island-live" aria-hidden="true"><span class="live-dot"></span><span data-island-status>Download manager</span></span>
-      <div class="island-links" id="island-links">
+      <div class="island-links" id="island-links" data-ios-nav>
         <a href="#features">Features</a>
         <a href="#choice">Design</a>
         <a href="#extension">Browser</a>
@@ -51,7 +51,6 @@
           <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
           <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
         </button>
-        <a class="island-cta" href="#download">Download</a>
         <button class="island-btn island-menu" id="island-menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="island-links">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
         </button>
@@ -71,11 +70,11 @@
         <h1><span class="line">Download faster.</span><span class="line muted-head">Stay in control.</span></h1>
         <p class="lead">MyNoX splits every file over up to 32 connections, resumes after the internet or the power cuts out, catches the links you click in your browser, and saves videos and torrents. No ads, no trial, no sign-up.</p>
         <div class="hero-cta">
-          <a class="btn btn-primary btn-lg" data-asset="setup" href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest">
+          <a class="btn btn-primary btn-lg btn-shine" data-magnetic data-asset="setup" href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5 10.5 4.4v7.1H3V5.5Zm8.5-1.25L21 3v8.5h-9.5V4.25ZM3 12.5h7.5v7.1L3 18.5v-6Zm8.5 0H21V21l-9.5-1.25V12.5Z"/></svg>
             Download for Windows
           </a>
-          <a class="btn btn-ghost btn-lg" data-asset="portable" href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest">Portable .exe</a>
+          <a class="btn btn-ghost btn-lg glass" data-magnetic data-asset="portable" href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest">Portable .exe</a>
         </div>
         <p class="fine"><span data-version-text>Windows 10 &amp; 11</span> · 64-bit · Free and open source (GPL-3.0)</p>
       </div>
@@ -84,12 +83,12 @@
         <div class="orb orb-b" aria-hidden="true"></div>
         <figure class="shot hero-shot" id="hero-shot">
           <div class="shot-glow" aria-hidden="true"></div>
-          <div class="chip chip-left" aria-hidden="true">
+          <div class="chip chip-left glass" aria-hidden="true">
             <span class="chip-k">Speed</span>
             <strong>32 connections</strong>
             <span class="chip-bar"><i></i></span>
           </div>
-          <div class="chip chip-right" aria-hidden="true">
+          <div class="chip chip-right glass" aria-hidden="true">
             <span class="chip-ok"><svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"/></svg></span>
             <span><strong>Update verified</strong><span class="chip-k">Signed checksums</span></span>
           </div>
@@ -120,35 +119,35 @@
           <p class="sub">Built in Rust for speed and stability, laid out the way people who manage many downloads expect.</p>
         </div>
         <div class="grid features">
-          <article class="card tilt">
+          <article class="card glass tilt">
             <h3><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg>Faster downloads</h3>
             <p>Up to 32 connections per file, rebalanced as parts finish, with a per-download and global speed limiter.</p>
           </article>
-          <article class="card tilt">
+          <article class="card glass tilt">
             <h3><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Resume anything</h3>
             <p>Broken downloads pick up where they stopped, even after a restart or a dropped connection.</p>
           </article>
-          <article class="card tilt">
+          <article class="card glass tilt">
             <h3><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Browser integration</h3>
             <p>Chrome, Edge, Brave, Opera, Vivaldi and Firefox hand their downloads to MyNoX, with a right-click menu too.</p>
           </article>
-          <article class="card tilt">
+          <article class="card glass tilt">
             <h3><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3V9Z"/></svg>Video downloader</h3>
             <p>A Download video button on YouTube and many other sites: whole playlists, subtitles, the quality you pick.</p>
           </article>
-          <article class="card tilt">
+          <article class="card glass tilt">
             <h3><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15-4-4 6.75-6.77a7.79 7.79 0 0 1 11 11L13 22l-4-4 6.39-6.36a2.14 2.14 0 0 0-3-3L6 15"/><path d="m5 8 4 4M12 15l4 4"/></svg>Torrents and magnets</h3>
             <p>Per-torrent limits, file selection, RSS feeds and a blocklist, in the same list as your other downloads.</p>
           </article>
-          <article class="card tilt">
+          <article class="card glass tilt">
             <h3><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4M8 14h3"/></svg>Queues and scheduler</h3>
             <p>Download overnight, then shut down, sleep or hang up. Several queues, each on its own schedule.</p>
           </article>
-          <article class="card tilt">
+          <article class="card glass tilt">
             <h3><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>Link grabber</h3>
             <p>Every link of a page or a whole site, filtered by type, with archives unpacked for you when they arrive.</p>
           </article>
-          <article class="card tilt">
+          <article class="card glass tilt">
             <h3><svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>Signed updates</h3>
             <p>Help, then Check for updates installs a new release only after checking its signed checksums.</p>
           </article>
@@ -188,17 +187,17 @@
           <p class="sub">The extension comes inside MyNoX. Open Tasks, then Browser extension, and click Add it now: MyNoX opens the extensions page and copies the folder for you.</p>
         </div>
         <ol class="steps">
-          <li class="card step tilt">
+          <li class="card step glass tilt">
             <span class="num">1</span>
             <h3>Click Add it now</h3>
             <p>MyNoX opens your browser's extensions page and copies the extension's folder.</p>
           </li>
-          <li class="card step tilt">
+          <li class="card step glass tilt">
             <span class="num">2</span>
             <h3>Turn on Developer mode</h3>
             <p>Then click <span class="kbd">Load unpacked</span> on the page that just opened.</p>
           </li>
-          <li class="card step tilt">
+          <li class="card step glass tilt">
             <span class="num">3</span>
             <h3>Paste and select</h3>
             <p>Press <span class="kbd">Ctrl</span> + <span class="kbd">V</span> in the folder box and click Select Folder. MyNoX says Connected.</p>
@@ -217,18 +216,18 @@
           <p class="sub" data-release-date>Free for Windows 10 and 11, 64-bit.</p>
         </div>
         <div class="grid downloads">
-          <article class="card dl recommended tilt">
+          <article class="card dl recommended glass tilt">
             <span class="tag">Recommended</span>
             <h3>Setup</h3>
             <p>Installs MyNoX, sets up browser integration, and keeps your settings across updates.</p>
             <div class="dl-meta"><span class="mono" data-name="setup">MyNoX-setup.exe</span><span data-size="setup"></span></div>
-            <a class="btn btn-primary btn-block" data-asset="setup" href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest">Download setup</a>
+            <a class="btn btn-primary btn-block btn-shine" data-magnetic data-asset="setup" href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest">Download setup</a>
           </article>
-          <article class="card dl tilt">
+          <article class="card dl glass tilt">
             <h3>Portable</h3>
             <p>Unpacks into any folder or USB stick, keeps its data beside it, and writes nothing to the registry.</p>
             <div class="dl-meta"><span class="mono" data-name="portable">MyNoX-portable.exe</span><span data-size="portable"></span></div>
-            <a class="btn btn-ghost btn-block" data-asset="portable" href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest">Download portable</a>
+            <a class="btn btn-ghost btn-block" data-magnetic data-asset="portable" href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest">Download portable</a>
           </article>
         </div>
         <div class="notes">
@@ -287,7 +286,7 @@
           <h2>Ready when your next download is.</h2>
           <p>One setup, under 20 MB. Your settings stay across every update.</p>
         </div>
-        <a class="btn btn-primary btn-lg" data-asset="setup" href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest">Download for Windows</a>
+        <a class="btn btn-primary btn-lg btn-shine" data-magnetic data-asset="setup" href="https://github.com/InoshMatheesha/MyNoX-Download-Manager/releases/latest">Download for Windows</a>
       </div>
     </section>
   </main>
@@ -325,6 +324,7 @@
     </div>
   </footer>
 
+  <script src="ios.js" defer></script>
   <script src="app.js" defer></script>
 </body>
 </html>

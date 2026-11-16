@@ -60,8 +60,6 @@
   var ticking = false;
   function onScroll() {
     ticking = false;
-    var y = window.scrollY;
-    island.classList.toggle("compact", y > 80);
     if (shot && !calm) {
       // 0 while the picture's top is low in the window, 1 once it has risen to its upper third.
       var r = shot.getBoundingClientRect();
