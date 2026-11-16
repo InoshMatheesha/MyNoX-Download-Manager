@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "files": [
+    {
+      "name": "image.png",
+      "sha256": "0870b1f8e34539fac0162718f60dc129032dd5c8b5ad8f0c377ec6cac4eef7fd"
+    }
+  ],
+  "documents": {
+    "README.md": [
+      "image.png"
+    ]
+  },
+  "pending": {}
+}

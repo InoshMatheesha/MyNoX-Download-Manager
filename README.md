@@ -12,10 +12,6 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-1e6fff?style=flat-square" alt="GPL-3.0"></a>
 </p>
 
-<p align="center">
-  <img src="docs/images/main-light.webp" alt="MyNoX Download Manager's main window" width="820">
-</p>
-
 MyNoX splits every download over several connections, resumes it after the internet or the power
 cuts out, catches the links you click in your browser, saves videos, handles torrents, and runs
 your queues on a schedule. No ads, no trial, no sign-up.
@@ -102,20 +98,18 @@ for good. Every step, with pictures: **[Catch downloads from your browser](docs/
 ## Screenshots
 
 | | |
-|---|---|
-| ![Enter new address to download](docs/images/add-url.webp) | ![A download coming in over several connections](docs/images/progress.webp) |
-| ![Add torrent: the files of a torrent to choose from](docs/images/add-torrent.webp) | ![The Download video button over a video in the browser](docs/images/video-button-youtube.webp) |
-
-## Themes
+| --- | --- |
+| <img src="docs/images/mynox-choice-dark.webp" alt="MyNoX Download Manager in the MyNoX Choice theme, dark" width="820" /> | ![image](assets/image.png) |
+| | |
 
 | | |
-|---|---|
-| ![The main window in the MyNoX Choice theme](docs/images/help/site-theme-mynox-choice.webp) | ![The main window in the Classic theme](docs/images/help/site-theme-classic.webp) |
-| ![The main window in the Metro theme](docs/images/help/site-theme-metro.webp) | ![The main window in the Native theme](docs/images/help/site-theme-native.webp) |
-| ![The main window in the Aero theme](docs/images/help/site-theme-aero.webp) | ![The main window in the Luna theme](docs/images/help/site-theme-luna.webp) |
-| ![The main window in the Emerald theme](docs/images/help/site-theme-emerald.webp) | ![The main window in the Aqua theme](docs/images/help/site-theme-aqua.webp) |
-| ![The main window in the High contrast theme](docs/images/help/site-theme-high-contrast.webp) | ![The main window in the Adwaita theme](docs/images/help/site-theme-adwaita.webp) |
-| ![The main window in the Breeze theme](docs/images/help/site-theme-breeze.webp) | |
+| --- | --- |
+| | |
+| | |
+| | |
+| | |
+| | |
+| | |
 
 ## User guide
 
