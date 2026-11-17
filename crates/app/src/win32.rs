@@ -3,6 +3,15 @@
 //! and the drop target's OLE `IDropTarget` (`ole`).
 #![allow(unsafe_code)]
 
+/// RivaTuner Statistics Server (MSI Afterburner's on-screen display) hooks every program that
+/// draws with Direct3D or OpenGL and paints its overlay into the windows, MyNoX's too. Its hook
+/// looks for this value exported by the program's exe: 0 means "no hooks compatible", and it
+/// leaves the program alone. A user who does want it here sets `ForceHooking=1` in the
+/// `[Hooking]` section of RivaTuner's profile for mynox.exe. build.rs exports it.
+#[unsafe(no_mangle)]
+#[allow(non_upper_case_globals)]
+pub static RTSSHooksCompatibility: u32 = 0;
+
 use std::ffi::c_void;
 use std::mem::{size_of, zeroed};
 

@@ -3781,17 +3781,9 @@ fn paint_button(
             Stroke::new(m.border, face.border),
             StrokeKind::Inside,
         );
-        // The bottom edge: a push button's and a drop-down's 3 points in from its ends, a small
-        // part's from its corners (none on one too low for it).
+        // The bottom edge (none on a part too low for it).
         if shape != Shape::Small || rc.height() >= 14.0 {
-            let inset = if shape == Shape::Small { radius } else { 3.0 };
-            hline(
-                p,
-                rc.left() + inset,
-                rc.right() - inset - 1.0,
-                rc.bottom() - 1.0,
-                face.bottom,
-            );
+            bottom_lip(p, rc, radius, m.border, face.bottom);
         }
         return radius;
     };
@@ -3825,6 +3817,27 @@ fn paint_button(
         StrokeKind::Inside,
     );
     radius
+}
+
+/// A button's bottom edge as a lip that follows its outline: the border itself again in `color`,
+/// whole along the bottom and fading as it climbs the round corners. A straight line under a
+/// round button (MyNoX Choice's 8 pt corners) ran out past its curves and read as an underline.
+fn bottom_lip(p: &Painter, rc: Rect, radius: f32, width: f32, color: Color32) {
+    // Faintest and tallest first: each band below paints over the one before. Never above the
+    // corners (the sides stay the border's).
+    let rise = radius.min(rc.height() / 2.0);
+    for (height, strength) in [(rise, 0.25), (rise * 0.5, 0.5), (width, 1.0)] {
+        if height <= 0.0 {
+            continue;
+        }
+        let band = Rect::from_min_max(pos2(rc.left(), rc.bottom() - height), rc.max);
+        p.with_clip_rect(band).rect_stroke(
+            rc,
+            radius,
+            Stroke::new(width, color.gamma_multiply(strength)),
+            StrokeKind::Inside,
+        );
+    }
 }
 
 /// What a face drawn by [`paint_button`] is: a push button, a small button-like part (a spin

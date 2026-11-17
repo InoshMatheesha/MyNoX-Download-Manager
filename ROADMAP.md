@@ -6,6 +6,11 @@ are in [CHANGELOG.md](CHANGELOG.md). Ideas and bug reports are welcome in
 
 ✅ done · 🔄 being built · 📋 planned
 
+## Version 1.0.4
+
+- ✅ RivaTuner / MSI Afterburner's overlay kept out of MyNoX's windows
+- ✅ Buttons' bottom edge follows their rounded corners
+
 ## Version 1.0.3
 
 - ✅ MyNoX Choice's dark mode in three surfaces with crisp borders

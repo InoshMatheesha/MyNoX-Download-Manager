@@ -16,8 +16,21 @@ fn main() {
     if matches!(os.as_str(), "windows" | "linux" | "macos") {
         println!("cargo::rustc-cfg=gpu");
     }
-    if windows && std::env::var("CARGO_CFG_TARGET_ENV").as_deref() == Ok("msvc") {
+    let msvc = std::env::var("CARGO_CFG_TARGET_ENV").as_deref() == Ok("msvc");
+    if windows && msvc {
         println!("cargo:rustc-link-arg-bins=/SUBSYSTEM:WINDOWS,5.02");
+    }
+    // The exe exports `RTSSHooksCompatibility` (win32.rs): RivaTuner's overlay stays out of
+    // MyNoX's windows. Rust exports nothing from an exe by itself.
+    if windows {
+        if msvc {
+            println!("cargo:rustc-link-arg-bin=mynox=/EXPORT:RTSSHooksCompatibility,DATA");
+        } else {
+            let def = std::path::PathBuf::from(std::env::var("OUT_DIR").unwrap()).join("mynox.def");
+            std::fs::write(&def, "EXPORTS\n    RTSSHooksCompatibility DATA\n")
+                .expect("the exe's export list");
+            println!("cargo:rustc-link-arg-bin=mynox={}", def.display());
+        }
     }
     // The icon and version info are for a Windows program only (not one built on Windows for
     // Linux or macOS); winresource builds on Windows only.

@@ -5,6 +5,19 @@ Each release's notes on GitHub come from its section here (`## [X.Y.Z]`, see
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-11-17
+
+### Fixed
+
+- **No more game overlay in MyNoX's windows.** RivaTuner Statistics Server (MSI Afterburner's
+  on-screen display) painted its CPU/GPU/FPS readout over the title bar of the download window
+  and the others. MyNoX now tells RivaTuner to leave it alone (the exe exports
+  `RTSSHooksCompatibility`); anyone who wants the overlay back can set `ForceHooking=1` in the
+  `[Hooking]` section of RivaTuner's profile for mynox.exe.
+- **Round buttons without the underline.** The bottom edge of Pause, Cancel, Hide details and
+  every other button was a straight line that ran past MyNoX Choice's rounded corners. It now
+  follows the button's own curve, solid along the bottom and fading as it climbs the corners.
+
 ## [1.0.3] - 2026-11-16
 
 ### Changed
