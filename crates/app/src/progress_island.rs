@@ -126,11 +126,7 @@ impl Progress {
         let shown = winui::ellipsize(&p, &sf, &status, 300.0);
         let iw = (width(&p, sf.clone(), &shown) + 62.0).max(150.0);
         let cap = Rect::from_min_size(pos2(x(274.0) - iw / 2.0, y(14.0)), vec2(iw, 30.0));
-        p.rect_filled(
-            winui::rect(cap.translate(vec2(0.0, 4.0))),
-            15.0,
-            k.shadow.gamma_multiply(0.6),
-        );
+        glass::soft_shadow(&p, cap, 15.0, 5.0, 16.0, k.shadow.gamma_multiply(0.8));
         p.rect_filled(winui::rect(cap), 15.0, k.island);
         let ink = island_ink(item, &k);
         p.circle_filled(

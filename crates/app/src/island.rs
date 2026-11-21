@@ -16,7 +16,7 @@ use crate::winui;
 // The header (the view's name, the island, the speed), the filter bar and the dock's band.
 const HEAD_H: f32 = 98.0;
 const FILTER_H: f32 = 42.0;
-const FOOT_H: f32 = 76.0;
+const FOOT_H: f32 = 84.0;
 // A minute and a half of speed samples, one a second.
 const SAMPLES: usize = 90;
 // How long the island tells of a download that just finished.
@@ -279,11 +279,7 @@ impl App {
         };
         winui::expose(&r, egui::Role::Button, &what, true, None);
         let radius = 18.0f32.min(ih / 2.0);
-        p.rect_filled(
-            winui::rect(rc.expand(2.0).translate(vec2(0.0, 6.0))),
-            radius + 2.0,
-            k.shadow.gamma_multiply(0.7),
-        );
+        glass::soft_shadow(&p, rc, radius, 6.0, 20.0, k.shadow.gamma_multiply(0.85));
         p.rect_filled(winui::rect(rc), radius, k.island);
         p.rect_stroke(
             winui::rect(rc),
@@ -632,6 +628,26 @@ impl App {
         let clip = winui::rect(strip).intersect(ui.clip_rect());
         let mut sui = ui.new_child(egui::UiBuilder::new().max_rect(clip));
         sui.set_clip_rect(clip);
+        // A chip going out of sight at either end fades with it, over the backdrop as it is
+        // (a fade to one colour showed as a block over the glow).
+        let (lead_out, trail_out) = (scroll > 0.5, scroll < most - 0.5);
+        let chip_ui = |sui: &mut Ui, rc: Rect| -> Option<Ui> {
+            let span = rc.width() * 0.7;
+            let mut a: f32 = 1.0;
+            if trail_out {
+                a = a.min((strip.right() - rc.right() + span) / span);
+            }
+            if lead_out {
+                a = a.min((rc.left() - strip.left() + span) / span);
+            }
+            let a = a.clamp(0.0, 1.0);
+            (a > 0.03).then(|| {
+                let mut cu = sui.new_child(egui::UiBuilder::new().max_rect(clip));
+                cu.set_clip_rect(clip);
+                cu.set_opacity(a);
+                cu
+            })
+        };
         let sp = sui.painter().clone();
         let mut cx = strip.left() + 4.0 - scroll;
         let cy = top + 7.0;
@@ -643,8 +659,11 @@ impl App {
             if rc.right() < strip.left() || rc.left() > strip.right() {
                 continue;
             }
+            let Some(cu) = chip_ui(&mut sui, rc) else {
+                continue;
+            };
             let on = scope.is_some() && cat == Some(*ct);
-            let r = glass::chip(&sui, rc, ("island-cat", i), label, on, false);
+            let r = glass::chip(&cu, rc, ("island-cat", i), label, on, false);
             if r.clicked() {
                 let s = scope.unwrap_or(0);
                 self.view = in_scope(s, if on { None } else { Some(*ct) });
@@ -669,9 +688,13 @@ impl App {
             if rc.right() < strip.left() || rc.left() > strip.right() {
                 continue;
             }
+            let Some(cu) = chip_ui(&mut sui, rc) else {
+                continue;
+            };
+            let sp = cu.painter().clone();
             let label = self.queues[q].name.clone();
             let on = self.view == View::Queue(q);
-            let r = glass::chip(&sui, rc, ("island-queue", q), "", on, false);
+            let r = glass::chip(&cu, rc, ("island-queue", q), "", on, false);
             winui::expose(&r, egui::Role::CheckBox, &label, true, Some(on));
             // The queue's running dot, then its name.
             let running = self.queues[q].running;
@@ -701,27 +724,6 @@ impl App {
             {
                 menu = Some((View::Queue(q), q2));
             }
-        }
-        // Fades over the ends where chips are scrolled out of sight.
-        let fade = 26.0;
-        if scroll > 0.5 {
-            glass::fade_side(
-                &sp,
-                Rect::from_min_size(strip.min, vec2(fade, strip.height())),
-                c.window,
-                true,
-            );
-        }
-        if scroll < most - 0.5 {
-            glass::fade_side(
-                &sp,
-                Rect::from_min_size(
-                    pos2(strip.right() - fade, strip.top()),
-                    vec2(fade, strip.height()),
-                ),
-                c.window,
-                false,
-            );
         }
         if let Some((v, q)) = menu {
             self.open_popup(Popup::Node(Some(v)), q);
@@ -799,48 +801,68 @@ impl App {
             ("tb-options", "Options", true, Cmd::Options, None, 4),
             ("", "Always dark", true, Cmd::ToggleAlwaysDark, None, 4),
         ];
-        // The size that fits: 44 px buttons, smaller in a narrow window.
-        let dock_w = |s: f32| -> f32 {
-            let mut total = 12.0 * 2.0;
-            let mut group = 0u8;
-            for (i, b) in buttons.iter().enumerate() {
-                if b.5 != group {
-                    group = b.5;
-                    total += 17.0;
-                }
-                total += if i == 0 { s + 12.0 } else { s };
-                total += if b.4.is_some() { 18.0 } else { 0.0 };
-                total += 4.0;
-            }
-            total - 4.0
+        // Whether a button's state is on, marked by a dot under it: the main queue running, the
+        // window kept dark.
+        let always_dark = self.settings.always_dark;
+        let lit = |i: usize| match i {
+            7 => main_running,
+            11 => always_dark,
+            _ => false,
         };
+        // The dock: Add URL's orb, then each group of commands in a shallow pod of its own.
+        let (pad, gap, inset, drop_w) = (8.0, 8.0, 4.0, 16.0);
+        let groups: Vec<u8> = {
+            let mut g: Vec<u8> = buttons.iter().skip(1).map(|b| b.5).collect();
+            g.dedup();
+            g
+        };
+        let pod_w = |s: f32, g: u8| -> f32 {
+            inset * 2.0
+                + buttons
+                    .iter()
+                    .skip(1)
+                    .filter(|b| b.5 == g)
+                    .map(|b| s + if b.4.is_some() { drop_w } else { 0.0 })
+                    .sum::<f32>()
+        };
+        let dock_w = |s: f32| -> f32 {
+            pad * 2.0 + (s + 14.0) + groups.iter().map(|g| gap + pod_w(s, *g)).sum::<f32>()
+        };
+        // The size that fits: 40 px buttons, smaller in a narrow window.
         let s = [40.0f32, 36.0, 32.0]
             .into_iter()
             .find(|s| dock_w(*s) <= w - 40.0)
             .unwrap_or(32.0);
         let dw = dock_w(s);
-        let dh = s + 18.0;
+        let dh = s + 20.0;
         let dock = Rect::from_min_size(
-            pos2(x + w / 2.0 - dw / 2.0, top + (FOOT_H - dh) / 2.0 + 2.0),
+            pos2(x + w / 2.0 - dw / 2.0, top + (FOOT_H - dh) / 2.0 - 4.0),
             vec2(dw, dh),
         );
         glass::panel(&p, dock, dh / 2.0, &k);
-        let mut bx = dock.left() + 12.0;
-        let mut group = 0u8;
         let cy = dock.center().y;
         let mut hint: Option<(Rect, String)> = None;
+        let mut bx = dock.left() + pad;
+        let mut group = 0u8;
         for (i, (need, label, enabled, cmd, drop, g)) in buttons.iter().enumerate() {
             if *g != group {
                 group = *g;
-                bx += 6.0;
-                p.line_segment(
-                    [at(bx, cy - s * 0.32), at(bx, cy + s * 0.32)],
-                    Stroke::new(1.0, k.edge),
+                bx += gap;
+                // The pod: a shallow well in the glass, a rim of light along its lower edge.
+                let pw = pod_w(s, *g);
+                let pod = Rect::from_min_size(pos2(bx, cy - (s + 8.0) / 2.0), vec2(pw, s + 8.0));
+                let pr = pod.height() / 2.0;
+                p.rect_filled(winui::rect(pod), pr, k.well);
+                p.rect_stroke(
+                    winui::rect(pod),
+                    pr,
+                    Stroke::new(1.0, k.sheen.gamma_multiply(if k.dark { 0.35 } else { 0.8 })),
+                    egui::StrokeKind::Outside,
                 );
-                bx += 11.0;
+                bx += inset;
             }
             let primary = i == 0;
-            let d = if primary { s + 12.0 } else { s };
+            let d = if primary { s + 14.0 } else { s };
             let rc = Rect::from_min_size(pos2(bx, cy - d / 2.0), vec2(d, d));
             let words = if *label == "Always dark" {
                 crate::i18n::t(label).to_owned()
@@ -855,8 +877,9 @@ impl App {
             winui::expose(&r, egui::Role::Button, &words, *enabled, None);
             let hot = *enabled && r.hovered();
             let down = hot && r.is_pointer_button_down_on();
-            // Pressed, a button sinks a little.
+            // Pressed, a button sinks a little; under the pointer its glyph rises a little.
             let face = rc.shrink(if down { 1.5 } else { 0.0 });
+            let fc = face.center();
             let ink = if primary {
                 let fill = if down {
                     c.button_accent_pressed
@@ -865,34 +888,39 @@ impl App {
                 } else {
                     c.button_accent
                 };
-                p.circle_filled(
-                    at(face.center().x, face.center().y + 3.0),
-                    d / 2.0,
-                    c.button_accent.gamma_multiply(0.25),
+                // The orb: a glow of its own colour round it, lit from above, a fine rim.
+                glass::soft_disc(
+                    &p,
+                    fc,
+                    d / 2.0 - 3.0,
+                    4.0,
+                    18.0,
+                    c.button_accent
+                        .gamma_multiply(if hot { 0.70 } else { 0.48 }),
                 );
-                p.circle_filled(
-                    at(face.center().x, face.center().y),
+                winui::fill_shaded(
+                    &p,
+                    winui::rect(face),
                     face.width() / 2.0,
-                    fill,
+                    &[
+                        (0.0, crate::derive::mix(fill, egui::Color32::WHITE, 0.16)),
+                        (1.0, fill),
+                    ],
+                );
+                p.circle_stroke(
+                    at(fc.x, fc.y),
+                    face.width() / 2.0 - 0.5,
+                    Stroke::new(1.0, egui::Color32::from_white_alpha(36)),
                 );
                 c.button_accent_text
             } else {
                 if hot {
-                    p.circle_filled(
-                        at(face.center().x, face.center().y),
-                        face.width() / 2.0,
-                        k.glass_hot,
-                    );
-                    p.circle_stroke(
-                        at(face.center().x, face.center().y),
-                        face.width() / 2.0 - 0.5,
-                        Stroke::new(1.0, k.edge),
-                    );
+                    p.circle_filled(at(fc.x, fc.y), face.width() / 2.0, k.glass_hot);
                 }
                 if *enabled { k.text } else { k.disabled }
             };
             let gs = (s * 0.42).round();
-            let gc = face.center();
+            let gc = pos2(fc.x, fc.y - if hot && !primary { 1.0 } else { 0.0 });
             if primary {
                 // A plus, drawn: the one button that needs no icon to be read.
                 let st = Stroke::new(2.4, ink);
@@ -900,18 +928,12 @@ impl App {
                 p.line_segment([at(gc.x - a, gc.y), at(gc.x + a, gc.y)], st);
                 p.line_segment([at(gc.x, gc.y - a), at(gc.x, gc.y + a)], st);
             } else if need.is_empty() {
-                // A moon: a disc with the dock's glass bitten out of it.
-                let mc = at(gc.x, gc.y);
-                p.circle_filled(mc, gs * 0.42, ink);
-                let behind = glass::over(c.window, k.glass);
-                let behind = if hot {
-                    glass::over(behind, k.glass_hot)
-                } else {
-                    behind
-                };
-                p.circle_filled(at(gc.x + gs * 0.22, gc.y - gs * 0.2), gs * 0.36, behind);
+                glass::moon(&p, gc, gs * 0.42, ink);
             } else {
                 glyph(ui, need, Rect::from_center_size(gc, vec2(gs, gs)), ink);
+            }
+            if lit(i) {
+                p.circle_filled(at(fc.x, fc.y + gs * 0.5 + 5.0), 2.0, k.accent);
             }
             if r.hovered() {
                 hint = Some((winui::rect(rc), words.clone()));
@@ -921,10 +943,10 @@ impl App {
             }
             bx += d;
             if let Some(popup) = drop {
-                // The drop-down: a narrow capsule after the button (every queue, also while the
-                // main one's button is greyed).
+                // The drop-down: a narrow capsule after its button, inside the pod (every queue,
+                // also while the main one's button is greyed).
                 let arrow =
-                    Rect::from_min_size(pos2(bx - 2.0, cy - s * 0.36), vec2(18.0, s * 0.72));
+                    Rect::from_min_size(pos2(bx - 2.0, cy - s * 0.34), vec2(drop_w, s * 0.68));
                 let ar = ui.interact(
                     winui::rect(arrow),
                     egui::Id::unique(("island-dock-drop", i)),
@@ -938,16 +960,19 @@ impl App {
                 };
                 winui::expose(&ar, egui::Role::Button, &more, true, None);
                 if ar.hovered() {
-                    p.rect_filled(winui::rect(arrow), 9.0, k.glass_hot);
+                    p.rect_filled(winui::rect(arrow), drop_w / 2.0, k.glass_hot);
                     hint = Some((winui::rect(arrow), more));
                 }
                 chevron(&p, arrow.center().x, arrow.center().y, k.muted);
                 if ar.clicked() {
                     self.open_popup(*popup, at(arrow.left(), dock.top() - 4.0));
                 }
-                bx += 18.0;
+                bx += drop_w;
             }
-            bx += 4.0;
+            // The pod's end.
+            if buttons.get(i + 1).is_none_or(|b| b.5 != *g) && !primary {
+                bx += inset;
+            }
         }
         if let Some((rc, label)) = hint {
             glass::tip(ui, rc, &label);

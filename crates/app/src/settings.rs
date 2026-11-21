@@ -376,7 +376,7 @@ impl Default for Settings {
             dark_mode_support: true,
             always_dark: false,
             // MyNoX's own theme for a new list; a saved one keeps its choice.
-            theme: "mynox-choice".into(),
+            theme: "mynox-island".into(),
             renderer: None,
             interface_size: 100,
             smooth_text: false,

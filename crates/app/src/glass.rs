@@ -102,6 +102,10 @@ pub struct Ink {
     /// The light along a panel's top.
     pub sheen: Color32,
     pub shadow: Color32,
+    /// A shallow inset in the glass (the dock's pods).
+    pub well: Color32,
+    /// A raised thumb's face (the segmented switch).
+    pub raised: Color32,
     /// The Dynamic Island: its face, ink, quiet ink and signal.
     pub island: Color32,
     pub on_island: Color32,
@@ -141,25 +145,24 @@ impl Ink {
             } else {
                 Color32::from_white_alpha(235)
             },
-            shadow: Color32::from_black_alpha(if dark { 110 } else { 26 }),
-            island: mix(d.window, Color32::BLACK, 0.6),
+            shadow: Color32::from_black_alpha(if dark { 120 } else { 34 }),
+            well: if dark {
+                Color32::from_black_alpha(46)
+            } else {
+                Color32::from_black_alpha(12)
+            },
+            raised: if dark {
+                mix(c.list, c.text, 0.12)
+            } else {
+                Color32::WHITE
+            },
+            island: mix(d.window, Color32::BLACK, 0.55),
             on_island: d.text,
             island_muted: d.muted,
             island_signal: d.accent,
             island_good: d.success,
         }
     }
-}
-
-/// `layer` (translucent) painted over the opaque `base`: the colour that shows.
-pub fn over(base: Color32, layer: Color32) -> Color32 {
-    let a = 1.0 - layer.a() as f32 / 255.0;
-    let m = |l: u8, b: u8| (l as f32 + b as f32 * a).round().min(255.0) as u8;
-    Color32::from_rgb(
-        m(layer.r(), base.r()),
-        m(layer.g(), base.g()),
-        m(layer.b(), base.b()),
-    )
 }
 
 /// A soft round glow: `color` at `center`, gone at `radius`.
@@ -218,26 +221,6 @@ pub fn backdrop(p: &Painter, rc: Rect, t: f64) {
     );
 }
 
-/// A fade from `color` at the leading side of `rc` to nothing at its trailing side (`lead`), or
-/// the other way: where a strip goes on out of sight.
-pub fn fade_side(p: &Painter, rc: Rect, color: Color32, lead: bool) {
-    let rc = winui::rect(rc);
-    // On screen the leading side is the left, or the right in a right-to-left interface.
-    let (l, r) = if lead != winui::rtl() {
-        (color, Color32::TRANSPARENT)
-    } else {
-        (Color32::TRANSPARENT, color)
-    };
-    let mut mesh = egui::Mesh::default();
-    mesh.colored_vertex(rc.left_top(), l);
-    mesh.colored_vertex(rc.right_top(), r);
-    mesh.colored_vertex(rc.right_bottom(), r);
-    mesh.colored_vertex(rc.left_bottom(), l);
-    mesh.add_triangle(0, 1, 2);
-    mesh.add_triangle(0, 2, 3);
-    p.add(egui::Shape::mesh(mesh));
-}
-
 /// A frosted panel: a soft shadow, the glass, a sheen along its top and a hairline edge.
 pub fn panel(p: &Painter, rc: Rect, radius: f32, k: &Ink) {
     shadow(p, rc, radius, k);
@@ -267,13 +250,22 @@ pub fn card(p: &Painter, rc: Rect, radius: f32, k: &Ink) {
 }
 
 fn shadow(p: &Painter, rc: Rect, radius: f32, k: &Ink) {
-    for (dy, grow, a) in [(10.0, 6.0, 0.25), (4.0, 1.0, 0.55)] {
-        p.rect_filled(
-            winui::rect(rc.expand(grow).translate(vec2(0.0, dy))),
-            radius + grow,
-            k.shadow.gamma_multiply(a),
-        );
-    }
+    soft_shadow(p, rc, radius, 10.0, 30.0, k.shadow.gamma_multiply(0.55));
+}
+
+/// A shadow as light makes one: `rc` (English) blurred over `blur` points, `dy` below it, in
+/// `color`, its edge fading on both sides instead of the hard step of a solid shape.
+pub fn soft_shadow(p: &Painter, rc: Rect, radius: f32, dy: f32, blur: f32, color: Color32) {
+    let shape =
+        egui::epaint::RectShape::filled(winui::rect(rc.translate(vec2(0.0, dy))), radius, color)
+            .with_blur_width(blur);
+    p.add(shape);
+}
+
+/// A circle's soft shadow or glow round `center` (English).
+pub fn soft_disc(p: &Painter, center: Pos2, r: f32, dy: f32, blur: f32, color: Color32) {
+    let rc = Rect::from_center_size(center, vec2(r * 2.0, r * 2.0));
+    soft_shadow(p, rc, r, dy, blur, color);
 }
 
 fn sheen(p: &Painter, rc: Rect, radius: f32, k: &Ink) {
@@ -329,13 +321,27 @@ pub fn button(
             } else {
                 c.button_accent
             };
-            p.rect_filled(
-                winui::rect(rc.translate(vec2(0.0, 3.0))),
+            soft_shadow(
+                p,
+                rc.shrink2(vec2(6.0, 2.0)),
                 radius,
+                4.0,
+                16.0,
                 c.button_accent
-                    .gamma_multiply(if k.dark { 0.22 } else { 0.28 }),
+                    .gamma_multiply(if hot { 0.55 } else { 0.38 }),
             );
-            p.rect_filled(winui::rect(rc), radius, face);
+            winui::fill_shaded(
+                p,
+                winui::rect(rc),
+                radius,
+                &[(0.0, mix(face, Color32::WHITE, 0.12)), (1.0, face)],
+            );
+            p.rect_stroke(
+                winui::rect(rc),
+                radius,
+                Stroke::new(1.0, Color32::from_white_alpha(28)),
+                StrokeKind::Inside,
+            );
             c.button_accent_text
         }
         _ => {
@@ -464,16 +470,25 @@ pub fn segmented(
         let tx = ctx.animate_value_with_time(key.with("x"), starts[i], 0.22);
         let tw = ctx.animate_value_with_time(key.with("w"), widths[i], 0.22);
         let thumb = Rect::from_min_size(pos2(tx, y + 4.0), vec2(tw, h - 8.0));
-        p.rect_filled(
-            winui::rect(thumb.translate(vec2(0.0, 2.0))),
-            (h - 8.0) / 2.0,
-            k.shadow.gamma_multiply(0.6),
+        let tr = (h - 8.0) / 2.0;
+        soft_shadow(p, thumb, tr, 1.5, 6.0, k.shadow.gamma_multiply(0.45));
+        winui::fill_shaded(
+            p,
+            winui::rect(thumb),
+            tr,
+            &[(0.0, mix(k.raised, Color32::WHITE, 0.04)), (1.0, k.raised)],
         );
-        p.rect_filled(winui::rect(thumb), (h - 8.0) / 2.0, c.list);
         p.rect_stroke(
             winui::rect(thumb),
-            (h - 8.0) / 2.0,
-            Stroke::new(1.0, k.edge),
+            tr,
+            Stroke::new(
+                1.0,
+                if k.dark {
+                    Color32::from_white_alpha(16)
+                } else {
+                    c.list_frame
+                },
+            ),
             StrokeKind::Inside,
         );
     }
@@ -518,8 +533,60 @@ pub fn switch(p: &Painter, rc: Rect, on: bool, k: &Ink) {
     } else {
         rc.left() + rc.height() / 2.0
     };
-    p.circle_filled(at(kx, rc.center().y + 1.0), r, k.shadow.gamma_multiply(0.5));
+    soft_disc(
+        p,
+        pos2(kx, rc.center().y),
+        r,
+        1.0,
+        4.0,
+        k.shadow.gamma_multiply(0.6),
+    );
     p.circle_filled(at(kx, rc.center().y), r, Color32::WHITE);
+}
+
+/// A crescent moon of radius `r` round `center` (English): the disc less a smaller one up and
+/// toward the trailing side, filled as a shape so nothing behind it has to be matched.
+pub fn moon(p: &Painter, center: Pos2, r: f32, ink: Color32) {
+    use std::f32::consts::TAU;
+    let c = at(center.x, center.y);
+    let dir = if winui::rtl() { -1.0 } else { 1.0 };
+    let o = vec2(r * 0.62 * dir, -r * 0.48);
+    let ri = r * 0.86;
+    let d = o.length();
+    let a = (r * r - ri * ri + d * d) / (2.0 * d);
+    let h = (r * r - a * a).max(0.0).sqrt();
+    let u = o / d;
+    let n = vec2(-u.y, u.x);
+    let (p1, p2) = (c + u * a + n * h, c + u * a - n * h);
+    let away = (-u.y).atan2(-u.x);
+    // The arc of the circle round `cc` from p1 to p2 that passes the side away from the bite.
+    let arc = |cc: Pos2, rad: f32| -> Vec<Pos2> {
+        let (s0, e0) = (
+            (p1.y - cc.y).atan2(p1.x - cc.x),
+            (p2.y - cc.y).atan2(p2.x - cc.x),
+        );
+        let sweep = (e0 - s0).rem_euclid(TAU);
+        let through = (away - s0).rem_euclid(TAU) <= sweep;
+        let span = if through { sweep } else { sweep - TAU };
+        (0..=32)
+            .map(|k| {
+                let t = s0 + span * k as f32 / 32.0;
+                cc + vec2(t.cos(), t.sin()) * rad
+            })
+            .collect()
+    };
+    let (outer, inner) = (arc(c, r), arc(c + o, ri));
+    let mut mesh = egui::Mesh::default();
+    for (a, b) in outer.iter().zip(&inner) {
+        mesh.colored_vertex(*a, ink);
+        mesh.colored_vertex(*b, ink);
+    }
+    for k in 0..32u32 {
+        let i = k * 2;
+        mesh.add_triangle(i, i + 1, i + 2);
+        mesh.add_triangle(i + 1, i + 3, i + 2);
+    }
+    p.add(egui::Shape::mesh(mesh));
 }
 
 /// A progress ring round `center` (English): its track, and `frac` of it from the top, clockwise
@@ -618,7 +685,10 @@ pub fn tip(ui: &Ui, over: Rect, label: &str) {
         pos2(over.center().x - w / 2.0, over.top() - h - 8.0),
         vec2(w, h),
     );
-    p.rect_filled(rc.translate(vec2(0.0, 2.0)), h / 2.0, k.shadow);
+    p.add(
+        egui::epaint::RectShape::filled(rc.translate(vec2(0.0, 3.0)), h / 2.0, k.shadow)
+            .with_blur_width(12.0),
+    );
     p.rect_filled(rc, h / 2.0, k.island);
     let g = p.layout_no_wrap(label.to_owned(), f, k.on_island);
     let pos = pos2(

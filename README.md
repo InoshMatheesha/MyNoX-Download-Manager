@@ -25,22 +25,24 @@ MyNoX splits every download over several connections, resumes it after the inter
 cuts out, catches the links you click in your browser, saves videos, handles torrents, and runs
 your queues on a schedule. No ads, no trial, no sign-up.
 
-## MyNoX Choice: the default design
+## MyNoX Island: the default design
 
-New installs open in **MyNoX Choice**, MyNoX's own design in graphite and white, light and dark:
-a sidebar with your downloads library and a big **Add URL** button, a header with search, an
-action bar with a **Speed Limiter** switch, the list on a card with a progress bar under every
-download, a live download speed card, and a redesigned download window. Every menu and shortcut
-is still where it was; **View → Theme** has Classic and ten more themes.
+New installs open in **MyNoX Island**, frosted glass in blue and graphite, light and dark: a
+**Dynamic Island** at the top with the download running now (click it to open its window), the
+view's name and the download speed set large, a switch and chips for your downloads library and
+queues, the list on a glass card, and a floating dock of round buttons with Add URL as a glowing
+orb. Its download window has a progress ring and chips that act at once: a speed limit, and what
+to do when the download is done. Every menu and shortcut is still where it was; **View → Theme**
+has **MyNoX Choice** (MyNoX's sidebar design), Classic and nine more themes.
 
 <p align="center">
-  <img src="docs/images/mynox-choice-light.webp" alt="MyNoX Download Manager in the MyNoX Choice theme, light" width="820">
+  <img src="docs/images/mynox-island-dark.webp" alt="MyNoX Download Manager in the MyNoX Island theme, dark: the Dynamic Island with a download's name and speed, the view's name and speed set large, the filter chips, the list and the dock of round buttons" width="820">
 </p>
 <p align="center">
-  <img src="docs/images/mynox-choice-dark.webp" alt="MyNoX Download Manager in the MyNoX Choice theme, dark" width="820">
+  <img src="docs/images/mynox-island-light.webp" alt="MyNoX Download Manager in the MyNoX Island theme, light" width="820">
 </p>
 <p align="center">
-  <img src="docs/images/progress-choice-light.webp" alt="The download window in MyNoX Choice: the file with its type and share done, tiles for downloaded, speed and time left, and the connections" width="548">
+  <img src="docs/images/progress-island-dark.webp" alt="The download window in MyNoX Island: the state in a small island, a progress ring, the speed set large, four readings, the speed limit and When done chips, Pause and Cancel, and the connections" width="548">
 </p>
 
 ## Download
@@ -101,7 +103,8 @@ for good. Every step, with pictures: **[Catch downloads from your browser](docs/
 - **Categories** - files sorted into Compressed, Documents, Music, Programs and Video folders.
 - **Portable mode**, **remote control** from your phone, a **command line** and an **automation API**.
 - **86 languages**, right-to-left included, and themes in light and dark, among them
-  **MyNoX Choice** with its own sidebar layout.
+  **MyNoX Island** (glass, a Dynamic Island and a dock) and **MyNoX Choice** (a sidebar), each with
+  its own layout.
 - **Updates itself** - **Help → Check for updates** installs a new release after checking its signature.
 
 ## Screenshots

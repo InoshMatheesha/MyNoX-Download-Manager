@@ -12,7 +12,7 @@ Open **View → Theme** and click a theme: the whole window changes at once, not
 **View → Dark Mode support** and **View → Always dark** then choose its light or dark side, as
 for the classic look ([Dark mode](getting-started.md#dark-mode)).
 
-The built-in themes are **MyNoX Choice** (the default for a new install), **MyNoX Island**, **Classic**, **Native** (your system's
+The built-in themes are **MyNoX Island** (the default for a new install), **MyNoX Choice**, **Classic**, **Native** (your system's
 accent colour and contrast), **High contrast**, and the style themes **Metro**, **Adwaita**,
 **Breeze**, **Luna**, **Aero**, **Aqua** and **Emerald**, each with its own control shapes and
 icons, and on Windows its own title bar. [Getting started](getting-started.md#themes) describes

@@ -5,6 +5,29 @@ Each release's notes on GitHub come from its section here (`## [X.Y.Z]`, see
 
 ## [Unreleased]
 
+## [1.0.6] - 2026-11-21
+
+### Changed
+
+- **MyNoX Island is the default** for a new install (an existing one keeps its theme).
+- **MyNoX Island in blue and graphite.** The amber signal colour is now blue, so the backdrop's
+  glow, the speed, the rings and the primary buttons are blue; the dark side is graphite
+  (#1B1E24, its cards #23272F) instead of near-black.
+- **Soft shadows.** The Dynamic Island, the panels, the switch's thumb, the knobs, the labels
+  and the primary buttons cast real blurred shadows; the hard dark slab under each is gone. The
+  primary buttons glow in their own colour and are lit from above.
+- **A new dock.** Add URL is a glowing orb; the other commands sit in shallow pods, one for each
+  group, in place of the hairline dividers; a blue dot under a button tells that its state is on
+  (the main queue running, Always dark); a glyph rises a little under the pointer; the moon is a
+  true crescent. The dock no longer touches the window's bottom edge.
+- **The chip strip** fades the chips that go out of sight instead of laying a band of colour
+  over the backdrop.
+
+### Updating
+
+- From 1.0.5, Help → Check for updates installs this version. From 1.0.4 or earlier, install
+  1.0.5 or this version by hand once (releases before 1.0.5 trust a key that signs nothing).
+
 ## [1.0.5] - 2026-11-21
 
 ### New

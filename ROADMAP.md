@@ -6,6 +6,11 @@ are in [CHANGELOG.md](CHANGELOG.md). Ideas and bug reports are welcome in
 
 ✅ done · 🔄 being built · 📋 planned
 
+## Version 1.0.6
+
+- ✅ MyNoX Island as the default theme for a new install
+- ✅ MyNoX Island in blue and graphite, with soft shadows and a new dock of pods
+
 ## Version 1.0.5
 
 - ✅ MyNoX Island: a second theme of MyNoX's own, technical glass with a Dynamic Island, a filter

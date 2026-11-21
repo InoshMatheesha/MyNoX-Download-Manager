@@ -90,12 +90,13 @@ MyNoX follows your system: when Windows (or your desktop's light/dark preference
 **View → Theme** changes MyNoX's look at once:
 
 - **Classic**: the original layout: a menu bar, a toolbar and the Categories pane.
-- **MyNoX Choice**: the default for a new install, in graphite and white (light and dark), with a layout of its own: a sidebar with the
+- **MyNoX Choice**: in graphite and white (light and dark), with a layout of its own: a sidebar with the
   downloads library, a big **Add URL** button, **Add to browser** and a live speed card; a header
   with the view's name and a search box; an action bar with a **Speed Limiter** switch; and the
   list on a rounded card with a progress bar under each download. Fold the sidebar to icons with
   the button at its foot. The menus and shortcuts stay the same.
-- **MyNoX Island**: frosted glass with one amber colour and a layout of its own: a **Dynamic
+- **MyNoX Island**: the default for a new install, frosted glass in blue and graphite (light
+  and dark) with a layout of its own: a **Dynamic
   Island** at the top with the download running now (click it to open its window), the view's
   name and the speed set large, chips for the categories and queues, and a floating dock of round
   buttons. Its download window has chips for a speed limit and for what to do when it is done.
