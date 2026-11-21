@@ -506,7 +506,7 @@ mod tests {
         };
         assert_eq!(
             fingerprint(MYNOX_KEY),
-            "41A8EFFD122322A7223CED4EA77C44A25907A303"
+            "ABE8293DA2B8CF8792821A98D00A2529DE1C015D"
         );
         assert_eq!(
             fingerprint(YTDLP_KEY),

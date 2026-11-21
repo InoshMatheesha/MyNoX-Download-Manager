@@ -35,6 +35,13 @@ Each release's notes on GitHub come from its section here (`## [X.Y.Z]`, see
 - MyNoX Island carries its own type: Space Grotesk for headings and labels and JetBrains Mono
   for every number (both under the SIL Open Font License, see ATTRIBUTION.md).
 
+### Changed
+
+- **A new release signing key.** The previous one's private half was never available to sign a
+  release with, so no release before this one ever installed through Help → Check for updates;
+  this version's own `MyNoX-1.0.5-*.exe` still needs installing by hand, but from the next
+  release on, Check for updates works normally.
+
 ## [1.0.4] - 2026-11-17
 
 ### Fixed
