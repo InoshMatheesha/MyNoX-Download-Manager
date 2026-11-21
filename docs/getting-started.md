@@ -95,6 +95,10 @@ MyNoX follows your system: when Windows (or your desktop's light/dark preference
   with the view's name and a search box; an action bar with a **Speed Limiter** switch; and the
   list on a rounded card with a progress bar under each download. Fold the sidebar to icons with
   the button at its foot. The menus and shortcuts stay the same.
+- **MyNoX Island**: frosted glass with one amber colour and a layout of its own: a **Dynamic
+  Island** at the top with the download running now (click it to open its window), the view's
+  name and the speed set large, chips for the categories and queues, and a floating dock of round
+  buttons. Its download window has chips for a speed limit and for what to do when it is done.
 - **Native**: your system's colours. Windows' accent colour (Settings → Personalization →
   Colors) and, when it is on, its contrast theme; the desktop's accent colour and its higher
   contrast setting on Linux (GNOME 47 and later, KDE Plasma); the accent colour on macOS. It

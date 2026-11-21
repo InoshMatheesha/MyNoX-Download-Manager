@@ -470,7 +470,7 @@ pub fn parse(
             },
             "layout" => match value.as_str().and_then(crate::palette::Layout::from_key) {
                 Some(l) => theme.layout = l,
-                None => warnings.push(format!("layout: {value} is not classic or choice")),
+                None => warnings.push(format!("layout: {value} is not classic, choice or island")),
             },
             "icons" => match value.as_str().and_then(IconStyle::from_key) {
                 Some(s) => theme.icons = s,

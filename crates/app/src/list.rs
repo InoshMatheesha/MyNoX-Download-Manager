@@ -21,9 +21,10 @@ pub fn row_h() -> f32 {
     crate::theme::metrics().list_row
 }
 
-// Is MyNoX Choice's layout on (no frame, centred rows, rounded selection, progress bars)?
+// Is one of MyNoX's own layouts on, Choice or Island (no frame, centred rows, rounded selection,
+// progress bars)?
 fn choice() -> bool {
-    crate::theme::current().layout == crate::palette::Layout::Choice
+    crate::theme::current().layout.is_own()
 }
 
 // How far a row's text and icon move down to sit centred in a tall row (0 in the classic sizes).

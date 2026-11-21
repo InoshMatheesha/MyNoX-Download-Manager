@@ -80,6 +80,32 @@ pub fn install_fonts(defs: &mut egui::FontDefinitions, font_dir: Option<&std::pa
         };
         defs.families.insert(FontFamily::Name(family.into()), fonts);
     }
+    // MyNoX Island's own faces (app/island.rs, crate::glass), carried in the program under the
+    // SIL Open Font License (assets/fonts/OFL-*.txt): Space Grotesk for its headings and labels,
+    // JetBrains Mono for every number. egui draws them (win32's DirectWrite path draws only the
+    // system's families); the interface font and the script fonts follow for other scripts.
+    for (family, bytes) in [
+        (
+            crate::glass::DISPLAY,
+            &include_bytes!("../assets/fonts/SpaceGrotesk-Medium.ttf")[..],
+        ),
+        (
+            crate::glass::DISPLAY_BOLD,
+            &include_bytes!("../assets/fonts/SpaceGrotesk-Bold.ttf")[..],
+        ),
+        (
+            crate::glass::MONO,
+            &include_bytes!("../assets/fonts/JetBrainsMono-Medium.ttf")[..],
+        ),
+    ] {
+        defs.font_data.insert(
+            family.into(),
+            std::sync::Arc::new(egui::FontData::from_static(bytes)),
+        );
+        let mut fonts = vec![family.to_owned()];
+        fonts.extend(ui.iter().cloned());
+        defs.families.insert(FontFamily::Name(family.into()), fonts);
+    }
 }
 
 // ---- right to left (D-019) -----------------------------------------------------------------

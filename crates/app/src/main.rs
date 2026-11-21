@@ -21,6 +21,7 @@ mod extractq;
 mod fileicons;
 mod find;
 mod gallerydlg;
+mod glass;
 mod grabber;
 mod headless;
 mod help;

@@ -1,0 +1,125 @@
+# MyNoX Island - the second theme of MyNoX's own, beside MyNoX Choice. Technical glass: an
+# instrument panel under frosted glass. A Dynamic Island of live activity at the top, a floating
+# dock of round buttons at the bottom, every number in a monospaced face, one amber signal colour.
+# Its own layout (app/island.rs) and its own download window (progress/island.rs).
+
+name = "MyNoX Island"
+layout = "island"
+icons = "accent"
+icon-set = "metro"
+
+[controls]
+field-focus = "ring"
+check = "fluent"
+button = "fluent"
+progress = "line"
+scroll = "overlay"
+caption = "metro"
+focus = "ring"
+
+[sizes]
+radius = 10
+"radius.button" = 14
+"radius.part" = 8
+"radius.check" = 6
+"radius.flyout" = 16
+"radius.menu-item" = 8
+"radius.egui" = 10
+"radius.popup" = 14
+border = 1
+"focus-line" = 2
+"list.row" = 32
+"list.header" = 30
+
+[seeds.light]
+background = "#e9ebee"
+surface = "#f7f8fa"
+header = "#eff1f4"
+text = "#121417"
+accent = "#b45309"
+selection = "#f1e2cc"
+error = "#b91c1c"
+warning = "#8a5300"
+success = "#166534"
+
+[seeds.dark]
+background = "#0b0d10"
+surface = "#12151a"
+header = "#161a20"
+text = "#eef1f5"
+accent = "#ffb547"
+selection = "#2c2416"
+error = "#f87171"
+warning = "#fbbf24"
+success = "#4ade80"
+
+[light]
+# The title bar melts into the backdrop: the same cool paper grey.
+caption = "#e9ebee"
+"caption.text" = "#121417"
+"caption.text.inactive" = "#9aa0a8"
+"caption.hot" = "#00000010"
+"caption.pressed" = "#0000001a"
+window = "#e9ebee"
+menubar = "#e9ebee"
+"menubar.bottom" = "#e9ebee"
+"menubar.line" = "#e9ebee"
+"menubar.hot" = "#dde0e5"
+"menubar.open" = "#d3d7dd"
+"selection.text" = "#121417"
+"list.grid" = "#eceef1"
+"list.frame" = "#dadde2"
+"progress.bar" = "#b45309"
+"progress.track" = "#dadde2"
+"meter.fill" = "#b45309"
+"focus.ring" = "#b45309"
+# The signal colour is also the primary button: amber with white ink.
+"button.accent" = "#b45309"
+"button.accent.hot" = "#c2610f"
+"button.accent.pressed" = "#92400e"
+"button.accent.bottom" = "#92400e"
+"button.accent.text" = "#ffffff"
+"button.accent.text.pressed" = "#ffffff"
+"chip.web" = "#e3e7ed"
+"chip.torrent" = "#f4e6d3"
+"chip.text" = "#121417"
+
+[dark]
+# Near-black glass in three depths: the backdrop, the card, the header row.
+caption = "#0b0d10"
+"caption.text" = "#eef1f5"
+"caption.text.inactive" = "#69707a"
+"caption.hot" = "#ffffff12"
+"caption.pressed" = "#ffffff1f"
+window = "#0b0d10"
+menubar = "#0b0d10"
+"menubar.bottom" = "#0b0d10"
+"menubar.line" = "#0b0d10"
+"menubar.hot" = "#171b21"
+"menubar.open" = "#1e232b"
+list = "#12151a"
+field = "#14181e"
+header = "#161a20"
+"selection.text" = "#f8fafc"
+"list.frame" = "#232831"
+"list.grid" = "#1a1e25"
+"field.border" = "#232831"
+button = "#14181e"
+"button.hot" = "#1b2028"
+"button.pressed" = "#232831"
+"button.border" = "#232831"
+"button.bottom" = "#232831"
+"progress.bar" = "#ffb547"
+"progress.track" = "#232831"
+"meter.fill" = "#ffb547"
+"focus.ring" = "#ffb547"
+# Amber with near-black ink.
+"button.accent" = "#ffb547"
+"button.accent.hot" = "#ffc46b"
+"button.accent.pressed" = "#e89a2c"
+"button.accent.bottom" = "#e89a2c"
+"button.accent.text" = "#0b0d10"
+"button.accent.text.pressed" = "#0b0d10"
+"chip.web" = "#1b2028"
+"chip.torrent" = "#2a2217"
+"chip.text" = "#eef1f5"

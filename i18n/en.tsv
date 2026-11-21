@@ -50,7 +50,7 @@
 #. count in the download list (sizes, speeds, status)
 #. {n} = a number (keep the braces as they are)
 @plural	{n} byte|{n} bytes	{n} byte|{n} bytes
-#. count in the main window; count in choice.rs
+#. count in the main window; count in choice.rs; count in island.rs
 #. {n} = a number (keep the braces as they are)
 @plural	{n} download|{n} downloads	{n} download|{n} downloads
 #. count in the main window; count in choice.rs
@@ -77,7 +77,7 @@
 #. a number of peers (computers sharing a torrent), after where they came from
 #. {n} = a number (keep the braces as they are)
 @plural	{n} peer|{n} peers	{n} peer|{n} peers
-#. count in the main window; count in choice.rs
+#. count in the main window; count in choice.rs; count in island.rs
 #. {n} = a number (keep the braces as they are)
 @plural	{n} selected|{n} selected	{n} selected|{n} selected
 #. count in the Options window
@@ -322,7 +322,7 @@
 #. text in remote.rs
 #. remote control page (on a phone): tab: every download
 	All	All
-#. item in the Categories tree in the main window
+#. item in the Categories tree in the main window; text in island.rs
 	All Downloads	All Downloads
 #. message or event log entry in the main window
 	All files	All files
@@ -575,7 +575,7 @@
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Canada	Canada
-#. button in the Batch download window; button in categories.rs; text in the Checksum window; button in a dialog box; button in extracting archives (a download's log, the Archive password window); button in the Find window; button in gallerydlg.rs; text in the Link grabber window; text in the Help menu's windows (About, updates, shortcuts, Tell a friend); button in langpick.rs; button in the Options window; button in a download's progress window; text in remote.rs; button in the Scheduler window; button in the Add torrent window; button in the Download video window
+#. button in the Batch download window; button in categories.rs; text in the Checksum window; button in a dialog box; button in extracting archives (a download's log, the Archive password window); button in the Find window; button in gallerydlg.rs; text in the Link grabber window; text in the Help menu's windows (About, updates, shortcuts, Tell a friend); button in langpick.rs; button in the Options window; button in a download's progress window; text in progress_island.rs; text in remote.rs; button in the Scheduler window; button in the Add torrent window; button in the Download video window
 #. button: stop downloading the update
 	Cancel	Cancel
 #. text in errors.rs
@@ -739,9 +739,9 @@
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Comoros	Comoros
-#. item in the Categories tree in the download list; value in a column's filter list in the download list; text in the download list (sizes, speeds, status); text in a download's progress window; text in remote.rs
-#. a download's status (state it is in, not a command)
+#. text in island.rs; item in the Categories tree in the download list; value in a column's filter list in the download list; text in the download list (sizes, speeds, status); text in a download's progress window; text in remote.rs
 #. a download's status (state it is in, not a command): finished
+#. a download's status (state it is in, not a command)
 	Complete	Complete
 #. text in the download list (sizes, speeds, status)
 #. category name: compressed archives (zip, rar, 7z)
@@ -890,6 +890,9 @@
 	Description or part of the description	Description or part of the description
 #. text in a download's Properties window
 	Description:	Description:
+#. text in progress_island.rs
+#. MyNoX Island's download window: the button that opens and closes the window's details (its connections, the speed limiter, the options on completion), and the switch's first part (a download's connections, a torrent's files, peers and trackers)
+	Details	Details
 #. text in the Options window
 #. column title: a paired phone's or computer's name
 	Device	Device
@@ -984,7 +987,7 @@
 #. text in rssdlg.rs
 #. RSS feeds window: the tab of the rules that add articles by themselves
 	Download rules	Download rules
-#. text in choice.rs
+#. text in choice.rs; text in island.rs
 #. MyNoX Choice sidebar: heading of the card that shows the download speed
 	Download speed	Download speed
 #. text in a download's progress window
@@ -1008,7 +1011,7 @@
 #. RSS feeds window: add the selected article's torrent (opens Add torrent)
 #. the trailing ... means it opens a window: keep it
 	Download...	Download...
-#. text in a download's progress window
+#. text in a download's progress window; text in progress_island.rs
 #. label before the amount received so far
 #. column title: bytes this connection received
 	Downloaded	Downloaded
@@ -1163,6 +1166,8 @@
 #. text in the tray icon's menu
 #. verb: quit the app
 	Exit	Exit
+#. text in progress_island.rs
+	Exit MyNoX	Exit MyNoX
 #. checkbox in a download's progress window; checkbox in the Scheduler window
 	Exit MyNoX Download Manager when done	Exit MyNoX Download Manager when done
 #. text in the Checksum window
@@ -1239,7 +1244,7 @@
 	File name or part of the name	File name or part of the name
 #. window title in a download's Properties window
 	File Properties	File Properties
-#. text in a download's progress window
+#. text in a download's progress window; text in progress_island.rs
 	File size	File size
 #. text in the Options window
 #. tab title
@@ -1266,7 +1271,7 @@
 #. button in the Find window
 #. verb: button that starts the search
 	Find	Find
-#. text in choice.rs; what a keyboard shortcut does in the Help menu's windows (About, updates, shortcuts, Tell a friend)
+#. text in choice.rs; what a keyboard shortcut does in the Help menu's windows (About, updates, shortcuts, Tell a friend); text in island.rs
 #. MyNoX Choice header: the search box's placeholder (opens Find)
 	Find a download	Find a download
 #. message or event log entry in the main window; window title in the Find window
@@ -1284,7 +1289,7 @@
 	Find the next match	Find the next match
 #. text in the Find window
 	Find:	Find:
-#. item in the Categories tree in the main window; text in remote.rs
+#. item in the Categories tree in the main window; text in island.rs; text in remote.rs
 #. adjective: the downloads that are complete
 #. remote control page (on a phone): tab: downloads finished
 	Finished	Finished
@@ -1481,7 +1486,7 @@
 	Hide &categories	Hide &categories
 #. button in a download's progress window
 	Hide tab	Hide tab
-#. text in a download's progress window; text in standard windows
+#. text in a download's progress window; text in progress_island.rs; text in standard windows
 #. tooltip of a button in a download's progress window: hides the window to the notification area (system tray); the download goes on
 	Hide to the notification area	Hide to the notification area
 #. checkbox in the Link grabber window; text in the Link grabber window; checkbox in the Options window
@@ -1518,7 +1523,7 @@
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Iceland	Iceland
-#. text in choice.rs
+#. text in choice.rs; text in island.rs
 #. MyNoX Choice sidebar: the speed card while nothing downloads
 	Idle	Idle
 #. text in the Options window
@@ -1745,7 +1750,7 @@
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Liberia	Liberia
-#. text in choice.rs
+#. text in choice.rs; text in island.rs
 #. MyNoX Choice sidebar: heading above All Downloads, Unfinished, Finished and the queues
 	Library	Library
 #. text in countries.rs
@@ -1952,7 +1957,7 @@
 #. text in remote.rs
 #. remote control page (on a phone): its menu's button
 	More	More
-#. text in choice.rs
+#. text in choice.rs; text in island.rs
 #. MyNoX Choice sidebar: tooltip of the arrow beside Add Torrent (magnet links, RSS feeds...)
 	More torrent options	More torrent options
 #. text in countries.rs
@@ -2134,7 +2139,7 @@
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Niue	Niue
-#. button in a dialog box; text in a download's progress window
+#. button in a dialog box; text in a download's progress window; text in progress_island.rs
 	No	No
 #. text in a dialog box
 	No addresses yet	No addresses yet
@@ -2282,7 +2287,7 @@
 	Numbers	Numbers
 #. text in the Scheduler window
 	October	October
-#. option (radio button) in the Options window
+#. option (radio button) in the Options window; text in progress_island.rs
 	Off	Off
 #. text in the Add torrent window
 	Off: a finished torrent stops, like any download.	Off: a finished torrent stops, like any download.
@@ -2395,7 +2400,7 @@
 #. text in the tray icon's menu
 #. plural noun: opens the Options window (settings)
 	Options	Options
-#. text in a download's progress window
+#. text in a download's progress window; text in progress_island.rs
 #. tab title: what happens when the download finishes
 	Options on completion	Options on completion
 #. text in the Options window
@@ -2462,7 +2467,7 @@
 #. text in the Link grabber window
 #. Link grabber: where links came from: the clipboard (pasted with Ctrl+V)
 	Pasted	Pasted
-#. text in a download's progress window; text in remote.rs
+#. text in a download's progress window; text in progress_island.rs; text in remote.rs
 #. verb: pause the download
 #. remote control page (on a phone): button: pause a download
 	Pause	Pause
@@ -2592,6 +2597,9 @@
 	Reading the torrent...	Reading the torrent...
 #. text in helpers.rs
 	Reads a page and lists every quality the site offers, up to 4K, from YouTube, Vimeo and over a thousand other sites.	Reads a page and lists every quality the site offers, up to 4K, from YouTube, Vimeo and over a thousand other sites.
+#. text in island.rs
+#. MyNoX Island: the Dynamic Island while nothing downloads (ready for the next download)
+	Ready	Ready
 #. text in helpers.rs
 #. the helpers are downloaded, checked and ready; {list} = names and versions, e.g. "yt-dlp 2026.10.26, ffmpeg 9.0"
 	Ready: {list}	Ready: {list}
@@ -2659,10 +2667,10 @@
 #. text in a download's Properties window
 #. {result} = how the last attempt ended (a status or an error message)
 	Result: {result}	Result: {result}
-#. text in a download's progress window
+#. text in a download's progress window; text in progress_island.rs
 #. verb: continue the download
 	Resume	Resume
-#. text in a download's progress window
+#. text in a download's progress window; text in progress_island.rs
 #. label: whether the server lets a stopped download continue (Yes / No)
 	Resume capability	Resume capability
 #. message or event log entry in the main window
@@ -2810,7 +2818,7 @@
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Serbia	Serbia
-#. text in a dialog box; text in the Options window; text in a download's progress window
+#. text in a dialog box; text in the Options window; text in a download's progress window; text in progress_island.rs
 #. label before where a download's server is (its country and round trip)
 	Server	Server
 #. text in the Options window; text in a download's Properties window
@@ -2881,6 +2889,9 @@
 	Show all downloads	Show all downloads
 #. text in a download's progress window
 	Show details >>	Show details >>
+#. text in progress_island.rs
+#. MyNoX Island's download window: a chip: show the "Download complete" window when the download finishes
+	Show dialog	Show dialog
 #. checkbox in the Options window; checkbox in a download's progress window
 	Show download complete dialog	Show download complete dialog
 #. text in extension.rs
@@ -3001,7 +3012,7 @@
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Spain	Spain
-#. text in a download's progress window; text in the tray icon's menu
+#. text in a download's progress window; text in progress_island.rs; text in the tray icon's menu
 #. tab title: the tool that limits the download speed
 	Speed Limiter	Speed Limiter
 #. window title in a dialog box
@@ -3532,7 +3543,7 @@
 #. text in the Scheduler window
 #. tooltip on the Scheduler's "Wake the computer to run this queue" while "Start download at" is off
 	Tick "Start download at" first: the computer is woken for the start time	Tick "Start download at" first: the computer is woken for the start time
-#. text in a download's progress window; text in the Scheduler window
+#. text in a download's progress window; text in progress_island.rs; text in the Scheduler window
 	Time left	Time left
 #. text in countries.rs
 #. a country's name (where a download's server is)
@@ -3693,7 +3704,7 @@
 #. text in the Link grabber window
 #. Link grabber button (IDM's): untick every link
 	Uncheck all	Uncheck all
-#. item in the Categories tree in the main window; text in remote.rs
+#. item in the Categories tree in the main window; text in island.rs; text in remote.rs
 #. adjective: the downloads that are not complete yet
 #. remote control page (on a phone): tab: downloads not finished yet
 	Unfinished	Unfinished
@@ -3887,6 +3898,9 @@
 #. text in remote.rs
 #. remote control page (on a phone): label of the choice: start the new download now, or let it wait in a queue
 	When	When
+#. text in progress_island.rs
+#. MyNoX Island's download window: label before the chips that say what happens when the download finishes
+	When done	When done
 #. text in the Batch download window
 	Wildcard size	Wildcard size
 #. text in the Scheduler window
@@ -3934,7 +3948,7 @@
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Yemen	Yemen
-#. button in a dialog box; text in a download's progress window
+#. button in a dialog box; text in a download's progress window; text in progress_island.rs
 	Yes	Yes
 #. button in helpers.rs
 #. the first start's helpers window: download yt-dlp and ffmpeg (the recommended answer)
@@ -4845,6 +4859,9 @@ menu	MyNoX Choice	MyNoX Choice
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	MyNoX Download Manager &Home Page	MyNoX Download Manager &Home Page
 #. menu command in the main window
+#. View → Theme: MyNoX's own theme of frosted glass with a Dynamic Island and a dock of round buttons, a name: keep "MyNoX Island" as written
+menu	MyNoX Island	MyNoX Island
+#. menu command in the main window
 #. View → Theme: the system's own colours (its accent colour, its high contrast)
 menu	Native	Native
 #. menu command in the main window
@@ -4927,7 +4944,7 @@ menu	Select &all	Select &all
 menu	Show &drop target	Show &drop target
 #. menu command in the main window
 menu	Show MyNoX Download Manager	Show MyNoX Download Manager
-#. menu command in the main window; menu command in choice.rs
+#. menu command in the main window; menu command in choice.rs; menu command in island.rs
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	Speed &Limiter	Speed &Limiter
 #. menu command in the main window
@@ -4996,7 +5013,7 @@ menubar	&Tasks	&Tasks
 menubar	&View	&View
 #. toolbar button in the main window; toolbar button in choice.rs
 toolbar	Add Torrent	Add Torrent
-#. toolbar button in the main window; toolbar button in choice.rs
+#. toolbar button in the main window; toolbar button in choice.rs; toolbar button in island.rs
 toolbar	Add URL	Add URL
 #. toolbar button in the main window
 #. verb: delete the selected downloads
@@ -5027,12 +5044,12 @@ unit	{n} GB	{n} GB
 #. unit after a number in the download list (sizes, speeds, status)
 #. {n} = a number (keep the braces as they are)
 unit	{n} KB	{n} KB
-#. unit after a number in the download list (sizes, speeds, status)
+#. unit after a number in progress_island.rs; unit after a number in the download list (sizes, speeds, status)
 #. {n} = a number (keep the braces as they are)
 unit	{n} KB/sec	{n} KB/sec
 #. unit after a number in the download list (sizes, speeds, status)
 #. {n} = a number (keep the braces as they are)
 unit	{n} MB	{n} MB
-#. unit after a number in the download list (sizes, speeds, status)
+#. unit after a number in progress_island.rs; unit after a number in the download list (sizes, speeds, status)
 #. {n} = a number (keep the braces as they are)
 unit	{n} MB/sec	{n} MB/sec

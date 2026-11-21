@@ -29,6 +29,9 @@ use mynox_ipc as ipc;
 // MyNoX Choice's own main window layout (a child of this module, beside it on disk).
 #[path = "choice.rs"]
 mod choice;
+// MyNoX Island's main window layout (technical glass: the Dynamic Island, filter bar and dock).
+#[path = "island.rs"]
+mod island;
 
 /// A node of the Categories tree, what the list shows (saved: the last one comes back).
 #[derive(Clone, Copy, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
@@ -708,6 +711,8 @@ pub struct App {
     popup_serial: u64,
     /// MyNoX Choice's layout state (app/choice.rs).
     choice: choice::State,
+    /// MyNoX Island's layout state (app/island.rs).
+    island: island::State,
     /// The column layout last seen, to notice changes that need saving.
     last_layout: Option<list::Layout>,
     /// Main download queue (0), synchronization queue (1).
@@ -1235,6 +1240,7 @@ impl App {
             popup: None,
             popup_serial: 0,
             choice: choice::State::default(),
+            island: island::State::default(),
             last_layout: None,
             queues,
             failures: HashMap::new(),
@@ -5997,6 +6003,8 @@ impl App {
         let on = |id: &str| chosen == id;
         // i18n: View → Theme: MyNoX's own look, the default (IDM's layout, Windows 11's controls)
         items.push(Radio("Classic", Cmd::Theme("classic"), true, on("classic")));
+        // MyNoX's own themes, each with its own layout: a group of their own.
+        items.push(Sep);
         // i18n: View → Theme: MyNoX's own theme with its own layout (a sidebar, a header, cards), a name: keep "MyNoX Choice" as written
         items.push(Radio(
             "MyNoX Choice",
@@ -6004,6 +6012,14 @@ impl App {
             true,
             on("mynox-choice"),
         ));
+        // i18n: View → Theme: MyNoX's own theme of frosted glass with a Dynamic Island and a dock of round buttons, a name: keep "MyNoX Island" as written
+        items.push(Radio(
+            "MyNoX Island",
+            Cmd::Theme("mynox-island"),
+            true,
+            on("mynox-island"),
+        ));
+        items.push(Sep);
         // i18n: View → Theme: the system's own colours (its accent colour, its high contrast)
         items.push(Radio("Native", Cmd::Theme("native"), true, on("native")));
         // i18n: View → Theme: black and white with strong edges, for low vision
@@ -6673,8 +6689,9 @@ impl App {
                 (CaptionButton::Maximize, true),
                 (CaptionButton::Minimize, true),
             ];
-            // MyNoX Choice: only the logo and the name, centred (the window keeps its full title).
-            let bar = if crate::theme::current().layout == crate::palette::Layout::Choice {
+            // MyNoX Choice and Island: only the logo and the name, centred (the window keeps its
+            // full title).
+            let bar = if crate::theme::current().layout.is_own() {
                 caption::title_bar_with(ui, rect, "MyNoX", &buttons, true)
             } else {
                 caption::title_bar(ui, rect, crate::MAIN_TITLE, &buttons)
@@ -6904,7 +6921,13 @@ impl App {
         }
 
         // MyNoX Choice: its sidebar takes the leading edge, the menu bar starts after it.
-        let choice = crate::theme::current().layout == crate::palette::Layout::Choice;
+        let layout = crate::theme::current().layout;
+        let choice = layout == crate::palette::Layout::Choice;
+        // MyNoX Island: its backdrop under everything, the menu bar across the top.
+        let island = layout == crate::palette::Layout::Island;
+        if island {
+            self.island_backdrop(ui, o, w, h);
+        }
         let side_w = if choice { self.choice_side_w() } else { 0.0 };
         let (mo, mw) = (pos2(o.x + side_w, o.y), w - side_w);
         // Menu bar and its popups: which menu is open is chrome::menubar_next's to say.
@@ -6959,9 +6982,16 @@ impl App {
         }
 
         // MyNoX Choice: its sidebar, header and action bar stand for the toolbar and Categories.
-        let choice_list = choice.then(|| self.choice_chrome(ui, o, w, h, &mut chosen));
+        // MyNoX Island: its header, filter bar, card and dock.
+        let own_list = if choice {
+            Some(self.choice_chrome(ui, o, w, h, &mut chosen))
+        } else if island {
+            Some(self.island_chrome(ui, o, w, h, &mut chosen))
+        } else {
+            None
+        };
         // Toolbar — full labels (IDM truncates "Delete Co...", "Start Qu...": user decision).
-        if !choice {
+        if own_list.is_none() {
             let picked = self.chosen(None);
             let running = picked.iter().any(|i| i.live.is_some());
             let resumable = picked.iter().any(|i| i.can_start());
@@ -7015,7 +7045,7 @@ impl App {
         }
 
         // Categories pane.
-        let list_left = if choice {
+        let list_left = if own_list.is_some() {
             0.0
         } else if self.show_categories {
             let rows = self.tree_rows();
@@ -7073,7 +7103,7 @@ impl App {
         let (ids, rows) = self.list_rows();
         self.selection.retain(&ids);
         let (selected, focus) = self.selection.rows(&ids);
-        let outer = choice_list.unwrap_or_else(|| {
+        let outer = own_list.unwrap_or_else(|| {
             egui::Rect::from_min_max(
                 pos2(o.x + list_left, o.y + chrome::MENU_H + chrome::pane_top()),
                 pos2(o.x + w - 7.0, o.y + h - STRIP_H - 4.0),
@@ -7143,8 +7173,8 @@ impl App {
         {
             chosen = Some((cmd, None));
         }
-        // MyNoX Choice draws its own status bar (app/choice.rs).
-        if !choice {
+        // MyNoX Choice and Island draw their own status bar (app/choice.rs, app/island.rs).
+        if own_list.is_none() {
             self.status_strip(ui, o, w, h, ids.len());
         }
         if let Some((i, pos)) = r.context {

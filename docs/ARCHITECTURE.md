@@ -95,6 +95,12 @@ light and a dark palette, metrics, control styles and an icon style (`palette.rs
   sidebar, header, action bar, list card and status bar are drawn by `choice.rs`, a child module
   of `app.rs`: it runs the same commands (`Cmd`), menus, popups and tree keys, and gives the
   shared list a rect (`list.rs` then draws taller rows, a rounded selection and progress bars).
+  MyNoX Island (`layout = "island"`) is the second: `island.rs`, also a child of `app.rs`, draws
+  its Dynamic Island, header, filter bar, card and dock, and `progress_island.rs` (a child of
+  `progress.rs`, using that window's state and pages) its download window, both with the
+  painters in `glass.rs` (backdrop, panels, chips, the segmented switch, the ring) and its two
+  bundled faces (`assets/fonts`, families named in `glass.rs`, drawn by egui rather than
+  DirectWrite). `Layout::is_own` is true for both.
 - **Theme files.** `themefile.rs` reads TOML or JSON from the data folder's `themes` (one file,
   or `<id>/theme.toml` with icons beside it). A file names only what it changes; the rest comes
   from the theme it `inherits` (a built-in's id or another file, the classic look by default),

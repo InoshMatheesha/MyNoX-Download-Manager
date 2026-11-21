@@ -5,6 +5,36 @@ Each release's notes on GitHub come from its section here (`## [X.Y.Z]`, see
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-11-21
+
+### New
+
+- **MyNoX Island, a second theme of MyNoX's own** (View → Theme, grouped with MyNoX Choice).
+  Technical glass: an instrument panel under frosted glass, light and dark, in graphite with
+  one amber signal colour. Its own layout:
+  - **The Dynamic Island**, a dark capsule at the top. While downloads run it shows the first
+    one's progress ring, name and speed, and a count of the others; the pointer on it opens it
+    further (how many run, their speed together, the time left, a bar). A download that just
+    finished shows there for a few seconds. A click opens that download's window (or the
+    finished file); idle, it opens Add URL.
+  - **A header set in type**: the view's name large, the scope and count above it, and the
+    download speed in large monospaced figures over a minute and a half of it as a sparkline.
+  - **A filter bar**: All Downloads, Unfinished and Finished as a sliding switch, then the
+    categories and queues as chips (a queue's dot shows whether it runs; right-click a chip for
+    its menu; the strip scrolls sideways when they don't all fit), and Find.
+  - **A floating dock of round buttons** for the toolbar's commands, Add URL the large amber
+    one, Add Torrent and the queues with their drop-downs, Always dark at its end; each names
+    itself in a small dark label above it. What shows and the Speed Limiter's switch sit at its
+    sides.
+- **A new download window in MyNoX Island**: the state in a small island, a progress ring with
+  the share done, the file's name and speed set large, four readings without boxes, and two
+  rows of chips that act at once: a **speed limit** (Off, 256 KB/sec, 1 MB/sec, 4 MB/sec) and
+  **When done** (show the complete dialog, exit MyNoX, or turn the computer off). **Details**
+  opens the connections as an amber rail with their table (a torrent's own tabs), the full
+  Speed Limiter and Options on completion.
+- MyNoX Island carries its own type: Space Grotesk for headings and labels and JetBrains Mono
+  for every number (both under the SIL Open Font License, see ATTRIBUTION.md).
+
 ## [1.0.4] - 2026-11-17
 
 ### Fixed

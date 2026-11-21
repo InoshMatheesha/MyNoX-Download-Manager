@@ -13,6 +13,10 @@ use crate::winui::{self, ButtonKind, fill_l as fill, px_l as px, r, text};
 
 use crate::winui::caption::CaptionButton;
 
+// MyNoX Island's own download window (technical glass), using this one's state and pages.
+#[path = "progress_island.rs"]
+mod island;
+
 /// The drawn title bar's height (#63): Windows only, where the frame is ours
 /// (win32::progress_frame); Linux and macOS keep the system's decorations, which take no buttons
 /// of ours (Wayland even places them itself), so the hide button sits in the tab row there.
@@ -238,7 +242,9 @@ impl Progress {
         crate::crash::window("progress");
         let frac = item.fraction();
         let title = window_title(frac, &item.file_name);
-        let body = if self.details {
+        let body = if crate::glass::on() {
+            island::size(self.details, item)
+        } else if self.details {
             [548.0, 412.0 + torrent_drop(item)]
         } else {
             [548.0, 241.0]
@@ -401,6 +407,9 @@ impl Progress {
         snap: Option<&Snapshot>,
         frac: Option<f64>,
     ) -> Action {
+        if crate::glass::on() {
+            return self.island_body(ui, o, item, snap, frac);
+        }
         let p = ui.painter().clone();
         let choice = choice();
         let hide = self.tabs(ui, o);
@@ -683,8 +692,8 @@ impl Progress {
     }
 
     /// The Speed Limiter tab, live for this download. Returns true when "Hide tab" is pressed.
-    fn limiter_page(&mut self, ui: &mut Ui, o: Pos2, item: &Item) -> bool {
-        let p = ui.painter().clone();
+    /// The Speed Limiter's state from the download's limit, once: its own or a remembered one.
+    fn init_limit(&mut self, item: &Item) {
         if !self.limit_init {
             if let Some(rate) = item.torrent.as_ref().and_then(|t| t.upload_limit) {
                 self.up_on = true;
@@ -702,6 +711,11 @@ impl Progress {
             }
             self.limit_init = true;
         }
+    }
+
+    fn limiter_page(&mut self, ui: &mut Ui, o: Pos2, item: &Item) -> bool {
+        let p = ui.painter().clone();
+        self.init_limit(item);
         text(
             &p,
             o.x + 33.0,
@@ -813,7 +827,8 @@ impl Progress {
         if item.torrent.is_some() {
             self.upload_limit(ui, &p, o);
         }
-        hide_tab(ui, o)
+        // MyNoX Island shows this page in its details, not as a tab: nothing to hide.
+        !crate::glass::on() && hide_tab(ui, o)
     }
 
     /// A torrent's own upload limit, right of the download one (#39): kept with the torrent,
@@ -980,7 +995,7 @@ impl Progress {
         ) {
             self.turn_off = i;
         }
-        hide_tab(ui, o)
+        !crate::glass::on() && hide_tab(ui, o)
     }
 }
 

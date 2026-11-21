@@ -582,13 +582,15 @@ impl Controls {
     }
 }
 
-/// How the main window is laid out: the classic menu, toolbar and Categories pane, or MyNoX
-/// Choice's sidebar, header and action bar (the same commands, menus and list).
+/// How the main window is laid out: the classic menu, toolbar and Categories pane, MyNoX
+/// Choice's sidebar, header and action bar, or MyNoX Island's Dynamic Island, filter bar and dock
+/// (the same commands, menus and list in each).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Default)]
 pub enum Layout {
     #[default]
     Classic,
     Choice,
+    Island,
 }
 
 impl Layout {
@@ -596,8 +598,15 @@ impl Layout {
         match s {
             "classic" => Some(Layout::Classic),
             "choice" => Some(Layout::Choice),
+            "island" => Some(Layout::Island),
             _ => None,
         }
+    }
+
+    /// One of MyNoX's own layouts (Choice, Island): the list draws taller rows with a rounded
+    /// selection and progress bars, in a card that is its frame.
+    pub fn is_own(self) -> bool {
+        matches!(self, Layout::Choice | Layout::Island)
     }
 }
 
@@ -644,7 +653,7 @@ pub static CLASSIC: Theme = Theme {
 /// (written out above), then the ones shipped as theme files (`assets/themes/`, in the format
 /// users write, so they double as examples). Native follows the system and is made when chosen
 /// (`crate::native`).
-pub fn builtins() -> [&'static Theme; 10] {
+pub fn builtins() -> [&'static Theme; 11] {
     static HIGH_CONTRAST: std::sync::LazyLock<Theme> = std::sync::LazyLock::new(|| {
         crate::themefile::builtin(
             "high-contrast",
@@ -680,6 +689,13 @@ pub fn builtins() -> [&'static Theme; 10] {
             include_str!("../assets/themes/mynox-choice.toml"),
         )
     });
+    // MyNoX's second own theme: technical glass, its Dynamic Island and dock (app/island.rs).
+    static ISLAND: std::sync::LazyLock<Theme> = std::sync::LazyLock::new(|| {
+        crate::themefile::builtin(
+            "mynox-island",
+            include_str!("../assets/themes/mynox-island.toml"),
+        )
+    });
     [
         &CLASSIC,
         &HIGH_CONTRAST,
@@ -691,6 +707,7 @@ pub fn builtins() -> [&'static Theme; 10] {
         &AQUA,
         &EMERALD,
         &CHOICE,
+        &ISLAND,
     ]
 }
 
@@ -903,6 +920,11 @@ mod tests {
                 "MyNoX Choice",
                 include_str!("../assets/themes/mynox-choice.toml"),
             ),
+            (
+                "mynox-island",
+                "MyNoX Island",
+                include_str!("../assets/themes/mynox-island.toml"),
+            ),
         ] {
             let v: serde_json::Value = toml::from_str(text).unwrap();
             let l = crate::themefile::parse(id, &v, |_| {
@@ -1005,7 +1027,23 @@ mod tests {
             assert!(contrast(p.chip_text, p.chip_torrent) >= 4.5);
             assert!(contrast(p.selection_text, p.selection) >= 4.5);
         }
+        // MyNoX Island: its own layout too, the same readable texts, and its primary button's
+        // ink on the amber signal colour.
+        let island = builtins()[10];
+        assert_eq!(island.id, "mynox-island");
+        assert_eq!(island.layout, Layout::Island);
+        assert!(island.layout.is_own() && choice.layout.is_own());
+        for p in [&island.light, &island.dark] {
+            assert!(contrast(p.text, p.window) >= 4.5);
+            assert!(contrast(p.text, p.list) >= 4.5);
+            assert!(contrast(p.muted, p.list) >= 4.5, "{}", p.dark);
+            assert!(contrast(p.chip_text, p.chip_web) >= 4.5);
+            assert!(contrast(p.chip_text, p.chip_torrent) >= 4.5);
+            assert!(contrast(p.selection_text, p.selection) >= 4.5);
+            assert!(contrast(p.button_accent_text, p.button_accent) >= 4.5);
+        }
         assert!(builtins()[..9].iter().all(|t| t.layout == Layout::Classic));
+        assert!(!Layout::Classic.is_own());
     }
 
     /// The classic look's dark secondary and error texts read on every dark surface they sit on

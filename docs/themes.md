@@ -12,7 +12,7 @@ Open **View → Theme** and click a theme: the whole window changes at once, not
 **View → Dark Mode support** and **View → Always dark** then choose its light or dark side, as
 for the classic look ([Dark mode](getting-started.md#dark-mode)).
 
-The built-in themes are **MyNoX Choice** (the default for a new install), **Classic**, **Native** (your system's
+The built-in themes are **MyNoX Choice** (the default for a new install), **MyNoX Island**, **Classic**, **Native** (your system's
 accent colour and contrast), **High contrast**, and the style themes **Metro**, **Adwaita**,
 **Breeze**, **Luna**, **Aero**, **Aqua** and **Emerald**, each with its own control shapes and
 icons, and on Windows its own title bar. [Getting started](getting-started.md#themes) describes
@@ -25,6 +25,16 @@ Always dark and folding the sidebar to icons at its foot. The header names the v
 **Find**; the action bar has the toolbar's commands and a **Speed Limiter** switch; the list sits
 on a card with a progress bar under each download's status. The menus and every keyboard
 shortcut are the same as in the other themes.
+
+**MyNoX Island** has a layout of its own as well, in technical glass with one amber signal
+colour: a **Dynamic Island** at the top shows the download running now (its ring, name and
+speed; the pointer on it opens it further) or the one that just finished, and opens it with a
+click. Under it the view's name and the download speed are set large; a switch picks All
+Downloads, Unfinished or Finished, and chips pick a category or a queue (right-click one for its
+menu). The toolbar's commands are a floating dock of round buttons, Add URL the large one. Its
+download window has a progress ring and chips that act at once: a speed limit, and what to do
+when the download is done; **Details** opens the connections, the Speed Limiter and Options on
+completion.
 
 ## Gallery
 
@@ -185,7 +195,8 @@ focus = "ring"
 - **`[controls]`** — the shape of text boxes, check boxes, buttons, progress bars, scroll bars,
   the focus mark and the title bar.
 - **`icons`** — `color`, `mono` (one colour) or `accent`.
-- **`layout`** — `classic` (the default) or `choice`, MyNoX Choice's sidebar layout.
+- **`layout`** — `classic` (the default), `choice` (MyNoX Choice's sidebar layout) or
+  `island` (MyNoX Island's Dynamic Island, chips and dock).
 - **`contrast = "high"`** — strengthens every edge and text colour on top of the rest.
 
 Every colour role, size and control style, with what it sets, is listed on the website's

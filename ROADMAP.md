@@ -6,6 +6,14 @@ are in [CHANGELOG.md](CHANGELOG.md). Ideas and bug reports are welcome in
 
 ✅ done · 🔄 being built · 📋 planned
 
+## Version 1.0.5
+
+- ✅ MyNoX Island: a second theme of MyNoX's own, technical glass with a Dynamic Island, a filter
+  bar of chips and a floating dock of round buttons
+- ✅ MyNoX Island's download window: a progress ring, speed-limit and When done chips, and its
+  details
+- 📋 Download File Info in MyNoX Island's glass
+
 ## Version 1.0.4
 
 - ✅ RivaTuner / MSI Afterburner's overlay kept out of MyNoX's windows

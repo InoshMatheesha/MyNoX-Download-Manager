@@ -2,7 +2,7 @@
 ; It unpacks MyNoX with a `data` folder into any folder or USB stick: no registry, no uninstaller.
 
 #ifndef AppVersion
-  #define AppVersion "1.0.4"
+  #define AppVersion "1.0.5"
 #endif
 #define AppName "MyNoX Download Manager"
 #define AppExe "mynox.exe"
